@@ -27,9 +27,9 @@ cmake_minimum_required(VERSION 3.5)
 # components will be placed in the F-Prime binary subdirectory to keep them from
 # colliding with deployment specific items.
 ##
-include("${CMAKE_CURRENT_LIST_DIR}/../cmake/FPrime.cmake")
+include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime.cmake")
 # NOTE: register custom targets between these two lines
-include("${CMAKE_CURRENT_LIST_DIR}/../cmake/FPrime-Code.cmake")
+include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
 ##
 # Section 3: Components and Topology
 #
