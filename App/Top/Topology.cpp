@@ -166,7 +166,7 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
     health.init(25,0);
     pingRcvr.init(10);
     // Connect rate groups to rate group driver
-    constructRefArchitecture();
+    constructAppArchitecture();
 
     // dump topology if requested
     if (dump) {

@@ -1,4 +1,4 @@
-<dictionary topology="Ref">
+<dictionary topology="App">
   <enums>
     <enum type="CommandDispatcher::error::ErrorResponse">
       <item name="ERR_INVALID_OPCODE" value="0" description="Invalid opcode dispatched"/>

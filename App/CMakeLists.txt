@@ -37,10 +37,10 @@ include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
 # core components in the topology, which is also added here.
 ##
 # Add component subdirectories
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../fprime/Ref/PingReceiver/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../fprime/Ref/RecvBuffApp/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../fprime/Ref/SendBuffApp/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../fprime/Ref/SignalGen/")
+add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/PingReceiver/")
+add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/RecvBuffApp/")
+add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SendBuffApp/")
+add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SignalGen/")
 
 # Add Topology subdirectory
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Top/")

@@ -27,7 +27,7 @@
 #include <Drv/SocketIpDriver/SocketIpDriverComponentImpl.hpp>
 #include <Svc/GroundInterface/GroundInterface.hpp>
 
-void constructRefArchitecture(void);
+void constructAppArchitecture(void);
 bool constructApp(bool dump, U32 port_number, char* hostname);
 void exitTasks(void);
 
