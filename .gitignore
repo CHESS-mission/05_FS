@@ -1,0 +1,15 @@
+# IDE directories
+.idea
+
+# Python venv
+fprime-venv
+
+# Build directories
+App/cmake-build-debug
+App/build-fprime-automatic-native
+App/build-fprime-automatic-native-ut
+App/bin
+App/lib
+
+# Logs files
+App/logs
