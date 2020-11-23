@@ -1,5 +1,5 @@
 import socket
-
+from packages.state_machine.StateMachine import ADCSStateMachine
 
 
 def manage_data(data,adcs):
@@ -24,10 +24,12 @@ def runTCP(adcs):
             while 1:
                 data = conn.recv(BUFFER_SIZE)
                 if data:
-                    int_data = [i for i in data]
-                    print(int_data)
-                    manage_data(int_data,adcs)
-                    print('sending data back to client')
+                    #manage_data(int_data,adcs)
+                    if data[-1] == ADCSStateMachine.checksum(data[:-1]):
+                        print('CRC OK')
+                        print('sending data back to client')
+                    else:
+                        print('CRC error')
                     conn.send(data)
                 else:
                     print(f"no data from {addr}")

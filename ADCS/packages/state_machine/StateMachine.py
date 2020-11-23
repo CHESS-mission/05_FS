@@ -12,9 +12,26 @@ class ADCSStateMachine(StateMachine):
     down_low = middle_orbit.to(low_orbit)
 
     param = 10
+    CRC_POLY = 0x91
+    CRC8Table = [0] * 256
+
+    for i in range(256):
+        val = i
+        for j in range(8):
+            if val & 1 :
+                val ^=CRC_POLY
+            val >>= 1
+        CRC8Table[i] = val
 
     def __str__(self):
         return f"{self.current_state} set, param = {self.param}"
+
+    @staticmethod
+    def checksum(array):
+        crc = 0
+        for b in array:
+            crc = ADCSStateMachine.CRC8Table[crc ^ b]
+        return crc
 
     def switcher(self, case):
         if case == 0:
@@ -39,3 +56,5 @@ class ADCSStateMachine(StateMachine):
     def on_enter_high_orbit(self):
         self.param = 30
         print(f"{self.current_state} set, param = {self.param}")
+
+

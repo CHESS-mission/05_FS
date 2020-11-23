@@ -1,4 +1,5 @@
 import socket
+from packages.state_machine.StateMachine import ADCSStateMachine
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 5005)
@@ -7,8 +8,8 @@ if __name__ == '__main__':
     s.connect(server_address)
 
     try:
-        message = bytearray()
-        message.append(0)
+        message = bytearray([1,2,3,4,5])
+        message.append(ADCSStateMachine.checksum(message))
         print(message)
         s.send(message)
 
