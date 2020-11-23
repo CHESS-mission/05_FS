@@ -25,12 +25,10 @@ def runTCP(adcs):
                 data = conn.recv(BUFFER_SIZE)
                 if data:
                     #manage_data(int_data,adcs)
-                    if data[-1] == ADCSStateMachine.checksum(data[:-1]):
-                        print('CRC OK')
-                        print('sending data back to client')
-                    else:
-                        print('CRC error')
-                    conn.send(data)
+                    print(data)
+                    back_data = adcs.request(data)
+                    print('sending data back to client')
+                    conn.send(back_data)
                 else:
                     print(f"no data from {addr}")
                     break

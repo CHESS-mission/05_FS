@@ -8,7 +8,7 @@ if __name__ == '__main__':
     s.connect(server_address)
 
     try:
-        message = bytearray([1,2,3,4,5])
+        message = bytearray([0x1F,0x7F,0x01,0x1F,0xFF])
         message.append(ADCSStateMachine.checksum(message))
         print(message)
         s.send(message)
@@ -17,7 +17,7 @@ if __name__ == '__main__':
         amount_expected = len(message)
 
         while amount_received < amount_expected :
-            data = s.recv(20)
+            data = s.recv(4096)
             amount_received += len(data)
             print(f"received {data}")
     finally:
