@@ -8,3 +8,5 @@ App/build-fprime-automatic-native-ut/
 App/logs/
 
 fprime-venv
+
+.idea
