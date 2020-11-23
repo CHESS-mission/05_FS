@@ -470,6 +470,11 @@
         <arg name="fatalValue" type="U32"/>
       </args>
     </command>
+    <command component="health" mnemonic="HLTH_PING" opcode="0x16c">
+      <args>
+        <arg name="entry" len="40" type="string"/>
+      </args>
+    </command>
     <command component="fileDownlink" mnemonic="FileDownlink_SendFile" opcode="0x1f5">
       <args>
         <arg name="sourceFileName" len="60" type="string"/>
@@ -945,6 +950,16 @@
         <arg name="entry" len="40" type="string"/>
         <arg name="warn" type="U32"/>
         <arg name="fatal" type="U32"/>
+      </args>
+    </event>
+    <event component="health" name="HLTH_PING_RESPONSE" id="0x171" severity="ACTIVITY_HI" format_string="Ping response from %s">
+      <args>
+        <arg name="entry" len="40" type="string"/>
+      </args>
+    </event>
+    <event component="health" name="HLTH_PING_DISABLED" id="0x172" severity="WARNING_HI" format_string="Ping disable for %s">
+      <args>
+        <arg name="entry" len="40" type="string"/>
       </args>
     </event>
     <event component="fileUplink" name="FileUplink_BadChecksum" id="0x105" severity="WARNING_HI" format_string="Bad checksum value during receipt of file %s: computed 0x%08X, read 0x%08X">
