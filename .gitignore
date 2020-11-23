@@ -12,9 +12,8 @@ App/logs/
 ## venv
 fprime-venv
 
+.idea
+
 
 ## Python cache
 __pycache__
-
-## Pycharm
-ADCS/.idea/
