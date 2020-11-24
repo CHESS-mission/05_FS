@@ -18,16 +18,16 @@ class ADCSStateMachine(StateMachine):
     for i in range(256):
         val = i
         for j in range(8):
-            if val & 1 :
-                val ^=CRC_POLY
+            if val & 1:
+                val ^= CRC_POLY
             val >>= 1
         CRC8Table[i] = val
 
     def __str__(self):
         return f"{self.current_state} set, param = {self.param}"
 
-
     def switcher(self, case):
+        data = 0x00
         if case == 0:
             self.up_middle()
         elif case == 1:
@@ -38,6 +38,8 @@ class ADCSStateMachine(StateMachine):
             self.down_low()
         else:
             print("error orbit")
+            data = 0x03
+        return data
 
     def on_enter_low_orbit(self):
         self.param = 10
@@ -51,16 +53,15 @@ class ADCSStateMachine(StateMachine):
         self.param = 30
         print(f"{self.current_state} set, param = {self.param}")
 
-
-    def request(self,data):
+    def request(self, data):
         return_data = ADCSStateMachine.create_return_packet(data[2])
         if data[0] == 0x1F and data[1] == 0x7F:
             if data[2] < 128:
-                print('Telecommande packet')
+                print('Telecommand packet')
                 if data[-3] == 0x1F and data[-2] == 0xFF:
                     if ADCSStateMachine.checksum(data[:-1]) == data[-1]:
-                        print("Telecommande packet OK")
-                        return_data += ADCSStateMachine.exec_commande(data[2])
+                        print("Telecommand packet OK")
+                        return_data += self.exec_command(data[2])
                     else:
                         print("CRC error")
                         return_data += bytearray([0x04])
@@ -70,8 +71,7 @@ class ADCSStateMachine(StateMachine):
                 print('Telemetry packet')
                 if data[-2] == 0x1F and data[-1] == 0xFF:
                     print("Telemetry packet OK")
-                    return_data = ADCSStateMachine.create_return_packet(data[2])
-                    return_data += ADCSStateMachine.request_telemetry_data(data[2])
+                    return_data += self.request_telemetry_data(data[2])
                 else:
                     print("error in  Telecommand End message or Data byte bytes")
 
@@ -83,11 +83,11 @@ class ADCSStateMachine(StateMachine):
 
     @staticmethod
     def create_return_packet(id):
-        return bytearray([0x1F,0x7F,id])
+        return bytearray([0x1F, 0x7F, id])
 
     @staticmethod
     def end_packet(data):
-        return data + bytearray([0x1F,0xFF])
+        return data + bytearray([0x1F, 0xFF])
 
     @staticmethod
     def checksum(array):
@@ -96,12 +96,15 @@ class ADCSStateMachine(StateMachine):
             crc = ADCSStateMachine.CRC8Table[crc ^ b]
         return crc
 
-    @staticmethod
-    def exec_commande(id):
+    def exec_command(self, id):
+        try:
+            data = self.switcher(id)
+        except Exception as e:
+            print(e)
+            data = 0x03
 
-        return  bytearray([0x12])
+        return bytearray([data])
 
 
-    @staticmethod
-    def request_telemetry_data(id):
-        return bytearray([0x12])
+    def request_telemetry_data(self, id):
+        return bytearray([self.param])

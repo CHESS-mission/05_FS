@@ -20,14 +20,14 @@ def runTCP(adcs):
         print("Waiting connexion")
         conn, addr = s.accept()
         try:
-            print('Connection address:', addr)
+            print(f'Connection address: {addr} \n')
             while 1:
                 data = conn.recv(BUFFER_SIZE)
                 if data:
-                    #manage_data(int_data,adcs)
-                    print(data)
+
+                    print(f"Data Received : {data}")
                     back_data = adcs.request(data)
-                    print('sending data back to client')
+                    print(f'sending data back to client : data {back_data}\n')
                     conn.send(back_data)
                 else:
                     print(f"no data from {addr}")
