@@ -567,7 +567,7 @@
     <command component="pingRcvr" mnemonic="PR_StopPings" opcode="0x29">
       <args/>
     </command>
-    <command component="SG1" mnemonic="SignalGen_Settings" opcode="0xb5">
+    <command component="signalGen1" mnemonic="SignalGen_Settings" opcode="0xb5">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -575,13 +575,13 @@
         <arg name="SigType" type="Ref::SignalType"/>
       </args>
     </command>
-    <command component="SG1" mnemonic="SignalGen_Toggle" opcode="0xb6">
+    <command component="signalGen1" mnemonic="SignalGen_Toggle" opcode="0xb6">
       <args/>
     </command>
-    <command component="SG1" mnemonic="SignalGen_Skip" opcode="0xb7">
+    <command component="signalGen1" mnemonic="SignalGen_Skip" opcode="0xb7">
       <args/>
     </command>
-    <command component="SG3" mnemonic="SignalGen_Settings" opcode="0xc9">
+    <command component="signalGen2" mnemonic="SignalGen_Settings" opcode="0xdd">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -589,13 +589,13 @@
         <arg name="SigType" type="Ref::SignalType"/>
       </args>
     </command>
-    <command component="SG3" mnemonic="SignalGen_Toggle" opcode="0xca">
+    <command component="signalGen2" mnemonic="SignalGen_Toggle" opcode="0xde">
       <args/>
     </command>
-    <command component="SG3" mnemonic="SignalGen_Skip" opcode="0xcb">
+    <command component="signalGen2" mnemonic="SignalGen_Skip" opcode="0xdf">
       <args/>
     </command>
-    <command component="SG2" mnemonic="SignalGen_Settings" opcode="0xdd">
+    <command component="signalGen3" mnemonic="SignalGen_Settings" opcode="0xc9">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -603,13 +603,13 @@
         <arg name="SigType" type="Ref::SignalType"/>
       </args>
     </command>
-    <command component="SG2" mnemonic="SignalGen_Toggle" opcode="0xde">
+    <command component="signalGen3" mnemonic="SignalGen_Toggle" opcode="0xca">
       <args/>
     </command>
-    <command component="SG2" mnemonic="SignalGen_Skip" opcode="0xdf">
+    <command component="signalGen3" mnemonic="SignalGen_Skip" opcode="0xcb">
       <args/>
     </command>
-    <command component="SG5" mnemonic="SignalGen_Settings" opcode="0x119">
+    <command component="signalGen4" mnemonic="SignalGen_Settings" opcode="0x141">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -617,13 +617,13 @@
         <arg name="SigType" type="Ref::SignalType"/>
       </args>
     </command>
-    <command component="SG5" mnemonic="SignalGen_Toggle" opcode="0x11a">
+    <command component="signalGen4" mnemonic="SignalGen_Toggle" opcode="0x142">
       <args/>
     </command>
-    <command component="SG5" mnemonic="SignalGen_Skip" opcode="0x11b">
+    <command component="signalGen4" mnemonic="SignalGen_Skip" opcode="0x143">
       <args/>
     </command>
-    <command component="SG4" mnemonic="SignalGen_Settings" opcode="0x141">
+    <command component="signalGen5" mnemonic="SignalGen_Settings" opcode="0x119">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -631,10 +631,10 @@
         <arg name="SigType" type="Ref::SignalType"/>
       </args>
     </command>
-    <command component="SG4" mnemonic="SignalGen_Toggle" opcode="0x142">
+    <command component="signalGen5" mnemonic="SignalGen_Toggle" opcode="0x11a">
       <args/>
     </command>
-    <command component="SG4" mnemonic="SignalGen_Skip" opcode="0x143">
+    <command component="signalGen5" mnemonic="SignalGen_Skip" opcode="0x11b">
       <args/>
     </command>
   </commands>
@@ -957,7 +957,7 @@
         <arg name="entry" len="40" type="string"/>
       </args>
     </event>
-    <event component="health" name="HLTH_PING_DISABLED" id="0x172" severity="WARNING_HI" format_string="Ping disable for %s">
+    <event component="health" name="HLTH_PING_DISABLED" id="0x172" severity="WARNING_HI" format_string="Ping disabled for %s">
       <args>
         <arg name="entry" len="40" type="string"/>
       </args>
@@ -1289,7 +1289,7 @@
         <arg name="code" type="U32"/>
       </args>
     </event>
-    <event component="SG1" name="SignalGen_SettingsChanged" id="0xb5" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
+    <event component="signalGen1" name="SignalGen_SettingsChanged" id="0xb5" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -1297,7 +1297,7 @@
         <arg name="SignalType" type="Ref::SignalType"/>
       </args>
     </event>
-    <event component="SG3" name="SignalGen_SettingsChanged" id="0xc9" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
+    <event component="signalGen2" name="SignalGen_SettingsChanged" id="0xdd" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -1305,7 +1305,7 @@
         <arg name="SignalType" type="Ref::SignalType"/>
       </args>
     </event>
-    <event component="SG2" name="SignalGen_SettingsChanged" id="0xdd" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
+    <event component="signalGen3" name="SignalGen_SettingsChanged" id="0xc9" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -1313,7 +1313,7 @@
         <arg name="SignalType" type="Ref::SignalType"/>
       </args>
     </event>
-    <event component="SG5" name="SignalGen_SettingsChanged" id="0x119" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
+    <event component="signalGen4" name="SignalGen_SettingsChanged" id="0x141" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -1321,7 +1321,7 @@
         <arg name="SignalType" type="Ref::SignalType"/>
       </args>
     </event>
-    <event component="SG4" name="SignalGen_SettingsChanged" id="0x141" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
+    <event component="signalGen5" name="SignalGen_SettingsChanged" id="0x119" severity="ACTIVITY_LO" format_string="Set Frequency(Hz) %d, Amplitude %f, Phase %f, Signal Type %s">
       <args>
         <arg name="Frequency" type="U32"/>
         <arg name="Amplitude" type="F32"/>
@@ -1368,36 +1368,36 @@
     <channel component="recvBuffComp" name="Parameter1" id="0x68" description="Readback of Parameter1" type="U32"/>
     <channel component="recvBuffComp" name="Parameter2" id="0x69" description="Readback of Parameter2" low_red="-3" low_orange="-2" low_yellow="-1" high_yellow="1" high_orange="2" high_red="3" type="I16"/>
     <channel component="pingRcvr" name="PR_NumPings" id="0x29" description="Number of pings received" type="U32"/>
-    <channel component="SG1" name="Type" id="0xb5" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
-    <channel component="SG1" name="Output" id="0xb6" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
-    <channel component="SG1" name="PairOutput" id="0xb7" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
-    <channel component="SG1" name="History" id="0xb8" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
-    <channel component="SG1" name="PairHistory" id="0xb9" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
-    <channel component="SG1" name="Info" id="0xba" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
-    <channel component="SG3" name="Type" id="0xc9" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
-    <channel component="SG3" name="Output" id="0xca" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
-    <channel component="SG3" name="PairOutput" id="0xcb" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
-    <channel component="SG3" name="History" id="0xcc" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
-    <channel component="SG3" name="PairHistory" id="0xcd" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
-    <channel component="SG3" name="Info" id="0xce" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
-    <channel component="SG2" name="Type" id="0xdd" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
-    <channel component="SG2" name="Output" id="0xde" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
-    <channel component="SG2" name="PairOutput" id="0xdf" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
-    <channel component="SG2" name="History" id="0xe0" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
-    <channel component="SG2" name="PairHistory" id="0xe1" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
-    <channel component="SG2" name="Info" id="0xe2" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
-    <channel component="SG5" name="Type" id="0x119" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
-    <channel component="SG5" name="Output" id="0x11a" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
-    <channel component="SG5" name="PairOutput" id="0x11b" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
-    <channel component="SG5" name="History" id="0x11c" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
-    <channel component="SG5" name="PairHistory" id="0x11d" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
-    <channel component="SG5" name="Info" id="0x11e" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
-    <channel component="SG4" name="Type" id="0x141" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
-    <channel component="SG4" name="Output" id="0x142" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
-    <channel component="SG4" name="PairOutput" id="0x143" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
-    <channel component="SG4" name="History" id="0x144" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
-    <channel component="SG4" name="PairHistory" id="0x145" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
-    <channel component="SG4" name="Info" id="0x146" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
+    <channel component="signalGen1" name="Type" id="0xb5" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
+    <channel component="signalGen1" name="Output" id="0xb6" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
+    <channel component="signalGen1" name="PairOutput" id="0xb7" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
+    <channel component="signalGen1" name="History" id="0xb8" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
+    <channel component="signalGen1" name="PairHistory" id="0xb9" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
+    <channel component="signalGen1" name="Info" id="0xba" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
+    <channel component="signalGen2" name="Type" id="0xdd" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
+    <channel component="signalGen2" name="Output" id="0xde" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
+    <channel component="signalGen2" name="PairOutput" id="0xdf" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
+    <channel component="signalGen2" name="History" id="0xe0" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
+    <channel component="signalGen2" name="PairHistory" id="0xe1" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
+    <channel component="signalGen2" name="Info" id="0xe2" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
+    <channel component="signalGen3" name="Type" id="0xc9" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
+    <channel component="signalGen3" name="Output" id="0xca" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
+    <channel component="signalGen3" name="PairOutput" id="0xcb" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
+    <channel component="signalGen3" name="History" id="0xcc" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
+    <channel component="signalGen3" name="PairHistory" id="0xcd" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
+    <channel component="signalGen3" name="Info" id="0xce" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
+    <channel component="signalGen4" name="Type" id="0x141" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
+    <channel component="signalGen4" name="Output" id="0x142" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
+    <channel component="signalGen4" name="PairOutput" id="0x143" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
+    <channel component="signalGen4" name="History" id="0x144" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
+    <channel component="signalGen4" name="PairHistory" id="0x145" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
+    <channel component="signalGen4" name="Info" id="0x146" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
+    <channel component="signalGen5" name="Type" id="0x119" description="Type of the output signal: SINE, TRIANGLE, etc." type="Ref::SignalType"/>
+    <channel component="signalGen5" name="Output" id="0x11a" format_string="%2.4f" description="Single Y value of the output" type="F32"/>
+    <channel component="signalGen5" name="PairOutput" id="0x11b" description="Single (time, value) pair of the signal" type="Ref::SignalPair"/>
+    <channel component="signalGen5" name="History" id="0x11c" description="Last 10 Y values of the signal" type="Ref::SignalSet"/>
+    <channel component="signalGen5" name="PairHistory" id="0x11d" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
+    <channel component="signalGen5" name="Info" id="0x11e" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
     <channel component="blockDrv" name="BD_Cycles" id="0x1e1" description="Driver cycle count" type="U32"/>
   </channels>
   <parameters>

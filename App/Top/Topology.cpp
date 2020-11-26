@@ -70,9 +70,9 @@ Svc::CmdSequencerComponentImpl cmdSeq(FW_OPTIONAL_NAME("CMDSEQ"));
 
 Svc::PrmDbImpl prmDb(FW_OPTIONAL_NAME("PRM"),"PrmDb.dat");
 
-Ref::PingReceiverComponentImpl pingRcvr(FW_OPTIONAL_NAME("PngRecv"));
+Ref::PingReceiverComponentImpl pingRcvr(FW_OPTIONAL_NAME("pingRcvr"));
 
-Drv::SocketIpDriverComponentImpl socketIpDriver(FW_OPTIONAL_NAME("SocketIpDriver"));
+Drv::SocketIpDriverComponentImpl socketIpDriver(FW_OPTIONAL_NAME("socketIpDriver"));
 
 Svc::FileUplink fileUplink(FW_OPTIONAL_NAME("fileUplink"));
 
@@ -86,15 +86,15 @@ Svc::BufferManager fileUplinkBufferManager(FW_OPTIONAL_NAME("fileUplinkBufferMan
 
 Svc::HealthImpl health(FW_OPTIONAL_NAME("health"));
 
-Ref::SignalGen SG1(FW_OPTIONAL_NAME("signalGen1"));
+Ref::SignalGen signalGen1(FW_OPTIONAL_NAME("signalGen1"));
 
-Ref::SignalGen SG2(FW_OPTIONAL_NAME("signalGen2"));
+Ref::SignalGen signalGen2(FW_OPTIONAL_NAME("signalGen2"));
 
-Ref::SignalGen SG3(FW_OPTIONAL_NAME("signalGen3"));
+Ref::SignalGen signalGen3(FW_OPTIONAL_NAME("signalGen3"));
 
-Ref::SignalGen SG4(FW_OPTIONAL_NAME("signalGen4"));
+Ref::SignalGen signalGen4(FW_OPTIONAL_NAME("signalGen4"));
 
-Ref::SignalGen SG5(FW_OPTIONAL_NAME("signalGen5"));
+Ref::SignalGen signalGen5(FW_OPTIONAL_NAME("signalGen5"));
 
 Svc::AssertFatalAdapterComponentImpl fatalAdapter(FW_OPTIONAL_NAME("fatalAdapter"));
 
@@ -156,11 +156,11 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
     fileManager.init(30, 0);
     fileUplinkBufferManager.init(0);
     fileDownlinkBufferManager.init(1);
-    SG1.init(10,0);
-    SG2.init(10,1);
-    SG3.init(10,2);
-    SG4.init(10,3);
-    SG5.init(10,4);
+    signalGen1.init(10,0);
+    signalGen2.init(10,1);
+    signalGen3.init(10,2);
+    signalGen4.init(10,3);
+    signalGen5.init(10,4);
     fatalAdapter.init(0);
     fatalHandler.init(0);
     health.init(25,0);
@@ -185,11 +185,11 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
     prmDb.regCommands();
     fileDownlink.regCommands();
     fileManager.regCommands();
-    SG1.regCommands();
-    SG2.regCommands();
-    SG3.regCommands();
-    SG4.regCommands();
-	SG5.regCommands();
+    signalGen1.regCommands();
+    signalGen2.regCommands();
+    signalGen3.regCommands();
+    signalGen4.regCommands();
+	signalGen5.regCommands();
 	health.regCommands();
 	pingRcvr.regCommands();
 
