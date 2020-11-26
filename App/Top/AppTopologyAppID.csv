@@ -29,3 +29,4 @@ PassiveTextLogger,textLogger,521,20
 CmdSequencer,cmdSeq,541,23
 SocketIpDriver,socketIpDriver,601,20
 FileManager,fileManager,621,20
+EventAction,eventAction,641,20

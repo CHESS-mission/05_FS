@@ -29,7 +29,8 @@ fileDownlinkBufferManag |  401 (0x191)  |          20           |             20
       textLogger        |  521 (0x209)  |          20           |             20             |             None              |         0        
         cmdSeq          |  541 (0x21d)  |          23           |             60             |              23               |        23        
     socketIpDriver      |  601 (0x259)  |          20           |             20             |             None              |         0        
-      fileManager       |  621 (0x26d)  |          20           |            inf.            |              18               |        18        
+      fileManager       |  621 (0x26d)  |          20           |             20             |              18               |        18        
+      eventAction       |  641 (0x281)  |          20           |            inf.            |               1               |         1        
 -------------------------------------------------------------------------------------------------------------------------------------
 | INSTANCE NAME                 - Name of the instance object.                                                                      |
 | BASE ID (HEX)                 - Base ID set for the instance.                                                                     |

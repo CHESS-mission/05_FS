@@ -637,6 +637,9 @@
     <command component="signalGen5" mnemonic="SignalGen_Skip" opcode="0x11b">
       <args/>
     </command>
+    <command component="eventAction" mnemonic="EVAC_RUN" opcode="0x281">
+      <args/>
+    </command>
   </commands>
   <events>
     <event component="cmdDisp" name="OpCodeRegistered" id="0x79" severity="DIAGNOSTIC" format_string="Opcode 0x%04X registered to port %d slot %d">
@@ -1327,6 +1330,11 @@
         <arg name="Amplitude" type="F32"/>
         <arg name="Phase" type="F32"/>
         <arg name="SignalType" type="Ref::SignalType"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVA_EVENT" id="0x281" severity="ACTIVITY_HI" format_string="Event-Action : %s">
+      <args>
+        <arg name="info" len="40" type="string"/>
       </args>
     </event>
   </events>

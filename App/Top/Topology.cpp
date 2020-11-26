@@ -100,6 +100,8 @@ Svc::AssertFatalAdapterComponentImpl fatalAdapter(FW_OPTIONAL_NAME("fatalAdapter
 
 Svc::FatalHandlerComponentImpl fatalHandler(FW_OPTIONAL_NAME("fatalHandler"));
 
+App::EventActionComponentImpl eventAction(FW_OPTIONAL_NAME("eventAction"));
+
 const char* getHealthName(Fw::ObjBase& comp) {
    #if FW_OBJECT_NAMES == 1
        return comp.getObjName();
@@ -165,6 +167,9 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
     fatalHandler.init(0);
     health.init(25,0);
     pingRcvr.init(10);
+
+    eventAction.init(10);
+
     // Connect rate groups to rate group driver
     constructAppArchitecture();
 
@@ -192,6 +197,7 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
 	signalGen5.regCommands();
 	health.regCommands();
 	pingRcvr.regCommands();
+    eventAction.regCommands();
 
     // read parameters
     prmDb.readParamFile();
@@ -241,6 +247,8 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
 
     pingRcvr.start(0, 100, 10*1024);
 
+    eventAction.start(0, 100, 10*1024);
+
     // Initialize socket server if and only if there is a valid specification
     if (hostname != NULL && port_number != 0) {
         socketIpDriver.startSocketTask(100, 10 * 1024, hostname, port_number);
@@ -262,6 +270,7 @@ void exitTasks(void) {
     fileManager.exit();
     cmdSeq.exit();
     pingRcvr.exit();
+    eventAction.exit();
     // join the component threads with NULL pointers to free them
     (void) rateGroup1Comp.ActiveComponentBase::join(NULL);
     (void) rateGroup2Comp.ActiveComponentBase::join(NULL);
@@ -276,6 +285,7 @@ void exitTasks(void) {
     (void) fileManager.ActiveComponentBase::join(NULL);
     (void) cmdSeq.ActiveComponentBase::join(NULL);
     (void) pingRcvr.ActiveComponentBase::join(NULL);
+    (void) eventAction.ActiveComponentBase::join(NULL);
     socketIpDriver.exitSocketTask();
     (void) socketIpDriver.joinSocketTask(NULL);
     cmdSeq.deallocateBuffer(seqMallocator);
