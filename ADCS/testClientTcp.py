@@ -1,5 +1,5 @@
 import socket
-from packages.state_machine.StateMachine import ADCSStateMachine
+from packages.package.UART import Uart
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_address = ('localhost', 5005)
@@ -12,7 +12,7 @@ if __name__ == '__main__':
         for message in messages:
 
                 if message[2] < 128:
-                    message.append(ADCSStateMachine.checksum(message))
+                    message.append(Uart.checksum(message))
                     print(f"Sending Telecommand message : command id {message[2]}")
                 else:
                     print(f"Sending Telemetry message : Telemetry id {message[2]}")
