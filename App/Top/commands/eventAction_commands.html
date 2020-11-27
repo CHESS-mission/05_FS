@@ -44,9 +44,34 @@ html {
 	<tbody>
 
 		<tr style = "border: 2px solid black;">
-			<td rowspan="1">EVAC_RUN</td>
-			<td rowspan="1">641 (0x281)</td>
-			<td rowspan="1">Run sequence</td>
+			<td rowspan="3">EVAC_ADD</td>
+			<td rowspan="3">641 (0x281)</td>
+			<td rowspan="3">Add sequence for an event id</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>id</td>
+						<td>U32</td>
+						<td></td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>sequence</td>
+						<td>Fw::CmdStringArg</td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">EVAC_REMOVE</td>
+			<td rowspan="2">642 (0x282)</td>
+			<td rowspan="2">Remove sequence for a specific envent id</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>id</td>
+						<td>U32</td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="1">EVAC_DUMP</td>
+			<td rowspan="1">643 (0x283)</td>
+			<td rowspan="1">Dump event action list</td>
 				<td></td>
 				<td></td>
 				<td></td>

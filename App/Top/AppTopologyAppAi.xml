@@ -692,6 +692,10 @@
           <source component = "blockDrv" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
+     <connection name = "eventLoggerTime">
+          <source component = "eventAction" port = "Time" type = "Time" num = "0"/>
+          <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
+     </connection>
 
      <!-- Rate Group Connections -->
 
@@ -945,6 +949,10 @@
      <connection name = "eventActionSeqDone">
           <source component = "cmdSeq" port = "seqDone" type = "CmdResponse" num = "0"/>
           <target component = "eventAction" port = "seqResp" type = "CmdResponse" num = "0"/>
+     </connection>
+     <connection name = "eventActionLog">
+          <source component = "eventLogger" port = "LogSend" type = "Log" num = "0"/>
+          <target component = "eventAction" port = "logRecv" type = "Log" num = "0"/>
      </connection>
 
 </assembly>

@@ -39,20 +39,87 @@ EventAction component : Receive events from ActionLogger and trigger command seq
         </port>
         <port name="seqResp" data_type="Fw::CmdResponse" kind="async_input" max_number="1">
         </port>
+        <!-- Log ports -->
+        <port name="logRecv" data_type="Fw::Log" kind="sync_input">
+        </port>
     </ports>
 
     <commands>
-        <command kind="async" opcode="0" mnemonic="EVAC_RUN">
-            <comment>Run sequence</comment>
+        <command kind="async" opcode="0" mnemonic="EVAC_ADD">
+            <comment>Add sequence for an event id</comment>
+            <args>
+                <arg name="id" type="U32" comment="Event id to detect">
+                </arg>
+                <arg name="sequence" type="string" size="40" comment="Sequence to launch after specific id">
+                </arg>
+            </args>
+        </command>
+        <command kind="async" opcode="1" mnemonic="EVAC_REMOVE">
+            <comment>Remove sequence for a specific envent id</comment>
+            <args>
+                <arg name="id" type="U32" comment="Event id">
+                </arg>
+            </args>
+        </command>
+        <command kind="async" opcode="2" mnemonic="EVAC_DUMP">
+            <comment>Dump event action list</comment>
         </command>
     </commands>
 
     <events>
-        <event id="0" name="EVA_EVENT" severity="ACTIVITY_HI" format_string="Event-Action : %s">
+        <event id="0" name="EVAC_ADDED" severity="ACTIVITY_HI" format_string = "Sequence %s added for event %d.">
+            <comment>
+            Sequence added for a specific event id
+            </comment>
+            <args>
+                <arg name="sequence" type="string" size="40">
+                </arg>
+                <arg name="eventId" type="U32">
+                </arg>
+            </args>
+        </event>
+        <event id="1" name="EVAC_REMOVED" severity="ACTIVITY_HI" format_string = "Sequence %s removed for event %d.">
+            <comment>
+            Sequence removed for a specific event id
+            </comment>
+            <args>
+                <arg name="sequence" type="string" size="40">
+                </arg>
+                <arg name="eventId" type="U32">
+                </arg>
+            </args>
+        </event>
+        <event id="2" name="EVAC_LIST_FULL" severity="WARNING_LO" format_string = "Unable to add sequence for event %d, list full.">
+            <comment>
+            Attempted to add a new event id to detect to full list
+            </comment>
+            <args>
+                <arg name="eventId" type="U32">
+                </arg>
+            </args>
+        </event>
+        <event id="3" name="EVA_NOT_FOUND" severity="WARNING_LO" format_string = "Unable to remove sequence for event %d, none found.">
+            <comment>
+            Sequence for specific event id not found
+            </comment>
+            <args>
+                <arg name="eventId" type="U32">
+                </arg>
+            </args>
+        </event>
+        <event id="4" name="EVA_DUMP" severity="ACTIVITY_HI" format_string="Sequence %s registered for event %u">
+            <comment>Used to dump event-sequence items</comment>
+            <args>
+                <arg name="sequence" type="string" size="40">
+                </arg>
+                <arg name="eventId" type="U32">
+                </arg>
+            </args>
+        </event>
+        <event id="5" name="EVA_EVENT" severity="ACTIVITY_HI" format_string="EventAction - %s">
             <comment>An event occured</comment>
             <args>
-                <arg name="info" type="string" size="40">
-                    <comment>Event information</comment>
+                <arg name="message" type="string" size="40">
                 </arg>
             </args>
         </event>

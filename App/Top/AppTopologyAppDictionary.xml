@@ -637,7 +637,18 @@
     <command component="signalGen5" mnemonic="SignalGen_Skip" opcode="0x11b">
       <args/>
     </command>
-    <command component="eventAction" mnemonic="EVAC_RUN" opcode="0x281">
+    <command component="eventAction" mnemonic="EVAC_ADD" opcode="0x281">
+      <args>
+        <arg name="id" type="U32"/>
+        <arg name="sequence" len="40" type="string"/>
+      </args>
+    </command>
+    <command component="eventAction" mnemonic="EVAC_REMOVE" opcode="0x282">
+      <args>
+        <arg name="id" type="U32"/>
+      </args>
+    </command>
+    <command component="eventAction" mnemonic="EVAC_DUMP" opcode="0x283">
       <args/>
     </command>
   </commands>
@@ -1332,9 +1343,37 @@
         <arg name="SignalType" type="Ref::SignalType"/>
       </args>
     </event>
-    <event component="eventAction" name="EVA_EVENT" id="0x281" severity="ACTIVITY_HI" format_string="Event-Action : %s">
+    <event component="eventAction" name="EVAC_ADDED" id="0x281" severity="ACTIVITY_HI" format_string="Sequence %s added for event %d.">
       <args>
-        <arg name="info" len="40" type="string"/>
+        <arg name="sequence" len="40" type="string"/>
+        <arg name="eventId" type="U32"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVAC_REMOVED" id="0x282" severity="ACTIVITY_HI" format_string="Sequence %s removed for event %d.">
+      <args>
+        <arg name="sequence" len="40" type="string"/>
+        <arg name="eventId" type="U32"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVAC_LIST_FULL" id="0x283" severity="WARNING_LO" format_string="Unable to add sequence for event %d, list full.">
+      <args>
+        <arg name="eventId" type="U32"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVA_NOT_FOUND" id="0x284" severity="WARNING_LO" format_string="Unable to remove sequence for event %d, none found.">
+      <args>
+        <arg name="eventId" type="U32"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVA_DUMP" id="0x285" severity="ACTIVITY_HI" format_string="Sequence %s registered for event %u">
+      <args>
+        <arg name="sequence" len="40" type="string"/>
+        <arg name="eventId" type="U32"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVA_EVENT" id="0x286" severity="ACTIVITY_HI" format_string="EventAction - %s">
+      <args>
+        <arg name="message" len="40" type="string"/>
       </args>
     </event>
   </events>
