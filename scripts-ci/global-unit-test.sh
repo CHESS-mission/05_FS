@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 #check if an app name is specified
 if [[ -z "$1" ]]
 then
@@ -7,7 +8,7 @@ then
 	exit 1
 fi
 
-#Activate the python environnement
+#activate the python environnement
 . ./fprime-venv/bin/activate
 
 #purge an old app if it exists
@@ -19,16 +20,4 @@ set -e
 
 #build the app
 echo "generating..."; fprime-util generate
-echo "building..."; fprime-util build
-
-#start the gds if "start" is an argument
-if [[ "$1" == "start" ]]
-then
-	if  [[ $? -eq 0 ]]
-	then
-		echo "starting gds..."
-		fprime-gds
-	else
-		echo "build failed, gds start aborted"
-	fi
-fi
+fprime-util check --all

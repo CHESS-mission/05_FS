@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: "0 5 * * *"
 
+env:
+  path: App
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,11 +39,11 @@ jobs:
 
       # Build the project (project script)
       - name: Build the project
-        run: ./scripts-ci/build.sh
+        run: ./scripts-ci/build.sh ${{env.path}}
 
       # Upload the artifact
       - name: Upload the application binaries
         uses: actions/upload-artifact@v2
         with:
           name: Application binaries
-          path: App/build-*
+          path: ${{env.path}}/build-*
