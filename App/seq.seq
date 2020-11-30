@@ -1,6 +1,5 @@
-;R00:00:15 CMD_NO_OP 
+;R00:00:01 cmdDisp.CMD_NO_OP 
 R00:00:00 cmdDisp.CMD_NO_OP_STRING "1";
-R00:00:00 cmdDisp.CMD_TEST_CMD_1 17, 3.2, 2; <- this command has 3 arguments
+;R00:00:00 cmdDisp.CMD_TEST_CMD_1 1, 2.0, 3;
 
 ; A2020-330T16:22:00 cmdDisp.CMD_NO_OP ; 25.11.2020 17h22 GMT winter 
-
