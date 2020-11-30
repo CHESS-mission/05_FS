@@ -28,9 +28,8 @@
 #include <Svc/GroundInterface/GroundInterface.hpp>
 
 void constructAppArchitecture(void);
-bool constructApp(bool dump, U32 port_number, char* hostname);
+bool constructApp(bool dump, U32 port_number, char *hostname);
 void exitTasks(void);
-
 
 extern Svc::RateGroupDriverImpl rateGroupDriverComp;
 extern Svc::ActiveRateGroupImpl rateGroup1Comp, rateGroup2Comp, rateGroup3Comp;
@@ -55,8 +54,8 @@ extern Drv::BlockDriverImpl blockDrv;
 
 extern Ref::RecvBuffImpl recvBuffComp;
 extern Ref::SendBuffImpl sendBuffComp;
-extern Ref::SignalGen SG1 , SG2, SG3, SG4, SG5;
+extern Ref::SignalGen SG1, SG2, SG3, SG4, SG5;
 extern Ref::PingReceiverComponentImpl pingRcvr;
-extern Drv::SocketIpDriverComponentImpl socketIpDriver;
+extern Drv::SocketIpDriverComponentImpl socketIpDriver, socketIpDriverADCS;
 
 #endif

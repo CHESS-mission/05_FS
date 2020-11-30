@@ -255,7 +255,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     }
     return false;
 
-    socketIpDriverADCS.startSocketTask(100, 10 * 1024, "127.0.0.1", 5005);
+    socketIpDriverADCS.startSocketTask(100, 10 * 1024, "127.0.0.1", 5005, true);
 }
 
 void exitTasks(void)

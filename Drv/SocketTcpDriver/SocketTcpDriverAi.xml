@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="SocketTcpDriver" kind="passive" namespace="Drv" modeler="true">
+    <import_port_type>Fw/Buffer/BufferSendPortAi.xml</import_port_type>
+    <ports>
+
+        <!-- Functional ports -->
+        <port name="recv" data_type="Fw::BufferSend" kind="output" max_number="1">
+        </port>
+
+        <port name="send" data_type="Fw::BufferSend" kind="guarded_input" max_number="1">
+        </port>
+    </ports>
+</component>
