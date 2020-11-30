@@ -1,7 +1,10 @@
-name: Automatic Application Build
+name: Application Build and UT
 
 # Builds project on every push and PR
 on:  [push, pull_request]
+
+env:
+  path: App
 
 jobs:
   build:
@@ -34,4 +37,58 @@ jobs:
 
       # Build the project (project script)
       - name: Build the project
-        run: ./scripts-ci/build.sh
+        run: ./scripts-ci/build.sh ${{env.path}}
+
+  app_unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repository
+      - uses: actions/checkout@v2
+
+      - name: prepare python pre-built environnement
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: test python is functionnal
+        run: python -c "import sys; print(sys.version)"
+      
+      - name: Pepare dependencies python, cmake
+        run: |
+          python -m pip install --upgrade pip
+          sudo apt install cmake -y
+        
+      # Init the virtual environnement (project script)
+      - name: Prepare venv
+        run: ./scripts/init-venv.sh
+
+      # Build the unit tests and check them one by one in the app
+      - name: Build and run the unit test
+        run: ./scripts/local-unit-test.sh ${{env.path}}
+
+  global_unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the repository
+      - uses: actions/checkout@v2
+
+      - name: prepare python pre-built environnement
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: test python is functionnal
+        run: python -c "import sys; print(sys.version)"
+      
+      - name: Pepare dependencies python, cmake
+        run: |
+          python -m pip install --upgrade pip
+          sudo apt install cmake -y
+        
+      # Init the virtual environnement (project script)
+      - name: Prepare venv
+        run: ./scripts/init-venv.sh
+
+      # Build the unit tests and check them one by one in the app
+      - name: Build and run all the unit tests
+        run: ./scripts/global-unit-test.sh ${{env.path}}
