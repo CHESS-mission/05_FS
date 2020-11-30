@@ -14,7 +14,7 @@
 #define EventAction_HPP
 
 #include "App/EventAction/EventActionComponentAc.hpp"
-#include "EventActionImpCfg.hpp"
+#include "EventActionComponentImplCfg.hpp"
 
 namespace App {
 

@@ -30,9 +30,23 @@ void EventActionComponentImpl ::init(const NATIVE_INT_TYPE queueDepth,
     EventActionComponentBase::init(queueDepth, instance);
 
     memset(this->m_eventActionTable, 0, sizeof(this->m_eventActionTable));
+
+    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+         slot++) {
+        this->m_eventActionTable[slot].id = 0;
+        this->m_eventActionTable[slot].used = false;
+        this->m_eventActionTable[slot].sequence = nullptr;
+    }
 }
 
-EventActionComponentImpl ::~EventActionComponentImpl(void) {}
+EventActionComponentImpl ::~EventActionComponentImpl(void) {
+    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+         slot++) {
+        if (this->m_eventActionTable[slot].sequence != nullptr) {
+            delete this->m_eventActionTable[slot].sequence;
+        }
+    }
+}
 
 // ----------------------------------------------------------------------
 // Handler implementations for user-defined typed input ports
@@ -41,8 +55,7 @@ EventActionComponentImpl ::~EventActionComponentImpl(void) {}
 void EventActionComponentImpl ::seqResp_handler(const NATIVE_INT_TYPE portNum,
                                                 FwOpcodeType opCode, U32 cmdSeq,
                                                 Fw::CommandResponse response) {
-    // Fw::LogStringArg message("Response handler");
-    // this->log_ACTIVITY_HI_EVA_EVENT(message);
+    // @todo read response and send event
 }
 
 void EventActionComponentImpl ::logRecv_handler(const NATIVE_INT_TYPE portNum,
@@ -50,16 +63,18 @@ void EventActionComponentImpl ::logRecv_handler(const NATIVE_INT_TYPE portNum,
                                                 Fw::Time &timeTag,
                                                 Fw::LogSeverity severity,
                                                 Fw::LogBuffer &args) {
+    // @todo Avoid event-sequence loop by detecting if an event triggers a
+    // sequence that could emit the same event !
     for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
          slot++) {
         if ((this->m_eventActionTable[slot].used) and
             (this->m_eventActionTable[slot].id == id)) {
-            printf("NO_OP received\n");
-
-            Fw::EightyCharString file("seq.bin");
-
-            this->seqRun_out(
-                0, file);  // this->m_eventActionTable[slot].sequence);
+            Fw::LogStringArg log(
+                this->m_eventActionTable[slot].sequence->toChar());
+            this->log_ACTIVITY_HI_EVAC_RUN(id, log);
+            Fw::EightyCharString file(
+                this->m_eventActionTable[slot].sequence->toChar());
+            this->seqRun_out(0, file);
         }
     }
 }
@@ -67,27 +82,42 @@ void EventActionComponentImpl ::logRecv_handler(const NATIVE_INT_TYPE portNum,
 // ----------------------------------------------------------------------
 // Command handler implementations
 // ----------------------------------------------------------------------
-
 void EventActionComponentImpl ::EVAC_ADD_cmdHandler(
     const FwOpcodeType opCode, const U32 cmdSeq, U32 id,
     const Fw::CmdStringArg &sequence) {
     bool slotFound = false;
 
-    // @todo Check that event don't have another action registered
+    // make sure ID is not zero. Zero is reserved for ID filter.
+    FW_ASSERT(id != 0);
+
+    // check that event is not already registered
+    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+         slot++) {
+        if ((this->m_eventActionTable[slot].id == id) and
+            (this->m_eventActionTable[slot].used == true)) {
+            Fw::LogStringArg seq(
+                this->m_eventActionTable[slot].sequence->toChar());
+            this->log_WARNING_HI_EVAC_ALREADY_REGISTERED(id, seq);
+            this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
+            return;
+        }
+    }
+
+    // Try to add event in entries list
     for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
          slot++) {
         if ((not this->m_eventActionTable[slot].used) and (not slotFound)) {
             this->m_eventActionTable[slot].id = id;
-            Fw::EightyCharString seq(sequence.toChar());
-            this->m_eventActionTable[slot].sequence = &seq;
+            if (this->m_eventActionTable[slot].sequence != nullptr) {
+                delete this->m_eventActionTable[slot].sequence;
+            }
+            this->m_eventActionTable[slot].sequence =
+                new Fw::EightyCharString(sequence.toChar());
             this->m_eventActionTable[slot].used = true;
 
             slotFound = true;
         }
     }
-
-    // @todo Display event id in 0x00
-    Fw::LogStringArg seq("seq");
 
     if (not slotFound) {
         this->log_WARNING_LO_EVAC_LIST_FULL(id);
@@ -95,33 +125,35 @@ void EventActionComponentImpl ::EVAC_ADD_cmdHandler(
         return;
     }
 
-    this->log_ACTIVITY_HI_EVAC_ADDED(seq, id);
+    Fw::LogStringArg seqLog(sequence.toChar());
+    this->log_ACTIVITY_HI_EVAC_ADDED(seqLog, id);
     this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
 }
 
 void EventActionComponentImpl ::EVAC_REMOVE_cmdHandler(
     const FwOpcodeType opCode, const U32 cmdSeq, U32 id) {
-    bool slotFound = false;
-
     for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
          slot++) {
         if ((this->m_eventActionTable[slot].used) and
             (this->m_eventActionTable[slot].id == id)) {
+                //  @todo Ensure actionLogger will not access pointer after delete !
+            Fw::LogStringArg seq(
+                this->m_eventActionTable[slot].sequence->toChar());
+            this->log_ACTIVITY_HI_EVAC_REMOVED(seq, id);
+
+            // Clear slot
             this->m_eventActionTable[slot].id = 0;
             this->m_eventActionTable[slot].used = false;
+            delete this->m_eventActionTable[slot].sequence;
+            this->m_eventActionTable[slot].sequence = nullptr;
 
-            slotFound = true;
+            this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+            return;
         }
     }
 
-    Fw::LogStringArg seq("seq");
-    if (slotFound) {
-        this->log_ACTIVITY_HI_EVAC_REMOVED(seq, id);
-    } else {
-        // this->log_WARNING_LO_ALOG_ID_FILTER_NOT_FOUND
-    }
-
-    this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+    this->log_WARNING_LO_EVAC_NOT_FOUND(id);
+    this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
 }
 
 void EventActionComponentImpl ::EVAC_DUMP_cmdHandler(const FwOpcodeType opCode,
@@ -129,8 +161,10 @@ void EventActionComponentImpl ::EVAC_DUMP_cmdHandler(const FwOpcodeType opCode,
     for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
          slot++) {
         if (this->m_eventActionTable[slot].used) {
-            Fw::LogStringArg seq("seq");
-            this->log_ACTIVITY_HI_EVA_DUMP(seq, this->m_eventActionTable[slot].id);
+            Fw::LogStringArg seq(
+                this->m_eventActionTable[slot].sequence->toChar());
+            this->log_ACTIVITY_HI_EVAC_DUMP(seq,
+                                            this->m_eventActionTable[slot].id);
         }
     }
     this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);

@@ -1343,36 +1343,43 @@
         <arg name="SignalType" type="Ref::SignalType"/>
       </args>
     </event>
-    <event component="eventAction" name="EVAC_ADDED" id="0x281" severity="ACTIVITY_HI" format_string="Sequence %s added for event %d.">
+    <event component="eventAction" name="EVAC_ADDED" id="0x281" severity="ACTIVITY_HI" format_string="Sequence %s added for event 0x%02X.">
       <args>
         <arg name="sequence" len="40" type="string"/>
         <arg name="eventId" type="U32"/>
       </args>
     </event>
-    <event component="eventAction" name="EVAC_REMOVED" id="0x282" severity="ACTIVITY_HI" format_string="Sequence %s removed for event %d.">
+    <event component="eventAction" name="EVAC_REMOVED" id="0x282" severity="ACTIVITY_HI" format_string="Sequence %s removed for event 0x%02X.">
       <args>
         <arg name="sequence" len="40" type="string"/>
         <arg name="eventId" type="U32"/>
       </args>
     </event>
-    <event component="eventAction" name="EVAC_LIST_FULL" id="0x283" severity="WARNING_LO" format_string="Unable to add sequence for event %d, list full.">
+    <event component="eventAction" name="EVAC_LIST_FULL" id="0x283" severity="WARNING_LO" format_string="Unable to add sequence for event 0x%02X, list full.">
       <args>
         <arg name="eventId" type="U32"/>
       </args>
     </event>
-    <event component="eventAction" name="EVA_NOT_FOUND" id="0x284" severity="WARNING_LO" format_string="Unable to remove sequence for event %d, none found.">
+    <event component="eventAction" name="EVAC_NOT_FOUND" id="0x284" severity="WARNING_LO" format_string="Unable to remove sequence for event 0x%02X, not found.">
       <args>
         <arg name="eventId" type="U32"/>
       </args>
     </event>
-    <event component="eventAction" name="EVA_DUMP" id="0x285" severity="ACTIVITY_HI" format_string="Sequence %s registered for event %u">
+    <event component="eventAction" name="EVAC_ALREADY_REGISTERED" id="0x285" severity="WARNING_HI" format_string="Unable to add sequence - Event 0x%02X already registered for sequence %s">
+      <args>
+        <arg name="eventId" type="U32"/>
+        <arg name="sequence" len="40" type="string"/>
+      </args>
+    </event>
+    <event component="eventAction" name="EVAC_DUMP" id="0x286" severity="ACTIVITY_HI" format_string="Sequence %s registered for event 0x%02X">
       <args>
         <arg name="sequence" len="40" type="string"/>
         <arg name="eventId" type="U32"/>
       </args>
     </event>
-    <event component="eventAction" name="EVA_EVENT" id="0x286" severity="ACTIVITY_HI" format_string="EventAction - %s">
+    <event component="eventAction" name="EVAC_RUN" id="0x287" severity="ACTIVITY_HI" format_string="Event 0x%02X received - Running sequence %s">
       <args>
+        <arg name="eventId" type="U32"/>
         <arg name="message" len="40" type="string"/>
       </args>
     </event>
@@ -1446,6 +1453,7 @@
     <channel component="signalGen5" name="PairHistory" id="0x11d" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
     <channel component="signalGen5" name="Info" id="0x11e" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
     <channel component="blockDrv" name="BD_Cycles" id="0x1e1" description="Driver cycle count" type="U32"/>
+    <channel component="eventAction" name="EVAC_CHA" id="0x281" description="Sample channel to debug" type="U32"/>
   </channels>
   <parameters>
     <parameter component="sendBuffComp" name="parameter3" id="0x51" default="12"/>
