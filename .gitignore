@@ -10,3 +10,5 @@ App/logs/
 fprime-venv
 
 .idea
+.editorconfig
+.vscode/
