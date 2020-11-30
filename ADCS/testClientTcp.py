@@ -22,7 +22,7 @@ if __name__ == '__main__':
                 amount_expected = len(message)
 
                 while amount_received < amount_expected :
-                    data = s.recv(4096)
+                    data = s.recv(2048)
                     amount_received += len(data)
                     print(f"received {data}")
                     if data[2] < 128:

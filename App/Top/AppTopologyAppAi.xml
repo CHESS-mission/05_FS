@@ -34,7 +34,9 @@
     <import_component_type>Svc/PassiveConsoleTextLogger/PassiveTextLoggerComponentAi.xml</import_component_type>
     <import_component_type>Svc/GroundInterface/GroundInterfaceComponentAi.xml</import_component_type>
     <import_component_type>Svc/LinuxTimer/LinuxTimerComponentAi.xml</import_component_type>
+
     <import_component_type>Drv/SocketIpDriver/SocketIpDriverComponentAi.xml</import_component_type>
+    <import_component_type>App/Drv/SocketTcpDriver/SocketTcpDriverComponentAi.xml</import_component_type>
     
 
     <!-- Declare component instances - must match names in Components.hpp -->
@@ -59,7 +61,7 @@
 
     <!-- Communications driver. May be swapped with other comm drivers like UART -->
     <instance namespace="Drv" name="socketIpDriver" type="SocketIpDriver" base_id="601" base_id_window="20" />
-    <instance namespace="Drv" name="socketIpDriverADCS" type="SocketIpDriver" base_id="1000" base_id_window="20" />
+    <instance namespace="Drv" name="socketTcpDriverADCS" type="SocketTcpDriver" base_id="1000" base_id_window="5" />
 
     <!-- Rate Group Components -->
 

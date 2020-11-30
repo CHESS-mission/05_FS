@@ -74,8 +74,6 @@ Ref::PingReceiverComponentImpl pingRcvr(FW_OPTIONAL_NAME("PngRecv"));
 
 Drv::SocketIpDriverComponentImpl socketIpDriver(FW_OPTIONAL_NAME("SocketIpDriver"));
 
-Drv::SocketIpDriverComponentImpl socketIpDriverADCS(FW_OPTIONAL_NAME("SocketIpDriverADCS"));
-
 Svc::FileUplink fileUplink(FW_OPTIONAL_NAME("fileUplink"));
 
 Svc::FileDownlink fileDownlink(FW_OPTIONAL_NAME("fileDownlink"), DOWNLINK_PACKET_SIZE);
@@ -101,6 +99,9 @@ Ref::SignalGen SG5(FW_OPTIONAL_NAME("signalGen5"));
 Svc::AssertFatalAdapterComponentImpl fatalAdapter(FW_OPTIONAL_NAME("fatalAdapter"));
 
 Svc::FatalHandlerComponentImpl fatalHandler(FW_OPTIONAL_NAME("fatalHandler"));
+
+Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS(FW_OPTIONAL_NAME("SocketTcpDriverADCS"));
+
 
 const char *getHealthName(Fw::ObjBase &comp)
 {
@@ -155,7 +156,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     groundIf.init(0);
     socketIpDriver.init(0);
 
-    socketIpDriverADCS.init(0);
+    socketTcpDriverADCS.init(0);
 
     fileUplink.init(30, 0);
     fileDownlink.init(30, 0);
@@ -255,7 +256,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     }
     return false;
 
-    socketIpDriverADCS.startSocketTask(100, 10 * 1024, "127.0.0.1", 5005, true);
+     socketTcpDriverADCS.configure("127.0.0.1",5005,1,0);
 }
 
 void exitTasks(void)
@@ -289,7 +290,5 @@ void exitTasks(void)
     (void)pingRcvr.ActiveComponentBase::join(NULL);
     socketIpDriver.exitSocketTask();
     (void)socketIpDriver.joinSocketTask(NULL);
-    socketIpDriverADCS.exitSocketTask();
-    (void)socketIpDriverADCS.joinSocketTask(NULL);
     cmdSeq.deallocateBuffer(seqMallocator);
 }
