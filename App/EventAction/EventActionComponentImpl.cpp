@@ -55,7 +55,9 @@ EventActionComponentImpl ::~EventActionComponentImpl(void) {
 void EventActionComponentImpl ::seqResp_handler(const NATIVE_INT_TYPE portNum,
                                                 FwOpcodeType opCode, U32 cmdSeq,
                                                 Fw::CommandResponse response) {
-    // @todo read response and send event
+    // @todo Are we supposed to send events from EventAction depeding on 
+    // CmdDispatcher response given the fact it already does it ?
+    // Ex: Invalid sequence name or sequence completed
 }
 
 void EventActionComponentImpl ::logRecv_handler(const NATIVE_INT_TYPE portNum,

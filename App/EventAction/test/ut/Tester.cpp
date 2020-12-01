@@ -55,9 +55,6 @@ void Tester ::testAdd(U32 id, Fw::CmdStringArg &seq) {
     ASSERT_EVENTS_EVAC_ADDED_SIZE(1);
     ASSERT_EVENTS_EVAC_ADDED(0, seq.toChar(), id);
 
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
-
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
     ASSERT_CMD_RESPONSE(0, EventActionComponentBase::OPCODE_EVAC_ADD, 10,
@@ -85,9 +82,6 @@ void Tester ::testRemoveExisting(void) {
     ASSERT_EVENTS_EVAC_REMOVED_SIZE(1);
     ASSERT_EVENTS_EVAC_REMOVED(0, seq.toChar(), eventId);
 
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
-
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
     ASSERT_CMD_RESPONSE(0, EventActionComponentBase::OPCODE_EVAC_REMOVE, 11,
@@ -111,9 +105,6 @@ void Tester ::testRemoveEmpty(void) {
     ASSERT_EVENTS_SIZE(1);
     ASSERT_EVENTS_EVAC_NOT_FOUND_SIZE(1);
     ASSERT_EVENTS_EVAC_NOT_FOUND(0, eventId);
-
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -144,9 +135,6 @@ void Tester ::testRemoveUnexisting(void) {
     ASSERT_EVENTS_EVAC_NOT_FOUND_SIZE(1);
     ASSERT_EVENTS_EVAC_NOT_FOUND(0, eventIdUnexisting);
 
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
-
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
     ASSERT_CMD_RESPONSE(0, EventActionComponentBase::OPCODE_EVAC_REMOVE, 2,
@@ -166,9 +154,6 @@ void Tester ::testDumpEmpty(void) {
 
     // Check that there was no event
     ASSERT_EVENTS_SIZE(0);
-
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -202,9 +187,6 @@ void Tester ::testDump(void) {
     ASSERT_EVENTS_EVAC_DUMP(0, seq1.toChar(), event1);
     ASSERT_EVENTS_EVAC_DUMP(1, seq2.toChar(), event2);
 
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
-
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
     ASSERT_CMD_RESPONSE(0, EventActionComponentBase::OPCODE_EVAC_DUMP, 10,
@@ -234,9 +216,6 @@ void Tester::testAddFull(U32 maxSize) {
     ASSERT_EVENTS_EVAC_LIST_FULL_SIZE(1);
     ASSERT_EVENTS_EVAC_LIST_FULL(0, baseId + maxSize);
 
-    // Check that there was no telemetry
-    //ASSERT_TLM_SIZE(0);
-
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
     ASSERT_CMD_RESPONSE(0, EventActionComponentBase::OPCODE_EVAC_ADD, 10,
@@ -265,9 +244,6 @@ void Tester::testAddSame(void) {
     ASSERT_EVENTS_EVAC_ALREADY_REGISTERED_SIZE(1);
     ASSERT_EVENTS_EVAC_ALREADY_REGISTERED(0, eventId, seq1.toChar());
 
-    // Check that there was no telemetry
-    ////ASSERT_TLM_SIZE(0);
-
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
     ASSERT_CMD_RESPONSE(0, EventActionComponentBase::OPCODE_EVAC_ADD, 10,
@@ -277,8 +253,8 @@ void Tester::testAddSame(void) {
     this->clearHistory();
 }
 
-void Tester::testEventSequence(void) {
-    Fw::CmdStringArg seq("seq");
+void Tester::testEntryCorrespondingEvent(void) {
+    Fw::CmdStringArg seq("seq.bin");
     U32 eventId = 0x80;
 
     // Register event for a specific sequence
@@ -287,11 +263,31 @@ void Tester::testEventSequence(void) {
     Fw::Time time;
     Fw::LogBuffer logBuffer;
     this->invoke_to_logRecv(0, eventId, time, Fw::LogSeverity::LOG_ACTIVITY_HI, logBuffer);
+    this->component.doDispatch();
 
     // Check that there was one and only one port invocation
-    ASSERT_FROM_PORT_HISTORY_SIZE(0);
+    ASSERT_FROM_PORT_HISTORY_SIZE(1);
     ASSERT_from_seqRun_SIZE(1);
-    //ASSERT_from_seqRun(0, seq.toChar());
+    Fw::EightyCharString seqEC(seq.toChar());
+    ASSERT_from_seqRun(0, seqEC);
+
+    this->clearHistory();
+}
+
+void Tester::testEntryNonCorrespondingEvent(void) {
+    Fw::CmdStringArg seq("seq.bin");
+    U32 eventId = 0x80;
+
+    // Register event for a specific sequence
+    this->testAdd(eventId, seq);
+
+    Fw::Time time;
+    Fw::LogBuffer logBuffer;
+    this->invoke_to_logRecv(0, eventId + 1, time, Fw::LogSeverity::LOG_ACTIVITY_HI, logBuffer);
+    this->component.doDispatch();
+
+    // Check that there was no port invocation
+    ASSERT_FROM_PORT_HISTORY_SIZE(0);
 
     this->clearHistory();
 }

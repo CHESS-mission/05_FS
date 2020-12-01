@@ -52,8 +52,10 @@ class Tester : public EventActionGTestBase {
     void testAddFull(U32 maxSize);
     //! Add already existing id
     void testAddSame(void);
-    //! Register sequence and received requested event
-    void testEventSequence(void);
+    //! Add event-sequence entry and receive corresponding event
+    void testEntryCorrespondingEvent(void);
+    //! Add event-sequence entry and receive non-corresponding event
+    void testEntryNonCorrespondingEvent(void);
 
    private:
     // ----------------------------------------------------------------------
