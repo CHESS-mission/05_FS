@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>eventAction:EventAction Component Dictionary</title>
+</head>
+<body>
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+th {
+    text-align: left;
+}
+html {
+    font-family: Arial, sans-serif ;
+    font-size: 90% ;
+}
+</style>
+
+<h1><b>Events: eventAction:EventAction</b></h1>
+
+<table>
+	<thead>
+		<tr style = "border-right: 2px solid black; border-left: 2px solid black; border-top: 2px solid black;">
+			<th rowspan = "2">Event Name</th>
+			<th rowspan = "2">ID</th>
+			<th rowspan = "2">Description</th>
+			<th rowspan = "1" colspan = "4">Arguments</th>
+		</tr>
+		<tr style = "border-right: 2px solid black; ">
+			<th>Argument</th>
+			<th>Type</th>
+			<th>Size</th>
+			<th>Description</th>
+		<tr>
+	</thead>
+	<tbody>
+
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">EVAC_ADDED</td>
+			<td rowspan="3">641 (0x281)</td>
+			<td rowspan="3">Sequence added for a specific event id</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>sequence</td>
+						<td>Fw::LogStringArg&</td>
+						<td>40</td>
+						<td></td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">EVAC_REMOVED</td>
+			<td rowspan="3">642 (0x282)</td>
+			<td rowspan="3">Sequence removed for a specific event id</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>sequence</td>
+						<td>Fw::LogStringArg&</td>
+						<td>40</td>
+						<td></td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">EVAC_LIST_FULL</td>
+			<td rowspan="2">643 (0x283)</td>
+			<td rowspan="2">Attempted to add a new event id to detect to full list</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">EVAC_NOT_FOUND</td>
+			<td rowspan="2">644 (0x284)</td>
+			<td rowspan="2">Sequence for specific event id not found</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">EVAC_ALREADY_REGISTERED</td>
+			<td rowspan="3">645 (0x285)</td>
+			<td rowspan="3">Unable to add sequence</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>sequence</td>
+						<td>Fw::LogStringArg&</td>
+						<td>40</td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">EVAC_DUMP</td>
+			<td rowspan="3">646 (0x286)</td>
+			<td rowspan="3">Used to dump event-sequence items</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>sequence</td>
+						<td>Fw::LogStringArg&</td>
+						<td>40</td>
+						<td></td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">EVAC_RUN</td>
+			<td rowspan="3">647 (0x287)</td>
+			<td rowspan="3">A sequence has been triggered by an event</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>eventId</td>
+						<td>U32</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>sequence</td>
+						<td>Fw::LogStringArg&</td>
+						<td>40</td>
+						<td></td>
+					</tr>
+		</tr>
+	</tbody>
+</table>
+
+</body>
+</html>
