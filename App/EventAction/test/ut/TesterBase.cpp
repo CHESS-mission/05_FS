@@ -37,9 +37,6 @@ namespace App {
   {
     // Initialize command history
     this->cmdResponseHistory = new History<CmdResponse>(maxHistorySize);
-    // Initialize telemetry histories
-    this->tlmHistory_EVAC_CHA =
-      new History<TlmEntry_EVAC_CHA>(maxHistorySize);
     // Initialize event histories
 #if FW_ENABLE_TEXT_LOGGING
     this->textLogHistory = new History<TextLogEntry>(maxHistorySize);
@@ -70,8 +67,6 @@ namespace App {
   {
     // Destroy command history
     delete this->cmdResponseHistory;
-    // Destroy telemetry histories
-    delete this->tlmHistory_EVAC_CHA;
     // Destroy event histories
 #if FW_ENABLE_TEXT_LOGGING
     delete this->textLogHistory;
@@ -215,35 +210,6 @@ namespace App {
     }
 #endif
 
-    // Attach input port tlmOut
-
-    for (
-        NATIVE_INT_TYPE _port = 0;
-        _port < this->getNum_from_tlmOut();
-        ++_port
-    ) {
-
-      this->m_from_tlmOut[_port].init();
-      this->m_from_tlmOut[_port].addCallComp(
-          this,
-          from_tlmOut_static
-      );
-      this->m_from_tlmOut[_port].setPortNum(_port);
-
-#if FW_OBJECT_NAMES == 1
-      char _portName[120];
-      (void) snprintf(
-          _portName,
-          sizeof(_portName),
-          "%s_from_tlmOut[%d]",
-          this->m_objName,
-          _port
-      );
-      this->m_from_tlmOut[_port].setObjName(_portName);
-#endif
-
-    }
-
     // Attach input port seqRun
 
     for (
@@ -385,12 +351,6 @@ namespace App {
     return (NATIVE_INT_TYPE) FW_NUM_ARRAY_ELEMENTS(this->m_from_txtEventOut);
   }
 #endif
-
-  NATIVE_INT_TYPE EventActionTesterBase ::
-    getNum_from_tlmOut(void) const
-  {
-    return (NATIVE_INT_TYPE) FW_NUM_ARRAY_ELEMENTS(this->m_from_tlmOut);
-  }
 
   NATIVE_INT_TYPE EventActionTesterBase ::
     getNum_from_seqRun(void) const
@@ -545,13 +505,6 @@ namespace App {
   }
 #endif
 
-  Fw::InputTlmPort *EventActionTesterBase ::
-    get_from_tlmOut(const NATIVE_INT_TYPE portNum)
-  {
-    FW_ASSERT(portNum < this->getNum_from_tlmOut(),static_cast<AssertArg>(portNum));
-    return &this->m_from_tlmOut[portNum];
-  }
-
   Svc::InputCmdSeqInPort *EventActionTesterBase ::
     get_from_seqRun(const NATIVE_INT_TYPE portNum)
   {
@@ -608,20 +561,6 @@ namespace App {
     )
   {
 
-  }
-
-  void EventActionTesterBase ::
-    from_tlmOut_static(
-        Fw::PassiveComponentBase *const component,
-        NATIVE_INT_TYPE portNum,
-        FwChanIdType id,
-        Fw::Time &timeTag,
-        Fw::TlmBuffer &val
-    )
-  {
-    EventActionTesterBase* _testerBase =
-      static_cast<EventActionTesterBase*>(component);
-    _testerBase->dispatchTlm(id, timeTag, val);
   }
 
   void EventActionTesterBase ::
@@ -867,7 +806,6 @@ namespace App {
     clearHistory()
   {
     this->cmdResponseHistory->clear();
-    this->clearTlm();
     this->textLogHistory->clear();
     this->clearEvents();
     this->clearFromPortHistory();
@@ -881,68 +819,6 @@ namespace App {
     setTestTime(const Fw::Time& time)
   {
     this->m_testTime = time;
-  }
-
-  // ----------------------------------------------------------------------
-  // Telemetry dispatch
-  // ----------------------------------------------------------------------
-
-  void EventActionTesterBase ::
-    dispatchTlm(
-        const FwChanIdType id,
-        const Fw::Time &timeTag,
-        Fw::TlmBuffer &val
-    )
-  {
-
-    val.resetDeser();
-
-    const U32 idBase = this->getIdBase();
-    FW_ASSERT(id >= idBase, id, idBase);
-
-    switch (id - idBase) {
-
-      case EventActionComponentBase::CHANNELID_EVAC_CHA:
-      {
-        U32 arg;
-        const Fw::SerializeStatus _status = val.deserialize(arg);
-        if (_status != Fw::FW_SERIALIZE_OK) {
-          printf("Error deserializing EVAC_CHA: %d\n", _status);
-          return;
-        }
-        this->tlmInput_EVAC_CHA(timeTag, arg);
-        break;
-      }
-
-      default: {
-        FW_ASSERT(0, id);
-        break;
-      }
-
-    }
-
-  }
-
-  void EventActionTesterBase ::
-    clearTlm(void)
-  {
-    this->tlmSize = 0;
-    this->tlmHistory_EVAC_CHA->clear();
-  }
-
-  // ----------------------------------------------------------------------
-  // Channel: EVAC_CHA
-  // ----------------------------------------------------------------------
-
-  void EventActionTesterBase ::
-    tlmInput_EVAC_CHA(
-        const Fw::Time& timeTag,
-        const U32& val
-    )
-  {
-    TlmEntry_EVAC_CHA e = { timeTag, val };
-    this->tlmHistory_EVAC_CHA->push_back(e);
-    ++this->tlmSize;
   }
 
   // ----------------------------------------------------------------------
@@ -1273,14 +1149,14 @@ namespace App {
             static_cast<AssertArg>(_status)
         );
 
-        Fw::LogStringArg message;
-        _status = args.deserialize(message);
+        Fw::LogStringArg sequence;
+        _status = args.deserialize(sequence);
         FW_ASSERT(
             _status == Fw::FW_SERIALIZE_OK,
             static_cast<AssertArg>(_status)
         );
 
-        this->logIn_ACTIVITY_HI_EVAC_RUN(eventId, message);
+        this->logIn_ACTIVITY_HI_EVAC_RUN(eventId, sequence);
 
         break;
 
@@ -1493,11 +1369,11 @@ namespace App {
   void EventActionTesterBase ::
     logIn_ACTIVITY_HI_EVAC_RUN(
         U32 eventId,
-        Fw::LogStringArg& message
+        Fw::LogStringArg& sequence
     )
   {
     EventEntry_EVAC_RUN e = {
-      eventId, message
+      eventId, sequence
     };
     eventHistory_EVAC_RUN->push_back(e);
     ++this->eventsSize;

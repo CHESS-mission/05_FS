@@ -113,76 +113,6 @@ namespace App {
   }
 
   // ----------------------------------------------------------------------
-  // Telemetry
-  // ----------------------------------------------------------------------
-
-  void EventActionGTestBase ::
-    assertTlm_size(
-        const char *const __callSiteFileName,
-        const U32 __callSiteLineNumber,
-        const U32 size
-    ) const
-  {
-    ASSERT_EQ(size, this->tlmSize)
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Total size of all telemetry histories\n"
-      << "  Expected: " << size << "\n"
-      << "  Actual:   " << this->tlmSize << "\n";
-  }
-
-  // ----------------------------------------------------------------------
-  // Channel: EVAC_CHA
-  // ----------------------------------------------------------------------
-
-  void EventActionGTestBase ::
-    assertTlm_EVAC_CHA_size(
-        const char *const __callSiteFileName,
-        const U32 __callSiteLineNumber,
-        const U32 size
-    ) const
-  {
-    ASSERT_EQ(this->tlmHistory_EVAC_CHA->size(), size)
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Size of history for telemetry channel EVAC_CHA\n"
-      << "  Expected: " << size << "\n"
-      << "  Actual:   " << this->tlmHistory_EVAC_CHA->size() << "\n";
-  }
-
-  void EventActionGTestBase ::
-    assertTlm_EVAC_CHA(
-        const char *const __callSiteFileName,
-        const U32 __callSiteLineNumber,
-        const U32 __index,
-        const U32& val
-    )
-    const
-  {
-    ASSERT_LT(__index, this->tlmHistory_EVAC_CHA->size())
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Index into history of telemetry channel EVAC_CHA\n"
-      << "  Expected: Less than size of history ("
-      << this->tlmHistory_EVAC_CHA->size() << ")\n"
-      << "  Actual:   " << __index << "\n";
-    const TlmEntry_EVAC_CHA& e =
-      this->tlmHistory_EVAC_CHA->at(__index);
-    ASSERT_EQ(val, e.arg)
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Value at index "
-      << __index
-      << " on telmetry channel EVAC_CHA\n"
-      << "  Expected: " << val << "\n"
-      << "  Actual:   " << e.arg << "\n";
-  }
-
-  // ----------------------------------------------------------------------
   // Events
   // ----------------------------------------------------------------------
 
@@ -562,7 +492,7 @@ namespace App {
         const U32 __callSiteLineNumber,
         const U32 __index,
         const U32 eventId,
-        const char *const message
+        const char *const sequence
     ) const
   {
     ASSERT_GT(this->eventHistory_EVAC_RUN->size(), __index)
@@ -584,15 +514,15 @@ namespace App {
       << " in history of event EVAC_RUN\n"
       << "  Expected: " << eventId << "\n"
       << "  Actual:   " << e.eventId << "\n";
-    ASSERT_STREQ(message, e.message.toChar())
+    ASSERT_STREQ(sequence, e.sequence.toChar())
       << "\n"
       << "  File:     " << __callSiteFileName << "\n"
       << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Value of argument message at index "
+      << "  Value:    Value of argument sequence at index "
       << __index
       << " in history of event EVAC_RUN\n"
-      << "  Expected: " << message << "\n"
-      << "  Actual:   " << e.message.toChar() << "\n";
+      << "  Expected: " << sequence << "\n"
+      << "  Actual:   " << e.sequence.toChar() << "\n";
   }
 
   // ----------------------------------------------------------------------

@@ -570,10 +570,6 @@
           <source component = "blockDrv" port = "Tlm" type = "Tlm" num = "0"/>
           <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
      </connection>
-     <connection name = "eventActionTlm">
-          <source component = "eventAction" port = "tlmOut" type = "Tlm" num = "0"/>
-          <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
-     </connection>
 
      <!-- Parameter Connections -->
 

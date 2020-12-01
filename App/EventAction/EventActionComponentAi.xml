@@ -32,8 +32,8 @@ EventAction component : Receive events from ActionLogger and trigger command seq
         <port name="txtEventOut" data_type="Fw::LogText" kind="output" role="LogTextEvent" max_number="1">
         </port>
         <!-- Telemetry ports -->
-        <port name="tlmOut" data_type="Fw::Tlm" kind="output" role="Telemetry" max_number="1">
-        </port>
+        <!--<port name="tlmOut" data_type="Fw::Tlm" kind="output" role="Telemetry" max_number="1">
+        </port>-->
         <!-- CommandSequencer ports  -->
         <port name="seqRun" data_type="Svc::CmdSeqIn" kind="output" max_number="1">
         </port>
@@ -50,7 +50,7 @@ EventAction component : Receive events from ActionLogger and trigger command seq
             <args>
                 <arg name="id" type="U32" comment="Event id to detect">
                 </arg>
-                <arg name="sequence" type="string" size="40" comment="Sequence to launch after specific id">
+                <arg name="sequence" type="string" size="40" comment="Sequence to launch after event is detected">
                 </arg>
             </args>
         </command>
@@ -67,7 +67,7 @@ EventAction component : Receive events from ActionLogger and trigger command seq
     </commands>
 
     <events>
-        <event id="0" name="EVAC_ADDED" severity="ACTIVITY_HI" format_string = "Sequence %s added for event 0x%02X.">
+        <event id="0" name="EVAC_ADDED" severity="ACTIVITY_HI" format_string="Sequence %s added for event 0x%02X.">
             <comment>
             Sequence added for a specific event id
             </comment>
@@ -78,7 +78,7 @@ EventAction component : Receive events from ActionLogger and trigger command seq
                 </arg>
             </args>
         </event>
-        <event id="1" name="EVAC_REMOVED" severity="ACTIVITY_HI" format_string = "Sequence %s removed for event 0x%02X.">
+        <event id="1" name="EVAC_REMOVED" severity="ACTIVITY_HI" format_string="Sequence %s removed for event 0x%02X.">
             <comment>
             Sequence removed for a specific event id
             </comment>
@@ -89,7 +89,7 @@ EventAction component : Receive events from ActionLogger and trigger command seq
                 </arg>
             </args>
         </event>
-        <event id="2" name="EVAC_LIST_FULL" severity="WARNING_LO" format_string = "Unable to add sequence for event 0x%02X, list full.">
+        <event id="2" name="EVAC_LIST_FULL" severity="WARNING_LO" format_string="Unable to add sequence for event 0x%02X, list full.">
             <comment>
             Attempted to add a new event id to detect to full list
             </comment>
@@ -98,7 +98,7 @@ EventAction component : Receive events from ActionLogger and trigger command seq
                 </arg>
             </args>
         </event>
-        <event id="3" name="EVAC_NOT_FOUND" severity="WARNING_LO" format_string = "Unable to remove sequence for event 0x%02X, not found.">
+        <event id="3" name="EVAC_NOT_FOUND" severity="WARNING_LO" format_string="Unable to remove sequence for event 0x%02X, not found.">
             <comment>
             Sequence for specific event id not found
             </comment>
@@ -108,7 +108,7 @@ EventAction component : Receive events from ActionLogger and trigger command seq
             </args>
         </event>
         <event id="4" name="EVAC_ALREADY_REGISTERED" severity="WARNING_HI" format_string="Unable to add sequence - Event 0x%02X already registered for sequence %s">
-            <comment>Unable to add sequeunce</comment>
+            <comment>Unable to add sequence</comment>
             <args>
                 <arg name="eventId" type="U32">
                 </arg>
@@ -130,17 +130,9 @@ EventAction component : Receive events from ActionLogger and trigger command seq
             <args>
                 <arg name="eventId" type="U32">
                 </arg>
-                <arg name="message" type="string" size="40">
+                <arg name="sequence" type="string" size="40">
                 </arg>
             </args>
         </event>
     </events>
-
-    <telemetry>
-        <channel id="0" name="EVAC_CHA" data_type="U32">
-            <comment>
-            Sample channel to debug
-            </comment>
-        </channel>
-    </telemetry>
 </component>

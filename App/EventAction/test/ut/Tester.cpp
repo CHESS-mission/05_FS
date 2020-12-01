@@ -56,7 +56,7 @@ void Tester ::testAdd(U32 id, Fw::CmdStringArg &seq) {
     ASSERT_EVENTS_EVAC_ADDED(0, seq.toChar(), id);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -86,7 +86,7 @@ void Tester ::testRemoveExisting(void) {
     ASSERT_EVENTS_EVAC_REMOVED(0, seq.toChar(), eventId);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -113,7 +113,7 @@ void Tester ::testRemoveEmpty(void) {
     ASSERT_EVENTS_EVAC_NOT_FOUND(0, eventId);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -145,7 +145,7 @@ void Tester ::testRemoveUnexisting(void) {
     ASSERT_EVENTS_EVAC_NOT_FOUND(0, eventIdUnexisting);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -168,7 +168,7 @@ void Tester ::testDumpEmpty(void) {
     ASSERT_EVENTS_SIZE(0);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -203,7 +203,7 @@ void Tester ::testDump(void) {
     ASSERT_EVENTS_EVAC_DUMP(1, seq2.toChar(), event2);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -235,7 +235,7 @@ void Tester::testAddFull(U32 maxSize) {
     ASSERT_EVENTS_EVAC_LIST_FULL(0, baseId + maxSize);
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    //ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -266,7 +266,7 @@ void Tester::testAddSame(void) {
     ASSERT_EVENTS_EVAC_ALREADY_REGISTERED(0, eventId, seq1.toChar());
 
     // Check that there was no telemetry
-    ASSERT_TLM_SIZE(0);
+    ////ASSERT_TLM_SIZE(0);
 
     // Check that there was one command response
     ASSERT_CMD_RESPONSE_SIZE(1);
@@ -332,9 +332,6 @@ void Tester ::connectPorts(void) {
     // txtEventOut
     this->component.set_txtEventOut_OutputPort(0,
                                                this->get_from_txtEventOut(0));
-
-    // tlmOut
-    this->component.set_tlmOut_OutputPort(0, this->get_from_tlmOut(0));
 
     // seqRun
     this->component.set_seqRun_OutputPort(0, this->get_from_seqRun(0));

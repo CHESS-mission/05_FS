@@ -109,14 +109,6 @@ namespace App {
       );
 #endif
 
-      //! Get the port that receives input from tlmOut
-      //!
-      //! \return from_tlmOut[portNum]
-      //!
-      Fw::InputTlmPort* get_from_tlmOut(
-          const NATIVE_INT_TYPE portNum /*!< The port number*/
-      );
-
       //! Get the port that receives input from seqRun
       //!
       //! \return from_seqRun[portNum]
@@ -346,12 +338,6 @@ namespace App {
       //!
       NATIVE_INT_TYPE getNum_from_txtEventOut(void) const;
 #endif
-
-      //! Get the number of from_tlmOut ports
-      //!
-      //! \return The number of from_tlmOut ports
-      //!
-      NATIVE_INT_TYPE getNum_from_tlmOut(void) const;
 
       //! Get the number of from_seqRun ports
       //!
@@ -688,67 +674,20 @@ namespace App {
       //!
       virtual void logIn_ACTIVITY_HI_EVAC_RUN(
           U32 eventId, 
-          Fw::LogStringArg& message 
+          Fw::LogStringArg& sequence 
       );
 
       //! A history entry for event EVAC_RUN
       //!
       typedef struct {
         U32 eventId;
-        Fw::LogStringArg message;
+        Fw::LogStringArg sequence;
       } EventEntry_EVAC_RUN;
 
       //! The history of EVAC_RUN events
       //!
       History<EventEntry_EVAC_RUN>
         *eventHistory_EVAC_RUN;
-
-    protected:
-
-      // ----------------------------------------------------------------------
-      // Telemetry dispatch
-      // ----------------------------------------------------------------------
-
-      //! Dispatch telemetry
-      //!
-      void dispatchTlm(
-          const FwChanIdType id, /*!< The channel ID*/
-          const Fw::Time& timeTag, /*!< The time*/
-          Fw::TlmBuffer& val /*!< The channel value*/
-      );
-
-      //! Clear telemetry history
-      //!
-      void clearTlm(void);
-
-      //! The total number of telemetry inputs seen
-      //!
-      U32 tlmSize;
-
-    protected:
-
-      // ----------------------------------------------------------------------
-      // Channel: EVAC_CHA
-      // ----------------------------------------------------------------------
-
-      //! Handle channel EVAC_CHA
-      //!
-      virtual void tlmInput_EVAC_CHA(
-          const Fw::Time& timeTag, /*!< The time*/
-          const U32& val /*!< The channel value*/
-      );
-
-      //! A telemetry entry for channel EVAC_CHA
-      //!
-      typedef struct {
-        Fw::Time timeTag;
-        U32 arg;
-      } TlmEntry_EVAC_CHA;
-
-      //! The history of EVAC_CHA values
-      //!
-      History<TlmEntry_EVAC_CHA>
-        *tlmHistory_EVAC_CHA;
 
     protected:
 
@@ -803,10 +742,6 @@ namespace App {
       //!
       Fw::InputLogTextPort m_from_txtEventOut[1];
 #endif
-
-      //! From port connected to tlmOut
-      //!
-      Fw::InputTlmPort m_from_tlmOut[1];
 
       //! From port connected to seqRun
       //!
@@ -863,16 +798,6 @@ namespace App {
           Fw::TextLogString &text /*!< Text of log message*/
       );
 #endif
-
-      //! Static function for port from_tlmOut
-      //!
-      static void from_tlmOut_static(
-          Fw::PassiveComponentBase *const callComp, /*!< The component instance*/
-          const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          FwChanIdType id, /*!< Telemetry Channel ID*/
-          Fw::Time &timeTag, /*!< Time Tag*/
-          Fw::TlmBuffer &val /*!< Buffer containing serialized telemetry value*/
-      );
 
       //! Static function for port from_seqRun
       //!

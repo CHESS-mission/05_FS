@@ -27,19 +27,6 @@
   this->assertCmdResponse(__FILE__, __LINE__, index, opCode, cmdSeq, response)
 
 // ----------------------------------------------------------------------
-// Macros for telemetry history assertions
-// ----------------------------------------------------------------------
-
-#define ASSERT_TLM_SIZE(size) \
-  this->assertTlm_size(__FILE__, __LINE__, size)
-
-#define ASSERT_TLM_EVAC_CHA_SIZE(size) \
-  this->assertTlm_EVAC_CHA_size(__FILE__, __LINE__, size)
-
-#define ASSERT_TLM_EVAC_CHA(index, value) \
-  this->assertTlm_EVAC_CHA(__FILE__, __LINE__, index, value)
-
-// ----------------------------------------------------------------------
 // Macros for event history assertions
 // ----------------------------------------------------------------------
 
@@ -85,8 +72,8 @@
 #define ASSERT_EVENTS_EVAC_RUN_SIZE(size) \
   this->assertEvents_EVAC_RUN_size(__FILE__, __LINE__, size)
 
-#define ASSERT_EVENTS_EVAC_RUN(index, _eventId, _message) \
-  this->assertEvents_EVAC_RUN(__FILE__, __LINE__, index, _eventId, _message)
+#define ASSERT_EVENTS_EVAC_RUN(index, _eventId, _sequence) \
+  this->assertEvents_EVAC_RUN(__FILE__, __LINE__, index, _eventId, _sequence)
 
 // ----------------------------------------------------------------------
 // Macros for typed user from port history assertions
@@ -174,41 +161,6 @@ namespace App {
           const FwOpcodeType opCode, /*!< The opcode*/
           const U32 cmdSeq, /*!< The command sequence number*/
           const Fw::CommandResponse response /*!< The command response*/
-      ) const;
-
-    protected:
-
-      // ----------------------------------------------------------------------
-      // Telemetry
-      // ----------------------------------------------------------------------
-
-      //! Assert size of telemetry history
-      //!
-      void assertTlm_size(
-          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
-          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
-          const U32 size /*!< The asserted size*/
-      ) const;
-
-    protected:
-
-      // ----------------------------------------------------------------------
-      // Channel: EVAC_CHA
-      // ----------------------------------------------------------------------
-
-      //! Assert telemetry value in history at index
-      //!
-      void assertTlm_EVAC_CHA_size(
-          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
-          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
-          const U32 size /*!< The asserted size*/
-      ) const;
-
-      void assertTlm_EVAC_CHA(
-          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
-          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
-          const U32 __index, /*!< The index*/
-          const U32& val /*!< The channel value*/
       ) const;
 
     protected:
@@ -358,7 +310,7 @@ namespace App {
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
           const U32 eventId, 
-          const char *const message 
+          const char *const sequence 
       ) const;
 
     protected:
