@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #check if an app name is specified
 if [[ -z "$1" ]]
 then
@@ -13,38 +12,43 @@ fi
 
 #purge an old app if it exists
 cd $1
+base_directory=$(pwd)
 echo "purging..."; yes | fprime-util purge
 
 #now exit on error
 set -e
 
-#build the app
+#generate the build folder for UT
 echo "generating..."; fprime-util generate
 
-processed_tests=0
-dirs=()
-for dir in ./*
-do
-	if [[ -d "$dir/test" ]]
-	then
-		#echo -e "\n\nDetected component with unit test : $dir"
-		processed_tests=$[processed_tests + 1]
-		dirs+=($dir)
-		cd $dir
-		fprime-util build --ut
-		#fprime-util check
-		cd ..
-fi
-done
+echo "Searchign Unit Test on $base_directory..."
+#get directories that have test in them
+dirs=($(find $base_directory -type d -name "test" -not -path "$base_directory/build-*"))
+#number of dirs
+processed_tests=${#dirs[@]}
 
 for dir in "${dirs[@]}"
 do
-	if [[ -d "$dir/test" ]]
-	then
-		echo -e "\n\nDetected component with unit test : $dir"
-		cd $dir
-		fprime-util check
-fi
+	echo "found dirs : $dir"
+done
+
+#iterate over directories to build their UT
+for dir in "${dirs[@]}"
+do
+	cd $dir
+	cd ..
+	fprime-util build --ut
+	cd $base_directory
+done
+
+#iterate over directories to check their tests
+for dir in "${dirs[@]}"
+do
+	echo -e "\n\nDetected component with unit test : $dir"
+	cd $dir
+	cd ..
+	fprime-util check
+	cd $base_directory
 done
 
 echo -e "\n\nTotal : Checked $processed_tests components for unit tests"
