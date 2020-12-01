@@ -8,14 +8,14 @@ RecvBuff,recvBuffComp,101,20
 CommandDispatcher,cmdDisp,121,20
 PrmDb,prmDb,141,20
 ActiveRateGroup,rateGroup2Comp,161,20
-SignalGen,SG1,181,20
-SignalGen,SG3,201,20
-SignalGen,SG2,221,20
+SignalGen,signalGen1,181,20
+SignalGen,signalGen3,201,20
+SignalGen,signalGen2,221,20
 ActiveRateGroup,rateGroup3Comp,241,20
 FileUplink,fileUplink,261,20
-SignalGen,SG5,281,20
+SignalGen,signalGen5,281,20
 BufferManager,fileUplinkBufferManager,301,20
-SignalGen,SG4,321,20
+SignalGen,signalGen4,321,20
 AssertFatalAdapter,fatalAdapter,341,20
 Health,health,361,20
 GroundInterface,groundIf,381,20
@@ -29,3 +29,4 @@ PassiveTextLogger,textLogger,521,20
 CmdSequencer,cmdSeq,541,23
 SocketIpDriver,socketIpDriver,601,20
 FileManager,fileManager,621,20
+EventAction,eventAction,641,20
