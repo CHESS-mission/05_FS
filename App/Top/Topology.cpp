@@ -70,9 +70,9 @@ Svc::CmdSequencerComponentImpl cmdSeq(FW_OPTIONAL_NAME("CMDSEQ"));
 
 Svc::PrmDbImpl prmDb(FW_OPTIONAL_NAME("PRM"), "PrmDb.dat");
 
-Ref::PingReceiverComponentImpl pingRcvr(FW_OPTIONAL_NAME("PngRecv"));
+Ref::PingReceiverComponentImpl pingRcvr(FW_OPTIONAL_NAME("pingRcvr"));
 
-Drv::SocketIpDriverComponentImpl socketIpDriver(FW_OPTIONAL_NAME("SocketIpDriver"));
+Drv::SocketIpDriverComponentImpl socketIpDriver(FW_OPTIONAL_NAME("socketIpDriver"));
 
 Svc::FileUplink fileUplink(FW_OPTIONAL_NAME("fileUplink"));
 
@@ -86,30 +86,29 @@ Svc::BufferManager fileUplinkBufferManager(FW_OPTIONAL_NAME("fileUplinkBufferMan
 
 Svc::HealthImpl health(FW_OPTIONAL_NAME("health"));
 
-Ref::SignalGen SG1(FW_OPTIONAL_NAME("signalGen1"));
+Ref::SignalGen signalGen1(FW_OPTIONAL_NAME("signalGen1"));
 
-Ref::SignalGen SG2(FW_OPTIONAL_NAME("signalGen2"));
+Ref::SignalGen signalGen2(FW_OPTIONAL_NAME("signalGen2"));
 
-Ref::SignalGen SG3(FW_OPTIONAL_NAME("signalGen3"));
+Ref::SignalGen signalGen3(FW_OPTIONAL_NAME("signalGen3"));
 
-Ref::SignalGen SG4(FW_OPTIONAL_NAME("signalGen4"));
+Ref::SignalGen signalGen4(FW_OPTIONAL_NAME("signalGen4"));
 
-Ref::SignalGen SG5(FW_OPTIONAL_NAME("signalGen5"));
+Ref::SignalGen signalGen5(FW_OPTIONAL_NAME("signalGen5"));
 
 Svc::AssertFatalAdapterComponentImpl fatalAdapter(FW_OPTIONAL_NAME("fatalAdapter"));
 
 Svc::FatalHandlerComponentImpl fatalHandler(FW_OPTIONAL_NAME("fatalHandler"));
 
+App::EventActionComponentImpl eventAction(FW_OPTIONAL_NAME("eventAction"));
+
+const char* getHealthName(Fw::ObjBase& comp) {
+   #if FW_OBJECT_NAMES == 1
+       return comp.getObjName();
+   #else
+      return "[no object name]"
+   #endif
 Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS(FW_OPTIONAL_NAME("SocketTcpDriverADCS"));
-
-
-const char *getHealthName(Fw::ObjBase &comp)
-{
-#if FW_OBJECT_NAMES == 1
-    return comp.getObjName();
-#else
-    return "[no object name]"
-#endif
 }
 
 bool constructApp(bool dump, U32 port_number, char *hostname)
@@ -163,15 +162,18 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     fileManager.init(30, 0);
     fileUplinkBufferManager.init(0);
     fileDownlinkBufferManager.init(1);
-    SG1.init(10, 0);
-    SG2.init(10, 1);
-    SG3.init(10, 2);
-    SG4.init(10, 3);
-    SG5.init(10, 4);
+    signalGen1.init(10,0);
+    signalGen2.init(10,1);
+    signalGen3.init(10,2);
+    signalGen4.init(10,3);
+    signalGen5.init(10,4);
     fatalAdapter.init(0);
     fatalHandler.init(0);
     health.init(25, 0);
     pingRcvr.init(10);
+
+    eventAction.init(10);
+
     // Connect rate groups to rate group driver
     constructAppArchitecture();
 
@@ -193,13 +195,14 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     prmDb.regCommands();
     fileDownlink.regCommands();
     fileManager.regCommands();
-    SG1.regCommands();
-    SG2.regCommands();
-    SG3.regCommands();
-    SG4.regCommands();
-    SG5.regCommands();
-    health.regCommands();
-    pingRcvr.regCommands();
+    signalGen1.regCommands();
+    signalGen2.regCommands();
+    signalGen3.regCommands();
+    signalGen4.regCommands();
+	signalGen5.regCommands();
+	health.regCommands();
+	pingRcvr.regCommands();
+    eventAction.regCommands();
 
     // read parameters
     prmDb.readParamFile();
@@ -249,6 +252,8 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 
     pingRcvr.start(0, 100, 10 * 1024);
 
+    eventAction.start(0, 100, 10*1024);
+
     // Initialize socket server if and only if there is a valid specification
     if (hostname != NULL && port_number != 0)
     {
@@ -274,20 +279,22 @@ void exitTasks(void)
     fileManager.exit();
     cmdSeq.exit();
     pingRcvr.exit();
+    eventAction.exit();
     // join the component threads with NULL pointers to free them
-    (void)rateGroup1Comp.ActiveComponentBase::join(NULL);
-    (void)rateGroup2Comp.ActiveComponentBase::join(NULL);
-    (void)rateGroup3Comp.ActiveComponentBase::join(NULL);
-    (void)blockDrv.ActiveComponentBase::join(NULL);
-    (void)cmdDisp.ActiveComponentBase::join(NULL);
-    (void)eventLogger.ActiveComponentBase::join(NULL);
-    (void)chanTlm.ActiveComponentBase::join(NULL);
-    (void)prmDb.ActiveComponentBase::join(NULL);
-    (void)fileUplink.ActiveComponentBase::join(NULL);
-    (void)fileDownlink.ActiveComponentBase::join(NULL);
-    (void)fileManager.ActiveComponentBase::join(NULL);
-    (void)cmdSeq.ActiveComponentBase::join(NULL);
-    (void)pingRcvr.ActiveComponentBase::join(NULL);
+    (void) rateGroup1Comp.ActiveComponentBase::join(NULL);
+    (void) rateGroup2Comp.ActiveComponentBase::join(NULL);
+    (void) rateGroup3Comp.ActiveComponentBase::join(NULL);
+    (void) blockDrv.ActiveComponentBase::join(NULL);
+    (void) cmdDisp.ActiveComponentBase::join(NULL);
+    (void) eventLogger.ActiveComponentBase::join(NULL);
+    (void) chanTlm.ActiveComponentBase::join(NULL);
+    (void) prmDb.ActiveComponentBase::join(NULL);
+    (void) fileUplink.ActiveComponentBase::join(NULL);
+    (void) fileDownlink.ActiveComponentBase::join(NULL);
+    (void) fileManager.ActiveComponentBase::join(NULL);
+    (void) cmdSeq.ActiveComponentBase::join(NULL);
+    (void) pingRcvr.ActiveComponentBase::join(NULL);
+    (void) eventAction.ActiveComponentBase::join(NULL);
     socketIpDriver.exitSocketTask();
     (void)socketIpDriver.joinSocketTask(NULL);
     cmdSeq.deallocateBuffer(seqMallocator);

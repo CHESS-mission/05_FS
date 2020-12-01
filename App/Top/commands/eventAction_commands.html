@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>SG1:SignalGen Component Dictionary</title>
+<title>eventAction:EventAction Component Dictionary</title>
 </head>
 <body>
 
@@ -23,7 +23,7 @@ html {
 </style>
 
 
-<h1><b>Command: SG1:SignalGen</b></h1>
+<h1><b>Command: eventAction:EventAction</b></h1>
 
 
 
@@ -44,42 +44,34 @@ html {
 	<tbody>
 
 		<tr style = "border: 2px solid black;">
-			<td rowspan="5">SignalGen_Settings</td>
-			<td rowspan="5">181 (0xb5)</td>
-			<td rowspan="5">Signal Generator Settings</td>
+			<td rowspan="3">EVAC_ADD</td>
+			<td rowspan="3">641 (0x281)</td>
+			<td rowspan="3">Add sequence for an event id</td>
 					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
-						<td>Frequency</td>
+						<td>id</td>
 						<td>U32</td>
 						<td></td>
 					</tr>
-					<tr style = "border-right: 2px solid black;">
-						<td>Amplitude</td>
-						<td>F32</td>
-						<td></td>
-					</tr>
-					<tr style = "border-right: 2px solid black;">
-						<td>Phase</td>
-						<td>F32</td>
-						<td></td>
-					</tr>
 					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
-						<td>SigType</td>
-						<td>Ref::SignalType</td>
+						<td>sequence</td>
+						<td>Fw::CmdStringArg</td>
 						<td></td>
 					</tr>
 		</tr>
 		<tr style = "border: 2px solid black;">
-			<td rowspan="1">SignalGen_Toggle</td>
-			<td rowspan="1">182 (0xb6)</td>
-			<td rowspan="1">Toggle Signal Generator On/Off.</td>
-				<td></td>
-				<td></td>
-				<td></td>
+			<td rowspan="2">EVAC_REMOVE</td>
+			<td rowspan="2">642 (0x282)</td>
+			<td rowspan="2">Remove sequence for a specific envent id</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>id</td>
+						<td>U32</td>
+						<td></td>
+					</tr>
 		</tr>
 		<tr style = "border: 2px solid black;">
-			<td rowspan="1">SignalGen_Skip</td>
-			<td rowspan="1">183 (0xb7)</td>
-			<td rowspan="1">Skip next sample</td>
+			<td rowspan="1">EVAC_DUMP</td>
+			<td rowspan="1">643 (0x283)</td>
+			<td rowspan="1">Dump event-sequence list</td>
 				<td></td>
 				<td></td>
 				<td></td>
