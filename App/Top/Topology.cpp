@@ -102,13 +102,14 @@ Svc::FatalHandlerComponentImpl fatalHandler(FW_OPTIONAL_NAME("fatalHandler"));
 
 App::EventActionComponentImpl eventAction(FW_OPTIONAL_NAME("eventAction"));
 
+Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS(FW_OPTIONAL_NAME("SocketTcpDriverADCS"));
+
 const char* getHealthName(Fw::ObjBase& comp) {
    #if FW_OBJECT_NAMES == 1
        return comp.getObjName();
    #else
       return "[no object name]"
    #endif
-Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS(FW_OPTIONAL_NAME("SocketTcpDriverADCS"));
 }
 
 bool constructApp(bool dump, U32 port_number, char *hostname)
