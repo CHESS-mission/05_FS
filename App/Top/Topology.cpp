@@ -102,6 +102,8 @@ Svc::FatalHandlerComponentImpl fatalHandler(FW_OPTIONAL_NAME("fatalHandler"));
 
 App::EventActionComponentImpl eventAction(FW_OPTIONAL_NAME("eventAction"));
 
+App::ADCSComponentImpl ADCS(FW_OPTIONAL_NAME("ADCS"));
+
 Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS(FW_OPTIONAL_NAME("SocketTcpDriverADCS"));
 
 const char* getHealthName(Fw::ObjBase& comp) {
@@ -174,6 +176,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     pingRcvr.init(10);
 
     eventAction.init(10);
+    ADCS.init(10);
 
     // Connect rate groups to rate group driver
     constructAppArchitecture();
@@ -204,6 +207,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 	health.regCommands();
 	pingRcvr.regCommands();
     eventAction.regCommands();
+    ADCS.regCommands();
 
     // read parameters
     prmDb.readParamFile();
@@ -255,14 +259,18 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 
     eventAction.start(0, 100, 10*1024);
 
+    ADCS.start(0, 100, 10*1024);
+
     // Initialize socket server if and only if there is a valid specification
     if (hostname != NULL && port_number != 0)
     {
         socketIpDriver.startSocketTask(100, 10 * 1024, hostname, port_number);
     }
+
+    socketTcpDriverADCS.configure("127.0.0.1",5005,1,0);
+    socketTcpDriverADCS.openSocket();
     return false;
 
-     socketTcpDriverADCS.configure("127.0.0.1",5005,1,0);
 }
 
 void exitTasks(void)
@@ -281,6 +289,7 @@ void exitTasks(void)
     cmdSeq.exit();
     pingRcvr.exit();
     eventAction.exit();
+    ADCS.exit();
     // join the component threads with NULL pointers to free them
     (void) rateGroup1Comp.ActiveComponentBase::join(NULL);
     (void) rateGroup2Comp.ActiveComponentBase::join(NULL);
@@ -296,7 +305,9 @@ void exitTasks(void)
     (void) cmdSeq.ActiveComponentBase::join(NULL);
     (void) pingRcvr.ActiveComponentBase::join(NULL);
     (void) eventAction.ActiveComponentBase::join(NULL);
+    (void) ADCS.ActiveComponentBase::join(NULL);
     socketIpDriver.exitSocketTask();
     (void)socketIpDriver.joinSocketTask(NULL);
     cmdSeq.deallocateBuffer(seqMallocator);
+    socketTcpDriverADCS.closeSocket();
 }

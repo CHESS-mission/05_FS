@@ -31,7 +31,8 @@ fileDownlinkBufferManag |  401 (0x191)  |          20           |             20
     socketIpDriver      |  601 (0x259)  |          20           |             20             |             None              |         0        
       fileManager       |  621 (0x26d)  |          20           |             20             |              18               |        18        
       eventAction       |  641 (0x281)  |          20           |            359             |               7               |         7        
-  socketTcpDriverADCS   | 1000 (0x3e8)  |           5           |            inf.            |             None              |         0        
+  socketTcpDriverADCS   | 1000 (0x3e8)  |           5           |             50             |             None              |         0        
+         ADCS           | 1050 (0x41a)  |          20           |            inf.            |               2               |         2        
 -------------------------------------------------------------------------------------------------------------------------------------
 | INSTANCE NAME                 - Name of the instance object.                                                                      |
 | BASE ID (HEX)                 - Base ID set for the instance.                                                                     |

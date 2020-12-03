@@ -57,6 +57,7 @@ namespace Drv {
           );
 
       SocketIpStatus openSocket(void);
+      void closeSocket(void);
 
     PRIVATE:
       // ----------------------------------------------------------------------

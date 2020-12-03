@@ -1,7 +1,7 @@
 // ====================================================================== 
-// \title  SocketTcpDriver.hpp
+// \title  ADCS.hpp
 // \author root
-// \brief  cpp file for SocketTcpDriver test harness implementation class
+// \brief  cpp file for ADCS test harness implementation class
 //
 // \copyright
 // Copyright 2009-2015, by the California Institute of Technology.
@@ -14,8 +14,9 @@
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
+#define QUEUE_DEPTH 10
 
-namespace Drv {
+namespace App {
 
   // ----------------------------------------------------------------------
   // Construction and destruction 
@@ -24,10 +25,10 @@ namespace Drv {
   Tester ::
     Tester(void) : 
 #if FW_OBJECT_NAMES == 1
-      SocketTcpDriverGTestBase("Tester", MAX_HISTORY_SIZE),
-      component("SocketTcpDriver")
+      ADCSGTestBase("Tester", MAX_HISTORY_SIZE),
+      component("ADCS")
 #else
-      SocketTcpDriverGTestBase(MAX_HISTORY_SIZE),
+      ADCSGTestBase(MAX_HISTORY_SIZE),
       component()
 #endif
   {
@@ -45,35 +46,25 @@ namespace Drv {
   // Tests 
   // ----------------------------------------------------------------------
 
-  void Tester::testSendTM(void){
-    U8 dataSend[]={0x1F,0x7F,0x80,0x1F,0xFF};
-    U8 dataRecv[] ={0x1F,0x7F,0x80,0x0A,0x1F,0xFF};
-    Fw::Buffer bufferSend;
-    Fw::Buffer bufferRecv;
-    bufferSend.setData(dataSend);
-    bufferSend.setSize(5);
-    bufferRecv.setData(dataRecv);
-    bufferRecv.setSize(5);
-    this->invoke_to_send(0,bufferSend);
-    ASSERT_FROM_PORT_HISTORY_SIZE(1);
-    ASSERT_from_recv_SIZE(1);
-    U8* data = this->fromPortHistory_recv->at(0).fwBuffer.getData();
-    ASSERT_EQ(data[0],dataRecv[0]);
-    this->component.closeSocket();
+  void Tester ::
+    testSendAdcsTm(void) 
+  {
+    Fw::Buffer bufferTm;
+    U8 data[] = {0x1F,0x7F,0x80,0x1F,0xFF};
+    bufferTm.setData(data);
   }
-
 
   // ----------------------------------------------------------------------
   // Handlers for typed from ports
   // ----------------------------------------------------------------------
 
   void Tester ::
-    from_recv_handler(
+    from_DataOut_handler(
         const NATIVE_INT_TYPE portNum,
         Fw::Buffer &fwBuffer
     )
   {
-    this->pushFromPortEntry_recv(fwBuffer);
+    this->pushFromPortEntry_DataOut(fwBuffer);
   }
 
   // ----------------------------------------------------------------------
@@ -84,16 +75,58 @@ namespace Drv {
     connectPorts(void) 
   {
 
-    // send
-    this->connect_to_send(
+    // DataIn
+    this->connect_to_DataIn(
         0,
-        this->component.get_send_InputPort(0)
+        this->component.get_DataIn_InputPort(0)
     );
 
-    // recv
-    this->component.set_recv_OutputPort(
+    // CmdDisp
+    this->connect_to_CmdDisp(
+        0,
+        this->component.get_CmdDisp_InputPort(0)
+    );
+
+    // DataOut
+    this->component.set_DataOut_OutputPort(
         0, 
-        this->get_from_recv(0)
+        this->get_from_DataOut(0)
+    );
+
+    // CmdStatus
+    this->component.set_CmdStatus_OutputPort(
+        0, 
+        this->get_from_CmdStatus(0)
+    );
+
+    // CmdReg
+    this->component.set_CmdReg_OutputPort(
+        0, 
+        this->get_from_CmdReg(0)
+    );
+
+    // Tlm
+    this->component.set_Tlm_OutputPort(
+        0, 
+        this->get_from_Tlm(0)
+    );
+
+    // Time
+    this->component.set_Time_OutputPort(
+        0, 
+        this->get_from_Time(0)
+    );
+
+    // Log
+    this->component.set_Log_OutputPort(
+        0, 
+        this->get_from_Log(0)
+    );
+
+    // LogText
+    this->component.set_LogText_OutputPort(
+        0, 
+        this->get_from_LogText(0)
     );
 
 
@@ -106,10 +139,8 @@ namespace Drv {
   {
     this->init();
     this->component.init(
-        INSTANCE
+        QUEUE_DEPTH, INSTANCE
     );
-    this->component.configure("127.0.0.1",5005);
-    this->component.openSocket();
   }
 
-} // end namespace Drv
+} // end namespace App

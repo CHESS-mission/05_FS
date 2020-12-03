@@ -37,6 +37,8 @@
      <import_component_type>Drv/SocketIpDriver/SocketIpDriverComponentAi.xml</import_component_type>
      <import_component_type>App/EventAction/EventActionComponentAi.xml</import_component_type>
     <import_component_type>App/Drv/SocketTcpDriver/SocketTcpDriverComponentAi.xml</import_component_type>
+     <import_component_type>App/ADCS/ADCSComponentAi.xml</import_component_type>
+
 
      <!-- Declare component instances - must match names in Components.hpp -->
 
@@ -83,6 +85,8 @@
 
      <!-- Mission components -->
      <instance namespace="App" name="eventAction" type="EventAction" base_id="641" base_id_window="20" />
+     <instance namespace="App" name="ADCS" type="ADCS" base_id="1050" base_id_window="20" />
+
 
      <!-- Connections -->
      <!-- Communications driver connections -->
@@ -952,5 +956,66 @@
           <source component = "eventLogger" port = "LogSend" type = "Log" num = "0"/>
           <target component = "eventAction" port = "logRecv" type = "Log" num = "0"/>
      </connection>
+
+     <!-- ADCS connections-->
+
+     <!-- Command Registration Ports - Registration port number must match dispatch port for each component -->
+
+   <connection name = "ADCSReg">
+        <source component = "ADCS" port = "CmdReg" type = "CmdReg" num = "0"/>
+        <target component = "cmdDisp" port = "compCmdReg" type = "CmdReg" num = "25"/>
+   </connection>
+   
+    <!-- Command Dispatch Ports - Dispatch port number must match registration port for each component -->
+
+   <connection name = "ADCSDisp">
+        <source component = "cmdDisp" port = "compCmdSend" type = "Cmd" num = "25"/>
+        <target component = "ADCS" port = "CmdDisp" type = "Cmd" num = "0"/>
+   </connection>
+  
+    <!-- Command Reply Ports - Go to the same response port on the dispatcher -->
+
+   <connection name = "ADCSReply">
+      <source component = "ADCS" port = "CmdStatus" type = "CmdResponse" num = "0"/>
+      <target component = "cmdDisp" port = "compCmdStat" type = "CmdResponse" num = "0"/>
+   </connection>
+
+      <!-- Event Logger Binary Connections -->
+   
+   <connection name = "ADCSLog">
+       <source component = "ADCS" port = "Log" type = "Log" num = "0"/>
+        <target component = "eventLogger" port = "LogRecv" type = "Log" num = "0"/>
+   </connection>
+
+   <!-- Event Logger Text Connections -->
+   
+   <connection name = "MathSenderTextLog">
+       <source component = "ADCS" port = "LogText" type = "LogText" num = "0"/>
+        <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
+   </connection>
+
+      <!-- Telemetry Connections -->
+
+   <connection name = "ADCSTlm">
+       <source component = "ADCS" port = "Tlm" type = "Tlm" num = "0"/>
+        <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
+   </connection>
+
+      <!-- Time Connections -->
+
+   <connection name = "ADCSTime">
+       <source component = "ADCS" port = "Time" type = "Time" num = "0"/>
+        <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
+   </connection>
+
+<connection name = "ADCSTcpDriver">
+       <source component = "ADCS" port = "DataOut" type = "Fw::BufferSend" num = "0"/>
+        <target component = "socketTcpDriverADCS" port = "send" type = "Fw::BufferSend" num = "0"/>
+</connection>
+
+<connection name = "TcpADCSDriver">
+       <source component = "socketTcpDriverADCS" port = "recv" type = "Fw::BufferSend" num = "0"/>
+        <target component = "ADCS" port = "DataIn" type = "Fw::BufferSend" num = "0"/>
+</connection>
 
 </assembly>

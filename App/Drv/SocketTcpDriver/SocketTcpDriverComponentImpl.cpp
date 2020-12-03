@@ -14,6 +14,7 @@
 #include <App/Drv/SocketTcpDriver/SocketTcpDriverComponentImpl.hpp>
 #include "Fw/Types/BasicTypes.hpp"
 #include <Fw/Types/Assert.hpp>
+#include <Fw/Logger/Logger.hpp>
 
 namespace Drv {
 
@@ -50,12 +51,15 @@ namespace Drv {
           const U32 timeout_seconds,
           const U32 timeout_microseconds
           ) {
-
       return this->m_helper.configure(hostname,port,timeout_seconds,timeout_microseconds);
   }
 
    SocketIpStatus SocketTcpDriverComponentImpl :: openSocket(void){
      return this->m_helper.open();
+   }
+
+   void SocketTcpDriverComponentImpl :: closeSocket(void){
+           this->m_helper.close();
    }
   // ----------------------------------------------------------------------
   // Handler implementations for user-defined typed input ports
@@ -70,10 +74,8 @@ namespace Drv {
       U32 size = fwBuffer.getSize();
       U8* data = fwBuffer.getData();
       FW_ASSERT(data);
-      this->m_helper.open();
       this->m_helper.send(data,size,outBuffer);
       recv_out(0, outBuffer);
-      this->m_helper.close();
   }
 
 } // end namespace Drv

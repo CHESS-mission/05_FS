@@ -100,7 +100,7 @@ namespace Drv {
         }
          // Coding error, if not successful here
         FW_ASSERT(status == SOCK_SUCCESS);
-
+       
         return status;
 
     }
@@ -161,7 +161,7 @@ namespace Drv {
         this->m_socketOutFd = socketFd;
 
         Fw::Logger::logMsg("Connected to %s:%hu for %s using %s\n", reinterpret_cast<POINTER_CAST>(m_hostname), m_port,
-                           reinterpret_cast<POINTER_CAST>("downlink"),
+                           reinterpret_cast<POINTER_CAST>("ADCS"),
                            reinterpret_cast<POINTER_CAST>("tcp"));
         return SOCK_SUCCESS;
 
