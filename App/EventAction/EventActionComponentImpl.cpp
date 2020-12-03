@@ -29,8 +29,6 @@ void EventActionComponentImpl ::init(const NATIVE_INT_TYPE queueDepth,
                                      const NATIVE_INT_TYPE instance) {
     EventActionComponentBase::init(queueDepth, instance);
 
-    // memset(this->m_eventActionTable, 0, sizeof(this->m_eventActionTable));
-
     for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
          slot++) {
         this->m_eventActionTable[slot].id = 0;
