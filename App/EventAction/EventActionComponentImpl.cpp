@@ -29,24 +29,15 @@ void EventActionComponentImpl ::init(const NATIVE_INT_TYPE queueDepth,
                                      const NATIVE_INT_TYPE instance) {
     EventActionComponentBase::init(queueDepth, instance);
 
-    memset(this->m_eventActionTable, 0, sizeof(this->m_eventActionTable));
-
     for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
          slot++) {
         this->m_eventActionTable[slot].id = 0;
         this->m_eventActionTable[slot].used = false;
-        this->m_eventActionTable[slot].sequence = nullptr;
+        this->m_eventActionTable[slot].sequence = Fw::EightyCharString("");
     }
 }
 
-EventActionComponentImpl ::~EventActionComponentImpl(void) {
-    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
-         slot++) {
-        if (this->m_eventActionTable[slot].sequence != nullptr) {
-            delete this->m_eventActionTable[slot].sequence;
-        }
-    }
-}
+EventActionComponentImpl ::~EventActionComponentImpl(void) {}
 
 // ----------------------------------------------------------------------
 // Handler implementations for user-defined typed input ports
@@ -55,7 +46,7 @@ EventActionComponentImpl ::~EventActionComponentImpl(void) {
 void EventActionComponentImpl ::seqResp_handler(const NATIVE_INT_TYPE portNum,
                                                 FwOpcodeType opCode, U32 cmdSeq,
                                                 Fw::CommandResponse response) {
-    // @todo Are we supposed to send events from EventAction depeding on 
+    // @todo Are we supposed to send events from EventAction depeding on
     // CmdDispatcher response given the fact it already does it ?
     // Ex: Invalid sequence name or sequence completed
 }
@@ -72,10 +63,10 @@ void EventActionComponentImpl ::logRecv_handler(const NATIVE_INT_TYPE portNum,
         if ((this->m_eventActionTable[slot].used) and
             (this->m_eventActionTable[slot].id == id)) {
             Fw::LogStringArg log(
-                this->m_eventActionTable[slot].sequence->toChar());
+                this->m_eventActionTable[slot].sequence.toChar());
             this->log_ACTIVITY_HI_EVAC_RUN(id, log);
             Fw::EightyCharString file(
-                this->m_eventActionTable[slot].sequence->toChar());
+                this->m_eventActionTable[slot].sequence.toChar());
             this->seqRun_out(0, file);
         }
     }
@@ -98,7 +89,7 @@ void EventActionComponentImpl ::EVAC_ADD_cmdHandler(
         if ((this->m_eventActionTable[slot].id == id) and
             (this->m_eventActionTable[slot].used == true)) {
             Fw::LogStringArg seq(
-                this->m_eventActionTable[slot].sequence->toChar());
+                this->m_eventActionTable[slot].sequence.toChar());
             this->log_WARNING_HI_EVAC_ALREADY_REGISTERED(id, seq);
             this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
             return;
@@ -110,12 +101,9 @@ void EventActionComponentImpl ::EVAC_ADD_cmdHandler(
          slot++) {
         if ((not this->m_eventActionTable[slot].used) and (not slotFound)) {
             this->m_eventActionTable[slot].id = id;
-            if (this->m_eventActionTable[slot].sequence != nullptr) {
-                delete this->m_eventActionTable[slot].sequence;
-            }
-            this->m_eventActionTable[slot].sequence =
-                new Fw::EightyCharString(sequence.toChar());
             this->m_eventActionTable[slot].used = true;
+            this->m_eventActionTable[slot].sequence =
+                Fw::EightyCharString(sequence.toChar());
 
             slotFound = true;
         }
@@ -138,16 +126,14 @@ void EventActionComponentImpl ::EVAC_REMOVE_cmdHandler(
          slot++) {
         if ((this->m_eventActionTable[slot].used) and
             (this->m_eventActionTable[slot].id == id)) {
-                //  @todo Ensure actionLogger will not access pointer after delete !
             Fw::LogStringArg seq(
-                this->m_eventActionTable[slot].sequence->toChar());
+                this->m_eventActionTable[slot].sequence.toChar());
             this->log_ACTIVITY_HI_EVAC_REMOVED(seq, id);
 
             // Clear slot
             this->m_eventActionTable[slot].id = 0;
             this->m_eventActionTable[slot].used = false;
-            delete this->m_eventActionTable[slot].sequence;
-            this->m_eventActionTable[slot].sequence = nullptr;
+            this->m_eventActionTable[slot].sequence = Fw::EightyCharString();
 
             this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
             return;
@@ -164,7 +150,7 @@ void EventActionComponentImpl ::EVAC_DUMP_cmdHandler(const FwOpcodeType opCode,
          slot++) {
         if (this->m_eventActionTable[slot].used) {
             Fw::LogStringArg seq(
-                this->m_eventActionTable[slot].sequence->toChar());
+                this->m_eventActionTable[slot].sequence.toChar());
             this->log_ACTIVITY_HI_EVAC_DUMP(seq,
                                             this->m_eventActionTable[slot].id);
         }

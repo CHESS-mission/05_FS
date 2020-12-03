@@ -96,11 +96,10 @@ class EventActionComponentImpl : public EventActionComponentBase {
     // Custom code
     // ----------------------------------------------------------------------
     struct EventActionEntry {
-        bool used;                       //!< if entry has been used yet
-        FwEventIdType id;                //!< event id to detect
-        Fw::EightyCharString *sequence;  //!< sequence to launch
+        bool used;                      //!< if entry has been used yet
+        FwEventIdType id;               //!< event id to detect
+        Fw::EightyCharString sequence;  //!< sequence to launch
     } m_eventActionTable[EVENT_ACTION_TABLE_SIZE];  //!< table of event action
-                                                    //!< entries
 };
 
 }  // end namespace App
