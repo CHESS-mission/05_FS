@@ -1,4 +1,6 @@
-CC := gcc
+CC := arm-linux-gnueabihf-gcc # gcc
+# Toolchain from 'sudo apt install gcc-arm-linux-gnueabihf'
+
 BIN := posix_demo
 
 BUILD_DIR := build
