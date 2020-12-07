@@ -124,7 +124,7 @@ int main(void) {
 }
 /*-----------------------------------------------------------*/
 
-static void prvQueueSendTask(void *pvParameters)  // used
+static void prvQueueSendTask(void *pvParameters)
 {
     TickType_t xNextWakeTime;
     const TickType_t xBlockTime = mainTASK_SEND_FREQUENCY_MS;
@@ -152,7 +152,7 @@ static void prvQueueSendTask(void *pvParameters)  // used
 }
 /*-----------------------------------------------------------*/
 
-static void prvQueueSendTimerCallback(TimerHandle_t xTimerHandle)  // used
+static void prvQueueSendTimerCallback(TimerHandle_t xTimerHandle)
 {
     const uint32_t ulValueToSend = mainVALUE_SENT_FROM_TIMER;
 
@@ -171,7 +171,7 @@ static void prvQueueSendTimerCallback(TimerHandle_t xTimerHandle)  // used
 }
 /*-----------------------------------------------------------*/
 
-static void prvQueueReceiveTask(void *pvParameters)  // used
+static void prvQueueReceiveTask(void *pvParameters)
 {
     uint32_t ulReceivedValue;
 
