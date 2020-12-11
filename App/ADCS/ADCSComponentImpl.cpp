@@ -13,6 +13,8 @@
 
 #include <App/ADCS/ADCSComponentImpl.hpp>
 #include "Fw/Types/BasicTypes.hpp"
+#include <Fw/Types/Assert.hpp>
+#include <Fw/Logger/Logger.hpp>
 
 namespace App {
 
@@ -25,10 +27,8 @@ namespace App {
         const char *const compName
     ) : ADCSComponentBase(compName)
   {
-    U8 baseTmPacket[] = {0x1F,0x7F,0x80,0x1F,0xFF};
-    TmPacket = baseTmPacket;
-    dataSendTmBuffer.setData(TmPacket);
     dataSendTmBuffer.setSize(5);
+    dataSendTmBuffer.setData(ADCSComponentImpl::TmPacket);
   }
 
   void ADCSComponentImpl ::
@@ -72,10 +72,12 @@ namespace App {
         U8 id
     )
   {
-   TmPacket[2]=id;
+   this->dataSendTmBuffer.getData()[2] = id;
    this->DataOut_out(0,dataSendTmBuffer);
    log_ACTIVITY_LO_MS_TM_SEND_ADCS(id);
    this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
   }
+
+  U8 ADCSComponentImpl::TmPacket[] = {0x1F,0x7F,0x00,0x1F,0xFF};
 
 } // end namespace App

@@ -73,7 +73,8 @@ namespace App {
 
 
       Fw::Buffer dataSendTmBuffer; /*< buffer to send data to Driver */
-      U8* TmPacket;
+      static U8 TmPacket[];
+      static U8 TcPacket[];
 
     };
 
