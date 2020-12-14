@@ -53,6 +53,21 @@ html {
 						<td>The telemetry id</td>
 					</tr>
 		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">MS_SEND_CMD</td>
+			<td rowspan="3">1051 (0x41b)</td>
+			<td rowspan="3">Send CMD to ADCS</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>id</td>
+						<td>U8</td>
+						<td>The telecommand id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>payload</td>
+						<td>Fw::CmdStringArg</td>
+						<td>The payload data</td>
+					</tr>
+		</tr>
 	</tbody>
 </table>
 

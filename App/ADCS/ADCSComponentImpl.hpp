@@ -14,6 +14,7 @@
 #define ADCS_HPP
 
 #include "App/ADCS/ADCSComponentAc.hpp"
+#include <App/ADCS/ADCSHelper.hpp>
 
 namespace App {
 
@@ -71,11 +72,25 @@ namespace App {
           U8 id /*!< The telemetry id*/
       );
 
+      //! Implementation for MS_SEND_CMD command handler
+      //! Send CMD to ADCS
+      void MS_SEND_CMD_cmdHandler(
+          const FwOpcodeType opCode, /*!< The opcode*/
+          const U32 cmdSeq, /*!< The command sequence number*/
+          U8 id, /*!< The telecommand id*/
+          const Fw::CmdStringArg& payload /*!< The payload data*/
+      );
 
+      void stringToHex (const char*, U8[]);
+      void setTcPacket(U8[],U8, NATIVE_UINT_TYPE);
+      bool isPayloadOK(const char*,NATIVE_UINT_TYPE);
       Fw::Buffer dataSendTmBuffer; /*< buffer to send data to Driver */
-      static U8 TmPacket[];
-      static U8 TcPacket[];
+      Fw::Buffer dataSendTcBuffer; /*< buffer to send data to Driver */
+      ADCSHelper adcsHelper;
 
+      static U8 TmPacket[];
+      
+ 
     };
 
 } // end namespace App

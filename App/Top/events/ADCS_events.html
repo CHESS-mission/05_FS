@@ -64,9 +64,71 @@ html {
 					</tr>
 					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
 						<td>tm</td>
-						<td>I8</td>
+						<td>F64</td>
 						<td></td>
 						<td>The telemetry data</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">MS_TC_SEND_ADCS</td>
+			<td rowspan="3">1052 (0x41c)</td>
+			<td rowspan="3">Send TC data</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>id</td>
+						<td>U8</td>
+						<td></td>
+						<td>The telecommand id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>payload</td>
+						<td>Fw::LogStringArg&</td>
+						<td>100</td>
+						<td>The telecommand data</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">MS_TC_RECV_ADCS</td>
+			<td rowspan="3">1053 (0x41d)</td>
+			<td rowspan="3">Received TC data</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>id</td>
+						<td>U8</td>
+						<td></td>
+						<td>The telecommand id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>tm</td>
+						<td>U8</td>
+						<td></td>
+						<td>The telecommand return data</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">MS_TC_PAYLOAD_ERROR</td>
+			<td rowspan="3">1054 (0x41e)</td>
+			<td rowspan="3">Payload Error</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>id</td>
+						<td>U8</td>
+						<td></td>
+						<td>The telecommand id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>payload</td>
+						<td>Fw::LogStringArg&</td>
+						<td>100</td>
+						<td>the payload error</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">MS_ID_ERROR</td>
+			<td rowspan="2">1055 (0x41f)</td>
+			<td rowspan="2">Payload Error</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>id</td>
+						<td>U8</td>
+						<td></td>
+						<td>the id error</td>
 					</tr>
 		</tr>
 	</tbody>

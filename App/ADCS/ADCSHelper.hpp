@@ -13,7 +13,7 @@ namespace App {
 
             ADCSHelper();
             virtual ~ADCSHelper();
-            U8 getCrc(Fw::Buffer);
+            U8 getCrc(U8* ,NATIVE_UINT_TYPE);
 
         private:
         
