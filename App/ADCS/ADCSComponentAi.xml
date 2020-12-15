@@ -95,7 +95,7 @@
                 <arg name="id" type="U8">
                     <comment>The telecommand id</comment>
                 </arg>
-                <arg name="tm" type="U8">
+                <arg name="tc" type="U8">
                     <comment>The telecommand return data</comment>
                 </arg>          
             </args>

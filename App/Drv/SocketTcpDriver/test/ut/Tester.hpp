@@ -43,6 +43,8 @@ namespace Drv {
       // ----------------------------------------------------------------------
 
       void testSendTM(void);
+      void testSendTC(void);
+      void testSendTCWrongCrc(void);
 
     private:
 

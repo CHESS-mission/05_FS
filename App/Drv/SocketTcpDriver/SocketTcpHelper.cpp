@@ -202,6 +202,6 @@ namespace Drv {
             }
         }
         valread = ::read( this->m_socketOutFd , backBuffer.getData(), MAX_RECV_BUFFER_SIZE);
-        backBuffer.setSize(total);
+        backBuffer.setSize(valread);
     }
 }

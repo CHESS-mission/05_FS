@@ -38,8 +38,10 @@ namespace App {
     // Initialize command history
     this->cmdResponseHistory = new History<CmdResponse>(maxHistorySize);
     // Initialize telemetry histories
-    this->tlmHistory_ADCS_PARAM =
-      new History<TlmEntry_ADCS_PARAM>(maxHistorySize);
+    this->tlmHistory_ADCS_LAST_TM_DATA =
+      new History<TlmEntry_ADCS_LAST_TM_DATA>(maxHistorySize);
+    this->tlmHistory_ADCS_LAST_CMD =
+      new History<TlmEntry_ADCS_LAST_CMD>(maxHistorySize);
     // Initialize event histories
 #if FW_ENABLE_TEXT_LOGGING
     this->textLogHistory = new History<TextLogEntry>(maxHistorySize);
@@ -48,6 +50,14 @@ namespace App {
       new History<EventEntry_MS_TM_SEND_ADCS>(maxHistorySize);
     this->eventHistory_MS_TM_RECV_ADCS =
       new History<EventEntry_MS_TM_RECV_ADCS>(maxHistorySize);
+    this->eventHistory_MS_TC_SEND_ADCS =
+      new History<EventEntry_MS_TC_SEND_ADCS>(maxHistorySize);
+    this->eventHistory_MS_TC_RECV_ADCS =
+      new History<EventEntry_MS_TC_RECV_ADCS>(maxHistorySize);
+    this->eventHistory_MS_TC_PAYLOAD_ERROR =
+      new History<EventEntry_MS_TC_PAYLOAD_ERROR>(maxHistorySize);
+    this->eventHistory_MS_ID_ERROR =
+      new History<EventEntry_MS_ID_ERROR>(maxHistorySize);
     // Initialize histories for typed user output ports
     this->fromPortHistory_DataOut =
       new History<FromPortEntry_DataOut>(maxHistorySize);
@@ -61,13 +71,18 @@ namespace App {
     // Destroy command history
     delete this->cmdResponseHistory;
     // Destroy telemetry histories
-    delete this->tlmHistory_ADCS_PARAM;
+    delete this->tlmHistory_ADCS_LAST_TM_DATA;
+    delete this->tlmHistory_ADCS_LAST_CMD;
     // Destroy event histories
 #if FW_ENABLE_TEXT_LOGGING
     delete this->textLogHistory;
 #endif
     delete this->eventHistory_MS_TM_SEND_ADCS;
     delete this->eventHistory_MS_TM_RECV_ADCS;
+    delete this->eventHistory_MS_TC_SEND_ADCS;
+    delete this->eventHistory_MS_TC_RECV_ADCS;
+    delete this->eventHistory_MS_TC_PAYLOAD_ERROR;
+    delete this->eventHistory_MS_ID_ERROR;
     // Destroy port histories
     delete this->fromPortHistory_DataOut;
   }
@@ -686,6 +701,47 @@ namespace App {
 
   }
 
+  // ----------------------------------------------------------------------
+  // Command: MS_SEND_CMD
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    sendCmd_MS_SEND_CMD(
+        const NATIVE_INT_TYPE instance,
+        const U32 cmdSeq,
+        U8 id,
+        const Fw::CmdStringArg& payload
+    )
+  {
+
+    // Serialize arguments
+
+    Fw::CmdArgBuffer buff;
+    Fw::SerializeStatus _status;
+    _status = buff.serialize(id);
+    FW_ASSERT(_status == Fw::FW_SERIALIZE_OK,static_cast<AssertArg>(_status));
+    _status = buff.serialize(payload);
+    FW_ASSERT(_status == Fw::FW_SERIALIZE_OK,static_cast<AssertArg>(_status));
+
+    // Call output command port
+
+    FwOpcodeType _opcode;
+    const U32 idBase = this->getIdBase();
+    _opcode = ADCSComponentBase::OPCODE_MS_SEND_CMD + idBase;
+
+    if (this->m_to_CmdDisp[0].isConnected()) {
+      this->m_to_CmdDisp[0].invoke(
+          _opcode,
+          cmdSeq,
+          buff
+      );
+    }
+    else {
+      printf("Test Command Output port not connected!\n");
+    }
+
+  }
+
 
   void ADCSTesterBase ::
     sendRawCmd(FwOpcodeType opcode, U32 cmdSeq, Fw::CmdArgBuffer& args) {
@@ -748,15 +804,27 @@ namespace App {
 
     switch (id - idBase) {
 
-      case ADCSComponentBase::CHANNELID_ADCS_PARAM:
+      case ADCSComponentBase::CHANNELID_ADCS_LAST_TM_DATA:
+      {
+        F64 arg;
+        const Fw::SerializeStatus _status = val.deserialize(arg);
+        if (_status != Fw::FW_SERIALIZE_OK) {
+          printf("Error deserializing ADCS_LAST_TM_DATA: %d\n", _status);
+          return;
+        }
+        this->tlmInput_ADCS_LAST_TM_DATA(timeTag, arg);
+        break;
+      }
+
+      case ADCSComponentBase::CHANNELID_ADCS_LAST_CMD:
       {
         U8 arg;
         const Fw::SerializeStatus _status = val.deserialize(arg);
         if (_status != Fw::FW_SERIALIZE_OK) {
-          printf("Error deserializing ADCS_PARAM: %d\n", _status);
+          printf("Error deserializing ADCS_LAST_CMD: %d\n", _status);
           return;
         }
-        this->tlmInput_ADCS_PARAM(timeTag, arg);
+        this->tlmInput_ADCS_LAST_CMD(timeTag, arg);
         break;
       }
 
@@ -773,21 +841,37 @@ namespace App {
     clearTlm(void)
   {
     this->tlmSize = 0;
-    this->tlmHistory_ADCS_PARAM->clear();
+    this->tlmHistory_ADCS_LAST_TM_DATA->clear();
+    this->tlmHistory_ADCS_LAST_CMD->clear();
   }
 
   // ----------------------------------------------------------------------
-  // Channel: ADCS_PARAM
+  // Channel: ADCS_LAST_TM_DATA
   // ----------------------------------------------------------------------
 
   void ADCSTesterBase ::
-    tlmInput_ADCS_PARAM(
+    tlmInput_ADCS_LAST_TM_DATA(
+        const Fw::Time& timeTag,
+        const F64& val
+    )
+  {
+    TlmEntry_ADCS_LAST_TM_DATA e = { timeTag, val };
+    this->tlmHistory_ADCS_LAST_TM_DATA->push_back(e);
+    ++this->tlmSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Channel: ADCS_LAST_CMD
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    tlmInput_ADCS_LAST_CMD(
         const Fw::Time& timeTag,
         const U8& val
     )
   {
-    TlmEntry_ADCS_PARAM e = { timeTag, val };
-    this->tlmHistory_ADCS_PARAM->push_back(e);
+    TlmEntry_ADCS_LAST_CMD e = { timeTag, val };
+    this->tlmHistory_ADCS_LAST_CMD->push_back(e);
     ++this->tlmSize;
   }
 
@@ -886,7 +970,7 @@ namespace App {
             static_cast<AssertArg>(_status)
         );
 
-        I8 tm;
+        F64 tm;
 #if FW_AMPCS_COMPATIBLE
         {
           // Deserialize the argument size
@@ -896,7 +980,7 @@ namespace App {
             _status == Fw::FW_SERIALIZE_OK,
             static_cast<AssertArg>(_status)
           );
-          FW_ASSERT(_argSize == sizeof(I8),_argSize,sizeof(I8));
+          FW_ASSERT(_argSize == sizeof(F64),_argSize,sizeof(F64));
         }
 #endif
         _status = args.deserialize(tm);
@@ -906,6 +990,203 @@ namespace App {
         );
 
         this->logIn_ACTIVITY_LO_MS_TM_RECV_ADCS(id, tm);
+
+        break;
+
+      }
+
+      case ADCSComponentBase::EVENTID_MS_TC_SEND_ADCS:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 2,_numArgs,2);
+
+#endif
+        U8 id;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
+        }
+#endif
+        _status = args.deserialize(id);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        Fw::LogStringArg payload;
+        _status = args.deserialize(payload);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_ACTIVITY_LO_MS_TC_SEND_ADCS(id, payload);
+
+        break;
+
+      }
+
+      case ADCSComponentBase::EVENTID_MS_TC_RECV_ADCS:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 2,_numArgs,2);
+
+#endif
+        U8 id;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
+        }
+#endif
+        _status = args.deserialize(id);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        U8 tm;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
+        }
+#endif
+        _status = args.deserialize(tm);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(id, tm);
+
+        break;
+
+      }
+
+      case ADCSComponentBase::EVENTID_MS_TC_PAYLOAD_ERROR:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 2,_numArgs,2);
+
+#endif
+        U8 id;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
+        }
+#endif
+        _status = args.deserialize(id);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        Fw::LogStringArg payload;
+        _status = args.deserialize(payload);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_WARNING_LO_MS_TC_PAYLOAD_ERROR(id, payload);
+
+        break;
+
+      }
+
+      case ADCSComponentBase::EVENTID_MS_ID_ERROR:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 1,_numArgs,1);
+
+#endif
+        U8 id;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
+        }
+#endif
+        _status = args.deserialize(id);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_WARNING_LO_MS_ID_ERROR(id);
 
         break;
 
@@ -926,6 +1207,10 @@ namespace App {
     this->eventsSize = 0;
     this->eventHistory_MS_TM_SEND_ADCS->clear();
     this->eventHistory_MS_TM_RECV_ADCS->clear();
+    this->eventHistory_MS_TC_SEND_ADCS->clear();
+    this->eventHistory_MS_TC_RECV_ADCS->clear();
+    this->eventHistory_MS_TC_PAYLOAD_ERROR->clear();
+    this->eventHistory_MS_ID_ERROR->clear();
   }
 
 #if FW_ENABLE_TEXT_LOGGING
@@ -1029,13 +1314,80 @@ namespace App {
   void ADCSTesterBase ::
     logIn_ACTIVITY_LO_MS_TM_RECV_ADCS(
         U8 id,
-        I8 tm
+        F64 tm
     )
   {
     EventEntry_MS_TM_RECV_ADCS e = {
       id, tm
     };
     eventHistory_MS_TM_RECV_ADCS->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_TC_SEND_ADCS
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    logIn_ACTIVITY_LO_MS_TC_SEND_ADCS(
+        U8 id,
+        Fw::LogStringArg& payload
+    )
+  {
+    EventEntry_MS_TC_SEND_ADCS e = {
+      id, payload
+    };
+    eventHistory_MS_TC_SEND_ADCS->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_TC_RECV_ADCS
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(
+        U8 id,
+        U8 tm
+    )
+  {
+    EventEntry_MS_TC_RECV_ADCS e = {
+      id, tm
+    };
+    eventHistory_MS_TC_RECV_ADCS->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_TC_PAYLOAD_ERROR
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    logIn_WARNING_LO_MS_TC_PAYLOAD_ERROR(
+        U8 id,
+        Fw::LogStringArg& payload
+    )
+  {
+    EventEntry_MS_TC_PAYLOAD_ERROR e = {
+      id, payload
+    };
+    eventHistory_MS_TC_PAYLOAD_ERROR->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_ID_ERROR
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    logIn_WARNING_LO_MS_ID_ERROR(
+        U8 id
+    )
+  {
+    EventEntry_MS_ID_ERROR e = {
+      id
+    };
+    eventHistory_MS_ID_ERROR->push_back(e);
     ++this->eventsSize;
   }
 

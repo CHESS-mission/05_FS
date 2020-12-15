@@ -391,6 +391,15 @@ namespace App {
           U8 id /*!< The telemetry id*/
       );
 
+      //! Send a MS_SEND_CMD command
+      //!
+      void sendCmd_MS_SEND_CMD(
+          const NATIVE_INT_TYPE instance, /*!< The instance number*/
+          const U32 cmdSeq, /*!< The command sequence number*/
+          U8 id, /*!< The telecommand id*/
+          const Fw::CmdStringArg& payload /*!< The payload data*/
+      );
+
     protected:
 
       // ----------------------------------------------------------------------
@@ -516,20 +525,118 @@ namespace App {
       //!
       virtual void logIn_ACTIVITY_LO_MS_TM_RECV_ADCS(
           U8 id, /*!< The telemetry id*/
-          I8 tm /*!< The telemetry data*/
+          F64 tm /*!< The telemetry data*/
       );
 
       //! A history entry for event MS_TM_RECV_ADCS
       //!
       typedef struct {
         U8 id;
-        I8 tm;
+        F64 tm;
       } EventEntry_MS_TM_RECV_ADCS;
 
       //! The history of MS_TM_RECV_ADCS events
       //!
       History<EventEntry_MS_TM_RECV_ADCS>
         *eventHistory_MS_TM_RECV_ADCS;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_TC_SEND_ADCS
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_TC_SEND_ADCS
+      //!
+      virtual void logIn_ACTIVITY_LO_MS_TC_SEND_ADCS(
+          U8 id, /*!< The telecommand id*/
+          Fw::LogStringArg& payload /*!< The telecommand data*/
+      );
+
+      //! A history entry for event MS_TC_SEND_ADCS
+      //!
+      typedef struct {
+        U8 id;
+        Fw::LogStringArg payload;
+      } EventEntry_MS_TC_SEND_ADCS;
+
+      //! The history of MS_TC_SEND_ADCS events
+      //!
+      History<EventEntry_MS_TC_SEND_ADCS>
+        *eventHistory_MS_TC_SEND_ADCS;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_TC_RECV_ADCS
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_TC_RECV_ADCS
+      //!
+      virtual void logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(
+          U8 id, /*!< The telecommand id*/
+          U8 tm /*!< The telecommand return data*/
+      );
+
+      //! A history entry for event MS_TC_RECV_ADCS
+      //!
+      typedef struct {
+        U8 id;
+        U8 tm;
+      } EventEntry_MS_TC_RECV_ADCS;
+
+      //! The history of MS_TC_RECV_ADCS events
+      //!
+      History<EventEntry_MS_TC_RECV_ADCS>
+        *eventHistory_MS_TC_RECV_ADCS;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_TC_PAYLOAD_ERROR
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_TC_PAYLOAD_ERROR
+      //!
+      virtual void logIn_WARNING_LO_MS_TC_PAYLOAD_ERROR(
+          U8 id, /*!< The telecommand id*/
+          Fw::LogStringArg& payload /*!< the payload error*/
+      );
+
+      //! A history entry for event MS_TC_PAYLOAD_ERROR
+      //!
+      typedef struct {
+        U8 id;
+        Fw::LogStringArg payload;
+      } EventEntry_MS_TC_PAYLOAD_ERROR;
+
+      //! The history of MS_TC_PAYLOAD_ERROR events
+      //!
+      History<EventEntry_MS_TC_PAYLOAD_ERROR>
+        *eventHistory_MS_TC_PAYLOAD_ERROR;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_ID_ERROR
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_ID_ERROR
+      //!
+      virtual void logIn_WARNING_LO_MS_ID_ERROR(
+          U8 id /*!< the id error*/
+      );
+
+      //! A history entry for event MS_ID_ERROR
+      //!
+      typedef struct {
+        U8 id;
+      } EventEntry_MS_ID_ERROR;
+
+      //! The history of MS_ID_ERROR events
+      //!
+      History<EventEntry_MS_ID_ERROR>
+        *eventHistory_MS_ID_ERROR;
 
     protected:
 
@@ -556,27 +663,52 @@ namespace App {
     protected:
 
       // ----------------------------------------------------------------------
-      // Channel: ADCS_PARAM
+      // Channel: ADCS_LAST_TM_DATA
       // ----------------------------------------------------------------------
 
-      //! Handle channel ADCS_PARAM
+      //! Handle channel ADCS_LAST_TM_DATA
       //!
-      virtual void tlmInput_ADCS_PARAM(
+      virtual void tlmInput_ADCS_LAST_TM_DATA(
+          const Fw::Time& timeTag, /*!< The time*/
+          const F64& val /*!< The channel value*/
+      );
+
+      //! A telemetry entry for channel ADCS_LAST_TM_DATA
+      //!
+      typedef struct {
+        Fw::Time timeTag;
+        F64 arg;
+      } TlmEntry_ADCS_LAST_TM_DATA;
+
+      //! The history of ADCS_LAST_TM_DATA values
+      //!
+      History<TlmEntry_ADCS_LAST_TM_DATA>
+        *tlmHistory_ADCS_LAST_TM_DATA;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Channel: ADCS_LAST_CMD
+      // ----------------------------------------------------------------------
+
+      //! Handle channel ADCS_LAST_CMD
+      //!
+      virtual void tlmInput_ADCS_LAST_CMD(
           const Fw::Time& timeTag, /*!< The time*/
           const U8& val /*!< The channel value*/
       );
 
-      //! A telemetry entry for channel ADCS_PARAM
+      //! A telemetry entry for channel ADCS_LAST_CMD
       //!
       typedef struct {
         Fw::Time timeTag;
         U8 arg;
-      } TlmEntry_ADCS_PARAM;
+      } TlmEntry_ADCS_LAST_CMD;
 
-      //! The history of ADCS_PARAM values
+      //! The history of ADCS_LAST_CMD values
       //!
-      History<TlmEntry_ADCS_PARAM>
-        *tlmHistory_ADCS_PARAM;
+      History<TlmEntry_ADCS_LAST_CMD>
+        *tlmHistory_ADCS_LAST_CMD;
 
     protected:
 

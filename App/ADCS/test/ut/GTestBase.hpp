@@ -33,11 +33,17 @@
 #define ASSERT_TLM_SIZE(size) \
   this->assertTlm_size(__FILE__, __LINE__, size)
 
-#define ASSERT_TLM_ADCS_PARAM_SIZE(size) \
-  this->assertTlm_ADCS_PARAM_size(__FILE__, __LINE__, size)
+#define ASSERT_TLM_ADCS_LAST_TM_DATA_SIZE(size) \
+  this->assertTlm_ADCS_LAST_TM_DATA_size(__FILE__, __LINE__, size)
 
-#define ASSERT_TLM_ADCS_PARAM(index, value) \
-  this->assertTlm_ADCS_PARAM(__FILE__, __LINE__, index, value)
+#define ASSERT_TLM_ADCS_LAST_TM_DATA(index, value) \
+  this->assertTlm_ADCS_LAST_TM_DATA(__FILE__, __LINE__, index, value)
+
+#define ASSERT_TLM_ADCS_LAST_CMD_SIZE(size) \
+  this->assertTlm_ADCS_LAST_CMD_size(__FILE__, __LINE__, size)
+
+#define ASSERT_TLM_ADCS_LAST_CMD(index, value) \
+  this->assertTlm_ADCS_LAST_CMD(__FILE__, __LINE__, index, value)
 
 // ----------------------------------------------------------------------
 // Macros for event history assertions
@@ -57,6 +63,30 @@
 
 #define ASSERT_EVENTS_MS_TM_RECV_ADCS(index, _id, _tm) \
   this->assertEvents_MS_TM_RECV_ADCS(__FILE__, __LINE__, index, _id, _tm)
+
+#define ASSERT_EVENTS_MS_TC_SEND_ADCS_SIZE(size) \
+  this->assertEvents_MS_TC_SEND_ADCS_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_TC_SEND_ADCS(index, _id, _payload) \
+  this->assertEvents_MS_TC_SEND_ADCS(__FILE__, __LINE__, index, _id, _payload)
+
+#define ASSERT_EVENTS_MS_TC_RECV_ADCS_SIZE(size) \
+  this->assertEvents_MS_TC_RECV_ADCS_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_TC_RECV_ADCS(index, _id, _tm) \
+  this->assertEvents_MS_TC_RECV_ADCS(__FILE__, __LINE__, index, _id, _tm)
+
+#define ASSERT_EVENTS_MS_TC_PAYLOAD_ERROR_SIZE(size) \
+  this->assertEvents_MS_TC_PAYLOAD_ERROR_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_TC_PAYLOAD_ERROR(index, _id, _payload) \
+  this->assertEvents_MS_TC_PAYLOAD_ERROR(__FILE__, __LINE__, index, _id, _payload)
+
+#define ASSERT_EVENTS_MS_ID_ERROR_SIZE(size) \
+  this->assertEvents_MS_ID_ERROR_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_ID_ERROR(index, _id) \
+  this->assertEvents_MS_ID_ERROR(__FILE__, __LINE__, index, _id)
 
 // ----------------------------------------------------------------------
 // Macros for typed user from port history assertions
@@ -163,18 +193,39 @@ namespace App {
     protected:
 
       // ----------------------------------------------------------------------
-      // Channel: ADCS_PARAM
+      // Channel: ADCS_LAST_TM_DATA
       // ----------------------------------------------------------------------
 
       //! Assert telemetry value in history at index
       //!
-      void assertTlm_ADCS_PARAM_size(
+      void assertTlm_ADCS_LAST_TM_DATA_size(
           const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 size /*!< The asserted size*/
       ) const;
 
-      void assertTlm_ADCS_PARAM(
+      void assertTlm_ADCS_LAST_TM_DATA(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const F64& val /*!< The channel value*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Channel: ADCS_LAST_CMD
+      // ----------------------------------------------------------------------
+
+      //! Assert telemetry value in history at index
+      //!
+      void assertTlm_ADCS_LAST_CMD_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertTlm_ADCS_LAST_CMD(
           const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
@@ -229,7 +280,86 @@ namespace App {
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
           const U8 id, /*!< The telemetry id*/
-          const I8 tm /*!< The telemetry data*/
+          const F64 tm /*!< The telemetry data*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_TC_SEND_ADCS
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_TC_SEND_ADCS_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_TC_SEND_ADCS(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const U8 id, /*!< The telecommand id*/
+          const char *const payload /*!< The telecommand data*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_TC_RECV_ADCS
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_TC_RECV_ADCS_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_TC_RECV_ADCS(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const U8 id, /*!< The telecommand id*/
+          const U8 tm /*!< The telecommand return data*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_TC_PAYLOAD_ERROR
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_TC_PAYLOAD_ERROR_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_TC_PAYLOAD_ERROR(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const U8 id, /*!< The telecommand id*/
+          const char *const payload /*!< the payload error*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_ID_ERROR
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_ID_ERROR_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_ID_ERROR(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const U8 id /*!< the id error*/
       ) const;
 
     protected:

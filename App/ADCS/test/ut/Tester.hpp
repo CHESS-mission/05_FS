@@ -44,7 +44,14 @@ namespace App {
 
       //! To do
       //!
-      void testSendAdcsTm(void);
+      void testCmdTMBadId(void);
+      void testCmdTMGoodId(void);
+      void testCmdTCBadId(void);
+      void testCmdTCGoodIdPayload(void);
+      void testCmdTCBadPayloadData(void);
+      void testCmdTCBadPayloadSize(void);
+      void testPortTM(void);
+      void testPortTC(void);
 
     private:
 

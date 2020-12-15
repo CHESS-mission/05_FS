@@ -11,6 +11,8 @@
 // ====================================================================== 
 
 #include "Tester.hpp"
+#include "App/ADCS/ADCSHelper.hpp"
+
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
@@ -38,7 +40,7 @@ namespace Drv {
   Tester ::
     ~Tester(void) 
   {
-    
+    this->component.closeSocket();
   }
 
   // ----------------------------------------------------------------------
@@ -46,22 +48,113 @@ namespace Drv {
   // ----------------------------------------------------------------------
 
   void Tester::testSendTM(void){
-    U8 dataSend[]={0x1F,0x7F,0x80,0x1F,0xFF};
-    U8 dataRecv[] ={0x1F,0x7F,0x80,0x0A,0x1F,0xFF};
+    // set test data
+    U8 tmId = 128;
+    U32 sizeDataSend = 5;
+    U8 dataSend[]={0x1F,0x7F,tmId,0x1F,0xFF};
+
+    U32 sizeDataRecvTheoritical = 6;
+    U8 tmReturnTheoritical = 10;
+    U8 dataRecvTheoretical[] ={0x1F,0x7F,tmId,tmReturnTheoritical,0x1F,0xFF};
+
     Fw::Buffer bufferSend;
-    Fw::Buffer bufferRecv;
+
     bufferSend.setData(dataSend);
-    bufferSend.setSize(5);
-    bufferRecv.setData(dataRecv);
-    bufferRecv.setSize(5);
+    bufferSend.setSize(sizeDataSend);
+
+    //Invok send port in
     this->invoke_to_send(0,bufferSend);
+    //Verify port out
     ASSERT_FROM_PORT_HISTORY_SIZE(1);
     ASSERT_from_recv_SIZE(1);
-    U8* data = this->fromPortHistory_recv->at(0).fwBuffer.getData();
-    ASSERT_EQ(data[0],dataRecv[0]);
-    this->component.closeSocket();
+
+    //Verify data recv form simulator
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getData();
+    U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getSize();
+
+    ASSERT_EQ(sizeDataRecvTheoritical,sizeDataRecvEmpirical);
+
+    for(int i = 0 ; i< sizeDataRecvTheoritical;i++){
+      ASSERT_EQ(dataRecvTheoretical[i],dataRecvEmpirical[i]);
+    }
+    
+    //Clean test
+    this->clearHistory();
   }
 
+  void Tester::testSendTC(void){
+    // set test data
+    U8 tcId = 0;
+    U32 sizeDataSend = 6;
+    U8 tcCrc = 105;
+    U8 dataSend[]={0x1F,0x7F,tcId,0x1F,0xFF,tcCrc};
+
+    U32 sizeDataRecvTheoritical = 6;
+    U8 tcReturnDataTheoritical = 0;
+    U8 dataRecvTheoretical[] ={0x1F,0x7F,tcId,tcReturnDataTheoritical,0x1F,0xFF};
+
+    Fw::Buffer bufferSend;
+
+    bufferSend.setData(dataSend);
+    bufferSend.setSize(sizeDataSend);
+
+    //Invok send port in
+    this->invoke_to_send(0,bufferSend);
+
+    //Verify port out
+    ASSERT_FROM_PORT_HISTORY_SIZE(1);
+    ASSERT_from_recv_SIZE(1);
+
+    //Verify data recv form simulator
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getData();
+    const U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getSize();
+
+    ASSERT_EQ(sizeDataRecvTheoritical,sizeDataRecvEmpirical);
+
+    for(int i = 0 ; i< tcReturnDataTheoritical;i++){
+      ASSERT_EQ(dataRecvTheoretical[i],dataRecvEmpirical[i]);
+    }
+    
+    //Clean test
+    this->clearHistory();
+  }
+
+  void Tester::testSendTCWrongCrc(void){
+    // set test data
+    U8 tcId = 0;
+    U32 sizeDataSend = 6;
+    U8 tcWrongCrc = 34;
+    U8 dataSend[]={0x1F,0x7F,tcId,0x1F,0xFF,tcWrongCrc};
+
+    U32 sizeDataRecvTheoritical = 6;
+    U8 tcReturnDataTheoritical = 4;
+    U8 dataRecvTheoretical[] ={0x1F,0x7F,tcId,tcReturnDataTheoritical,0x1F,0xFF};
+
+    Fw::Buffer bufferSend;
+
+    bufferSend.setData(dataSend);
+    bufferSend.setSize(sizeDataSend);
+
+    //Invok send port in
+    this->invoke_to_send(0,bufferSend);
+
+    //Verify port out
+    ASSERT_FROM_PORT_HISTORY_SIZE(1);
+    ASSERT_from_recv_SIZE(1);
+
+    //Verify data recv form simulator
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getData();
+    const U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getSize();
+
+    ASSERT_EQ(sizeDataRecvTheoritical,sizeDataRecvEmpirical);
+
+    for(int i = 0 ; i< tcReturnDataTheoritical;i++){
+      ASSERT_EQ(dataRecvTheoretical[i],dataRecvEmpirical[i]);
+    }
+    
+    //Clean test
+    this->clearHistory();
+  }
 
   // ----------------------------------------------------------------------
   // Handlers for typed from ports

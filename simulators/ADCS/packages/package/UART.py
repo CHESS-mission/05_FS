@@ -42,6 +42,7 @@ class Uart:
                         code = 0x04
                 else:
                     print("error in  Telecommand End message or Data byte bytes")
+                    code = 0x02
             else:
                 print('Telemetry packet')
                 if packet[-2] == 0x1F and packet[-1] == 0xFF:
