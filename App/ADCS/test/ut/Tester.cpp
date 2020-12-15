@@ -13,7 +13,6 @@
 #include "Tester.hpp"
 #include <Fw/Types/BasicTypes.hpp>
 #include <App/ADCS/ADCSHelper.hpp>
-#include <App/Config/ADCSCfg.hpp>
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
@@ -83,10 +82,10 @@ namespace App {
     //Init data for TM test
     Fw::Buffer bufferTm;
     U8 goodId = 128;
-    U8 data[] = {0x1F,0x7F,goodId,0x1F,0xFF};
-    U32 size= 5;
-    bufferTm.setData(data);
-    bufferTm.setSize(size);
+    U8 dataTheoritical[] = {0x1F,0x7F,goodId,0x1F,0xFF};
+    U32 sizeTheoritical= 5;
+    bufferTm.setData(dataTheoritical);
+    bufferTm.setSize(sizeTheoritical);
 
     //Send MS_GET_TM command
     this->sendCmd_MS_GET_TM(0,10,goodId);
@@ -98,12 +97,13 @@ namespace App {
     ASSERT_from_DataOut_SIZE(1);
 
     //Verify port param
-    U8* portData = this->fromPortHistory_DataOut->at(0).fwBuffer.getData();
-    U32 portSize = this->fromPortHistory_DataOut->at(0).fwBuffer.getSize();
+    U8* dataEmpirical = this->fromPortHistory_DataOut->at(0).fwBuffer.getData();
+    U32 sizeEmpirical = this->fromPortHistory_DataOut->at(0).fwBuffer.getSize();
 
-    ASSERT_EQ(size,portSize);
-    for(int i = 0; i < 5 ;i++){
-      ASSERT_EQ(data[i],portData[i]);
+    ASSERT_EQ(sizeTheoritical,sizeEmpirical);
+
+    for(int i = 0; i < sizeTheoritical ;i++){
+      ASSERT_EQ(dataTheoritical[i],dataEmpirical[i]);
     }
 
     //Verifiy events
@@ -148,13 +148,13 @@ namespace App {
     App::ADCSHelper adcsHelper;
     Fw::Buffer bufferTm;
     U8 goodId = 127;
-    //there is checksum
-    U32 size= SIZE_TC_PACKET + 1;
+    U32 sizeTheoritical= 7;
+    U8 dataTheoritical[] = {0x1F,0x7F,goodId,0x00,0x1F,0xFF,0x00};
+    adcsHelper.getCrc(dataTheoritical,sizeTheoritical);
+    bufferTm.setData(dataTheoritical);
+    bufferTm.setSize(sizeTheoritical);
+
     Fw::CmdStringArg payload("00");
-    U8 data[] = {0x1F,0x7F,goodId,0x00,0x1F,0xFF,0x00};
-    adcsHelper.getCrc(data,size);
-    bufferTm.setData(data);
-    bufferTm.setSize(size);
 
     //Send MS_GET_TM command
     this->sendCmd_MS_SEND_CMD(0,10,goodId,payload);
@@ -166,12 +166,13 @@ namespace App {
     ASSERT_from_DataOut_SIZE(1);
 
     //Verify port param
-    U8* portData = this->fromPortHistory_DataOut->at(0).fwBuffer.getData();
-    U32 portSize = this->fromPortHistory_DataOut->at(0).fwBuffer.getSize();
+    U8* dataEmpirical = this->fromPortHistory_DataOut->at(0).fwBuffer.getData();
+    U32 sizeEmpirical = this->fromPortHistory_DataOut->at(0).fwBuffer.getSize();
 
-    ASSERT_EQ(size,portSize);
+    ASSERT_EQ(sizeTheoritical,sizeEmpirical);
+
     for(int i = 0; i < 5 ;i++){
-      ASSERT_EQ(data[i],portData[i]);
+      ASSERT_EQ(dataTheoritical[i],dataEmpirical[i]);
     }
 
     //Verifiy events
