@@ -1414,7 +1414,7 @@
     <event component="ADCS" name="MS_TC_RECV_ADCS" id="0x41d" severity="ACTIVITY_LO" format_string="TC id=%hu recv from ADCS return : %hu">
       <args>
         <arg name="id" type="U8"/>
-        <arg name="tm" type="U8"/>
+        <arg name="tc" type="U8"/>
       </args>
     </event>
     <event component="ADCS" name="MS_TC_PAYLOAD_ERROR" id="0x41e" severity="WARNING_LO" format_string="Error in Commande id : %hu, payload : %s">
