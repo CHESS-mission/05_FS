@@ -1412,7 +1412,6 @@
       </args>
     </event>
     <event component="ADCS" name="MS_TC_RECV_ADCS" id="0x41d" severity="ACTIVITY_LO" format_string="TC id=%hu recv from ADCS return : %hu">
-<<<<<<< Updated upstream
       <args>
         <arg name="id" type="U8"/>
         <arg name="tc" type="U8"/>
@@ -1427,11 +1426,6 @@
     <event component="ADCS" name="MS_ID_ERROR" id="0x41f" severity="WARNING_LO" format_string="Error ADCS in TC or TM id : %hu">
       <args>
         <arg name="id" type="U8"/>
-=======
-      <args>
-        <arg name="id" type="U8"/>
-        <arg name="tm" type="U8"/>
->>>>>>> Stashed changes
       </args>
     </event>
   </events>
@@ -1504,11 +1498,7 @@
     <channel component="signalGen5" name="PairHistory" id="0x11d" description="Last 10 (time, value) pairs of the signal" type="Ref::SignalPairSet"/>
     <channel component="signalGen5" name="Info" id="0x11e" description="Composite field of signal information, containing histories, pairs etc" type="Ref::SignalInfo"/>
     <channel component="blockDrv" name="BD_Cycles" id="0x1e1" description="Driver cycle count" type="U32"/>
-<<<<<<< Updated upstream
     <channel component="ADCS" name="ADCS_LAST_TM_DATA" id="0x41a" description="Tm Value" type="F64"/>
-=======
-    <channel component="ADCS" name="ADCS_LAST_TM_DATA" id="0x41a" description="Tm Value" type="U8"/>
->>>>>>> Stashed changes
     <channel component="ADCS" name="ADCS_LAST_CMD" id="0x41b" description="Last Telecommand return" type="U8"/>
   </channels>
   <parameters>

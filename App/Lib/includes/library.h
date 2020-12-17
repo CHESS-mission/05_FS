@@ -1,0 +1,6 @@
+#ifndef TESTLIBRARY_LIBRARY_H
+#define TESTLIBRARY_LIBRARY_H
+
+char* hello();
+
+#endif //TESTLIBRARY_LIBRARY_H
