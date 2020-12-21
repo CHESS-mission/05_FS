@@ -27,6 +27,8 @@ cmake_minimum_required(VERSION 3.5)
 # components will be placed in the F-Prime binary subdirectory to keep them from
 # colliding with deployment specific items.
 ##
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+
 include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime.cmake")
 # NOTE: register custom targets between these two lines
 include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
@@ -36,7 +38,6 @@ include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
 # This section includes deployment specific directories. This allows use of non-
 # core components in the topology, which is also added here.
 ##
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 # Add component subdirectories
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/PingReceiver/")

@@ -249,10 +249,15 @@ bool constructApp(bool dump, U32 port_number, char* hostname) {
 
     eventAction.start(0, 100, 10*1024);
 
+#ifdef TGT_OS_TYPE_FREERTOS_SIM 
+    printf("!!! Be careful, FreeRTOS_Sim port currently do not support socketTask\n");
+    printf("!!! You can not connect to GDS through socketIpDriver\n");
+#else   // Linux and Darwin
     // Initialize socket server if and only if there is a valid specification
     if (hostname != NULL && port_number != 0) {
         socketIpDriver.startSocketTask(100, 10 * 1024, hostname, port_number);
     }
+#endif
     return false;
 }
 

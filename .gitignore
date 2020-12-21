@@ -11,6 +11,9 @@ App/logs/
 
 fprime-venv
 
+# If FreeRTOS is cloned in the root directory
+FreeRTOS/
+
 .idea
 .editorconfig
 .vscode/
