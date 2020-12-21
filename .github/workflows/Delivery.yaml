@@ -82,4 +82,7 @@ jobs:
 
       #put the build-artifacts folder as archive
       - name: Put version in archive
-        run: cp -r build-artifacts ${{ env.delivery-path }}/archives/$(date +"%d_%m_%Y_%H:%M:%S")
+        run: |
+          date_now=$(date +"%d_%m_%Y_%H:%M:%S")
+          mkdir ${{ env.delivery-path }}/archives/$date_now
+          cp -r build-artifacts ${{ env.delivery-path }}/archives/$date_now/build-artifacts
