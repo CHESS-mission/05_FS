@@ -2,7 +2,7 @@ name: Continous delivery
 
 on:
   push:
-    branches: [ main ]
+    #branches: [ main ]
 
 env:
   path: App
