@@ -100,6 +100,9 @@ jobs:
 
       - name: init submodule
         run: git submodule update --init
+
+      - name: start simulators
+        run: ./scripts-ci/start-simulators.sh
         
       # Init the virtual environnement (project script)
       - name: Prepare venv
@@ -131,6 +134,9 @@ jobs:
 
       - name: init submodule
         run: git submodule update --init
+
+      - name: start simulators
+        run: ./scripts-ci/start-simulators.sh
         
       # Init the virtual environnement (project script)
       - name: Prepare venv
