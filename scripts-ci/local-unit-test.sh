@@ -44,7 +44,7 @@ done
 #iterate over directories to check their tests
 for dir in "${dirs[@]}"
 do
-	echo -e "\n\n\Checking component with unit test : $dir"
+	echo -e "\n\nChecking component with unit test : $dir"
 	cd $dir
 	fprime-util check
 done
