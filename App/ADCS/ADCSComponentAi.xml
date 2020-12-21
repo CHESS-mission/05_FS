@@ -1,0 +1,127 @@
+<component name="ADCS" kind="active" namespace="App">
+    <comment>Component that manage ADCS</comment>
+     <import_port_type>Fw/Buffer/BufferSendPortAi.xml</import_port_type>
+    <ports>
+        <port name="DataOut" data_type="Fw::BufferSend" kind="output">
+            <comment>
+            Port for sending ADCS packet
+            </comment>
+        </port>
+        <port name="DataIn" data_type="Fw::BufferSend" kind="async_input">
+            <comment>
+            Port for returning ADCS Packet
+            </comment>
+        </port>
+    </ports>
+    <commands>
+        <command kind="async" opcode="0" mnemonic="MS_GET_TM">
+            <comment>
+            Send telemetry to ADCS
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telemetry id</comment>
+                </arg>                  
+             </args>
+        </command>
+        <command kind="async" opcode="1" mnemonic="MS_SEND_CMD">
+            <comment>
+            Send CMD to ADCS
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telecommand id</comment>
+                 </arg>
+                <arg name="payload" type="string" size="100">
+                    <comment>The payload data</comment>
+                </arg>                     
+             </args>
+        </command>
+    </commands>
+    <telemetry>
+        <channel id="0" name="ADCS_LAST_TM_DATA" data_type="F64">
+            <comment>
+            Tm Value
+            </comment>
+        </channel>
+                <channel id="1" name="ADCS_LAST_CMD" data_type="U8">
+            <comment>
+            Last Telecommand return
+            </comment>
+        </channel>
+    </telemetry>
+    <events>
+        <event id="0" name="MS_TM_SEND_ADCS" severity="ACTIVITY_LO" format_string="TM id=%hu send to ADCS"  >
+            <comment>
+            Send Tm command
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telemetry id</comment>
+                </arg>
+            </args>          
+        </event>
+        <event id="1" name="MS_TM_RECV_ADCS" severity="ACTIVITY_LO" format_string = "TM id=%hu recv from ADCS data: %f" >
+            <comment>
+            Received TM data
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telemetry id</comment>
+                </arg>
+                <arg name="tm" type="F64">
+                    <comment>The telemetry data</comment>
+                </arg>          
+            </args>
+        </event>
+        <event id="2" name="MS_TC_SEND_ADCS" severity="ACTIVITY_LO" format_string = "TC id=%hu send to ADCS data: %s" >
+            <comment>
+            Send TC data
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telecommand id</comment>
+                </arg>
+                <arg name="payload" type="string" size="100">
+                    <comment>The telecommand data</comment>
+                </arg>          
+            </args>
+        </event>
+        <event id="3" name="MS_TC_RECV_ADCS" severity="ACTIVITY_LO" format_string = "TC id=%hu recv from ADCS return : %hu" >
+            <comment>
+            Received TC data
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telecommand id</comment>
+                </arg>
+                <arg name="tc" type="U8">
+                    <comment>The telecommand return data</comment>
+                </arg>          
+            </args>
+        </event>
+        <event id="4" name="MS_TC_PAYLOAD_ERROR" severity="WARNING_LO" format_string = "Error in Commande id : %hu, payload : %s" >
+            <comment>
+            Payload Error
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>The telecommand id</comment>
+                </arg>
+                <arg name="payload" type="string" size="100">
+                    <comment>the payload error</comment>
+                </arg>    
+            </args>
+        </event>
+        <event id="5" name="MS_ID_ERROR" severity="WARNING_LO" format_string = "Error ADCS in TC or TM id : %hu" >
+            <comment>
+            Payload Error
+            </comment>
+            <args>
+                <arg name="id" type="U8">
+                    <comment>the id error</comment>
+                </arg>    
+            </args>
+        </event>
+    </events>
+</component>

@@ -30,10 +30,12 @@
 #include <App/EventAction/EventActionComponentImpl.hpp>
 
 
-void constructAppArchitecture(void);
-bool constructApp(bool dump, U32 port_number, char* hostname);
-void exitTasks(void);
+#include <App/Drv/SocketTcpDriver/SocketTcpDriverComponentImpl.hpp>
+#include <App/ADCS/ADCSComponentImpl.hpp>
 
+void constructAppArchitecture(void);
+bool constructApp(bool dump, U32 port_number, char *hostname);
+void exitTasks(void);
 
 extern Svc::RateGroupDriverImpl rateGroupDriverComp;
 extern Svc::ActiveRateGroupImpl rateGroup1Comp, rateGroup2Comp, rateGroup3Comp;
@@ -63,5 +65,9 @@ extern Ref::PingReceiverComponentImpl pingRcvr;
 extern Drv::SocketIpDriverComponentImpl socketIpDriver;
 
 extern App::EventActionComponentImpl eventAction;
+
+extern Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS;
+
+extern App::ADCSComponentImpl ADCS;
 
 #endif

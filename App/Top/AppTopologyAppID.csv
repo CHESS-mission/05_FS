@@ -30,3 +30,5 @@ CmdSequencer,cmdSeq,541,23
 SocketIpDriver,socketIpDriver,601,20
 FileManager,fileManager,621,20
 EventAction,eventAction,641,20
+SocketTcpDriver,socketTcpDriverADCS,1000,5
+ADCS,ADCS,1050,20

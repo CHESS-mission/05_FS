@@ -44,6 +44,9 @@ add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/RecvBuffApp/")
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SendBuffApp/")
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SignalGen/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/EventAction/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/SocketTcpDriver/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ADCS/")
+
 
 # Add Topology subdirectory
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Top/")
