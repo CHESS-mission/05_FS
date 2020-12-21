@@ -36,12 +36,12 @@ jobs:
 
       # Init the virtual environnement (project script)
       - name: Prepare venv
-        run: ./scripts/init-venv.sh
+        run: ./scripts-ci/init-venv.sh
 
       # Build the project (project script)
       - name: Build the project
         run: |
-          ./scripts/build.sh ${path} raspberrypi
+          ./scripts-ci/build.sh ${path} raspberrypi
 
       #move the script at the root inside a folder to avoid deflattening
       - name: Move build at root
