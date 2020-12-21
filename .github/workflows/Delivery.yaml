@@ -30,6 +30,9 @@ jobs:
           python -m pip install --upgrade pip
           sudo apt install cmake -y
 
+      - name: init submodule
+        run: git submodule update --init
+
       #prepare (download & export variable) the RPI toolchain
       - name: Toolchain installation
         run: sudo git clone https://github.com/raspberrypi/tools.git /opt/rpi/tools
