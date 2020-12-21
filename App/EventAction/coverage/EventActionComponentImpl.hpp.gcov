@@ -1,0 +1,109 @@
+        -:    0:Source:/home/jonathan/Documents/mse/tm/FlightSoftware/FPrime/05_FS/App/EventAction/EventActionComponentImpl.hpp
+        -:    0:Programs:3
+        -:    1:// ======================================================================
+        -:    2:// \title  EventActionComponentImpl.hpp
+        -:    3:// \author jonathan
+        -:    4:// \brief  hpp file for EventAction component implementation class
+        -:    5://
+        -:    6:// \copyright
+        -:    7:// Copyright 2009-2015, by the California Institute of Technology.
+        -:    8:// ALL RIGHTS RESERVED.  United States Government Sponsorship
+        -:    9:// acknowledged.
+        -:   10://
+        -:   11:// ======================================================================
+        -:   12:
+        -:   13:#ifndef EventAction_HPP
+        -:   14:#define EventAction_HPP
+        -:   15:
+        -:   16:#include "App/EventAction/EventActionComponentAc.hpp"
+        -:   17:#include "EventActionComponentImplCfg.hpp"
+        -:   18:
+        -:   19:namespace App {
+        -:   20:
+        -:   21:class EventActionComponentImpl : public EventActionComponentBase {
+        -:   22:   public:
+        -:   23:    // ----------------------------------------------------------------------
+        -:   24:    // Construction, initialization, and destruction
+        -:   25:    // ----------------------------------------------------------------------
+        -:   26:
+        -:   27:    //! Construct object EventAction
+        -:   28:    //!
+        -:   29:    EventActionComponentImpl(
+        -:   30:        const char *const compName /*!< The component name*/
+        -:   31:    );
+        -:   32:
+        -:   33:    //! Initialize object EventAction
+        -:   34:    //!
+        -:   35:    void init(const NATIVE_INT_TYPE queueDepth,  /*!< The queue depth*/
+        -:   36:              const NATIVE_INT_TYPE instance = 0 /*!< The instance number*/
+        -:   37:    );
+        -:   38:
+        -:   39:    //! Destroy object EventAction
+        -:   40:    //!
+        -:   41:    ~EventActionComponentImpl(void);
+        -:   42:
+        -:   43:    PRIVATE :
+        -:   44:
+        -:   45:        // ----------------------------------------------------------------------
+        -:   46:        // Handler implementations for user-defined typed input ports
+        -:   47:        // ----------------------------------------------------------------------
+        -:   48:
+        -:   49:        //! Handler implementation for seqResp
+        -:   50:        //!
+        -:   51:        void
+        -:   52:        seqResp_handler(
+        -:   53:            const NATIVE_INT_TYPE portNum, /*!< The port number*/
+        -:   54:            FwOpcodeType opCode,           /*!< Command Op Code*/
+        -:   55:            U32 cmdSeq,                    /*!< Command Sequence*/
+        -:   56:            Fw::CommandResponse response   /*!< The command response argument*/
+        -:   57:        );
+        -:   58:
+        -:   59:    //! Handler implementation for logRecv
+        -:   60:    //!
+        -:   61:    void logRecv_handler(
+        -:   62:        const NATIVE_INT_TYPE portNum, /*!< The port number*/
+        -:   63:        FwEventIdType id,              /*!< Log ID*/
+        -:   64:        Fw::Time &timeTag,             /*!< Time Tag*/
+        -:   65:        Fw::LogSeverity severity,      /*!< The severity argument*/
+        -:   66:        Fw::LogBuffer &args /*!< Buffer containing serialized log entry*/
+        -:   67:    );
+        -:   68:
+        -:   69:    PRIVATE :
+        -:   70:
+        -:   71:        // ----------------------------------------------------------------------
+        -:   72:        // Command handler implementations
+        -:   73:        // ----------------------------------------------------------------------
+        -:   74:
+        -:   75:        //! Implementation for EVAC_ADD command handler
+        -:   76:        //! Add event action
+        -:   77:        void
+        -:   78:        EVAC_ADD_cmdHandler(const FwOpcodeType opCode, /*!< The opcode*/
+        -:   79:                            const U32 cmdSeq, /*!< The command sequence number*/
+        -:   80:                            U32 id, const Fw::CmdStringArg &sequence);
+        -:   81:
+        -:   82:    //! Implementation for EVAC_REMOVE command handler
+        -:   83:    //! Remove sequence for a specific envent id
+        -:   84:    void EVAC_REMOVE_cmdHandler(
+        -:   85:        const FwOpcodeType opCode, /*!< The opcode*/
+        -:   86:        const U32 cmdSeq,          /*!< The command sequence number*/
+        -:   87:        U32 id);
+        -:   88:
+        -:   89:    //! Implementation for EVAC_DUMP command handler
+        -:   90:    //! Dump event action list
+        -:   91:    void EVAC_DUMP_cmdHandler(
+        -:   92:        const FwOpcodeType opCode, /*!< The opcode*/
+        -:   93:        const U32 cmdSeq           /*!< The command sequence number*/
+        -:   94:    );
+        -:   95:    // ----------------------------------------------------------------------
+        -:   96:    // Custom code
+        -:   97:    // ----------------------------------------------------------------------
+       80:   98:    struct EventActionEntry {
+        -:   99:        bool used;                      //!< if entry has been used yet
+        -:  100:        FwEventIdType id;               //!< event id to detect
+        -:  101:        Fw::EightyCharString sequence;  //!< sequence to launch
+        -:  102:    } m_eventActionTable[EVENT_ACTION_TABLE_SIZE];  //!< table of event action
+        -:  103:};
+        -:  104:
+        -:  105:}  // end namespace App
+        -:  106:
+        -:  107:#endif
