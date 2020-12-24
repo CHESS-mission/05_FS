@@ -1,7 +1,7 @@
 // ======================================================================
-// \title  SocketCspDriverComponentImpl.hpp
+// \title  SocketCspIpDriverComponentImpl.hpp
 // \author root
-// \brief  hpp file for SocketCspDriver component implementation class
+// \brief  hpp file for SocketCspIpDriver component implementation class
 //
 // \copyright
 // Copyright 2009-2015, by the California Institute of Technology.
@@ -10,15 +10,17 @@
 //
 // ======================================================================
 
-#ifndef SocketCspDriver_HPP
-#define SocketCspDriver_HPP
+#ifndef SocketCspIpDriver_HPP
+#define SocketCspIpDriver_HPP
 
-#include "App/Drv/SocketCspDriver/SocketCspDriverComponentAc.hpp"
+#include "App/Drv/SocketCspIpDriver/SocketCspIpDriverComponentAc.hpp"
+#include "App/Drv/SocketCspIpDriver/ScoketCspDriverType.hpp"
+#include "App/Drv/SocketCspIpDriver/SocketCspIpHelper.hpp"
 
 namespace Drv {
 
-  class SocketCspDriverComponentImpl :
-    public SocketCspDriverComponentBase
+  class SocketCspIpDriverComponentImpl :
+    public SocketCspIpDriverComponentBase
   {
 
     public:
@@ -27,21 +29,28 @@ namespace Drv {
       // Construction, initialization, and destruction
       // ----------------------------------------------------------------------
 
-      //! Construct object SocketCspDriver
+      //! Construct object SocketCspIpDriver
       //!
-      SocketCspDriverComponentImpl(
+      SocketCspIpDriverComponentImpl(
           const char *const compName /*!< The component name*/
       );
 
-      //! Initialize object SocketCspDriver
+      //! Initialize object SocketCspIpDriver
       //!
       void init(
           const NATIVE_INT_TYPE instance = 0 /*!< The instance number*/
       );
 
-      //! Destroy object SocketCspDriver
+      //! Destroy object SocketCspIpDriver
       //!
-      ~SocketCspDriverComponentImpl(void);
+      ~SocketCspIpDriverComponentImpl(void);
+
+      SocketCspStatus configure(
+            I32 address,
+            const char* zmqHost
+        );
+      SocketCspStatus open(I32 server_address);
+      void close(void);
 
     PRIVATE:
 
@@ -56,6 +65,10 @@ namespace Drv {
           Fw::Buffer &fwBuffer 
       );
 
+      SocketCspIpHelper m_helper;
+
+      Fw::Buffer outBuffer;           //!< Fw::Buffer used to pass data
+      U8 outBufferData [MAX_SIZE_PACKET]; //!< Buffer used to store data
 
     };
 

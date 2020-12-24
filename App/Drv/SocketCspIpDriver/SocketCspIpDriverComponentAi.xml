@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<component name="SocketCspDriver" kind="passive" namespace="Drv" modeler="true">
+<component name="SocketCspIpDriver" kind="passive" namespace="Drv" modeler="true">
     <import_port_type>Fw/Buffer/BufferSendPortAi.xml</import_port_type>
     <ports>
 
