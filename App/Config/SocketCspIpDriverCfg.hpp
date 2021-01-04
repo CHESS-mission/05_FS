@@ -4,7 +4,8 @@
 enum SocketCspCfg {
     UDPPort = 10,
     MAX_SIZE_PACKET = 256,
-    MAX_HOSTNAME_SIZE = 256
+    MAX_HOSTNAME_SIZE = 256,
+    TIMEOUT = 1000
 };
 
 

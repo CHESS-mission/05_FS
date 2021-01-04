@@ -45,6 +45,7 @@ namespace Drv {
       //! To do
       //!
       void toDo(void);
+      void toDo2(void);
 
     private:
 

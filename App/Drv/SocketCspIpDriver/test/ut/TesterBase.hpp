@@ -51,7 +51,7 @@ namespace Drv {
       //!
       void connect_to_send(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Fw::InputBufferSendPort *const send /*!< The port*/
+          Drv::InputEPSCmdPort *const send /*!< The port*/
       );
 
     public:
@@ -230,7 +230,8 @@ namespace Drv {
       //!
       void invoke_to_send(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Fw::Buffer &fwBuffer 
+          U8 port, 
+          Fw::Buffer &data 
       );
 
     public:
@@ -273,7 +274,7 @@ namespace Drv {
 
       //! To port connected to send
       //!
-      Fw::OutputBufferSendPort m_to_send[1];
+      Drv::OutputEPSCmdPort m_to_send[1];
 
     private:
 

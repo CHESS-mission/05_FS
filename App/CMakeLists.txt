@@ -46,6 +46,7 @@ add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SignalGen/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/EventAction/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/SocketTcpDriver/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/SocketCspIpDriver/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/EPSPort/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ADCS/")
 
 

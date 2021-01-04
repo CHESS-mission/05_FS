@@ -2,13 +2,14 @@
 
 <component name="SocketCspIpDriver" kind="passive" namespace="Drv" modeler="true">
     <import_port_type>Fw/Buffer/BufferSendPortAi.xml</import_port_type>
+    <import_port_type>App/Drv/EPSPort/EPSPortAi.xml</import_port_type>
     <ports>
 
         <!-- Functional ports -->
         <port name="recv" data_type="Fw::BufferSend" kind="output" max_number="1">
         </port>
 
-        <port name="send" data_type="Fw::BufferSend" kind="guarded_input" max_number="1">
+        <port name="send" data_type="Drv::EPSCmd" kind="guarded_input" max_number="1">
         </port>
     </ports>
 </component>

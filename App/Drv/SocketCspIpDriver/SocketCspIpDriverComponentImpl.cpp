@@ -65,13 +65,15 @@ namespace Drv {
   void SocketCspIpDriverComponentImpl ::
     send_handler(
         const NATIVE_INT_TYPE portNum,
-        Fw::Buffer &fwBuffer
+        U8 port,
+        Fw::Buffer &data
     )
   {
-      U32 size = fwBuffer.getSize();
-      U8* data = fwBuffer.getData();
-      FW_ASSERT(data);
-      this->m_helper.send(data,size,outBuffer);
+      U32 sizeBuffer = data.getSize();
+      U8* dataBuffer = data.getData();
+      FW_ASSERT(dataBuffer);
+
+      this->m_helper.send_transaction(port,dataBuffer,sizeBuffer,outBuffer);
       recv_out(0, outBuffer);
 
   }

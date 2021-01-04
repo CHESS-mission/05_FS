@@ -23,6 +23,8 @@ namespace Drv {
                     );
             SocketCspStatus open(I32 server_address);
             SocketCspStatus send(U8* data, const U32 size, Fw::Buffer& back_data); //Forwards to sendto, which on some OSes requires a non-const data pointer
+            SocketCspStatus send_transaction(U8 port,U8* data, const U32 size, Fw::Buffer& back_data); //Forwards to sendto, which on some OSes requires a non-const data pointer
+
             void close(void);
 
         PRIVATE:
@@ -30,6 +32,7 @@ namespace Drv {
             csp_conf_t csp_conf;
             char m_zmq_host[MAX_HOSTNAME_SIZE]; //!< Hostname to supply
             I32  m_port; 
+            U8   m_address;
             
             I32 error;             //!< IP address port used
             csp_iface_t* default_iface;

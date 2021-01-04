@@ -136,7 +136,7 @@ namespace Drv {
   void SocketCspIpDriverTesterBase ::
     connect_to_send(
         const NATIVE_INT_TYPE portNum,
-        Fw::InputBufferSendPort *const send
+        Drv::InputEPSCmdPort *const send
     )
   {
     FW_ASSERT(portNum < this->getNum_to_send(),static_cast<AssertArg>(portNum));
@@ -151,13 +151,14 @@ namespace Drv {
   void SocketCspIpDriverTesterBase ::
     invoke_to_send(
         const NATIVE_INT_TYPE portNum,
-        Fw::Buffer &fwBuffer
+        U8 port,
+        Fw::Buffer &data
     )
   {
     FW_ASSERT(portNum < this->getNum_to_send(),static_cast<AssertArg>(portNum));
     FW_ASSERT(portNum < this->getNum_to_send(),static_cast<AssertArg>(portNum));
     this->m_to_send[portNum].invoke(
-        fwBuffer
+        port, data
     );
   }
 

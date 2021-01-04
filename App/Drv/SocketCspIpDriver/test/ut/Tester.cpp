@@ -49,7 +49,7 @@ namespace Drv {
     toDo(void) 
   {
         // set test data
-    /*U8 tmId = 128;
+    U8 tmId = 128;
     U32 sizeDataSend = 5;
     U8 dataSend[]={0x1F,0x7F,tmId,0x1F,0xFF};
 
@@ -63,7 +63,7 @@ namespace Drv {
     bufferSend.setSize(sizeDataSend);
 
     //Invok send port in
-    this->invoke_to_send(0,bufferSend);
+    this->invoke_to_send(0,14,bufferSend);
     //Verify port out
     ASSERT_FROM_PORT_HISTORY_SIZE(1);
     ASSERT_from_recv_SIZE(1);
@@ -77,8 +77,41 @@ namespace Drv {
     }
 
     //Clean test
-    this->clearHistory();*/
+    this->clearHistory();
   }
+
+  void Tester::toDo2(void){
+            // set test data
+    U8 tmId = 128;
+    U32 sizeDataSend = 5;
+    U8 dataSend[]={0x1F,0x7F,tmId,0x1F,0xFF};
+
+    U32 sizeDataRecvTheoritical = 6;
+    U8 tmReturnTheoritical = 10;
+    U8 dataRecvTheoretical[] ={0x1F,0x7F,tmId,tmReturnTheoritical,0x1F,0xFF};
+
+    Fw::Buffer bufferSend;
+
+    bufferSend.setData(dataSend);
+    bufferSend.setSize(sizeDataSend);
+
+    //Invok send port in
+    this->invoke_to_send(0,14,bufferSend);
+    //Verify port out
+    ASSERT_FROM_PORT_HISTORY_SIZE(1);
+    ASSERT_from_recv_SIZE(1);
+
+    //Verify data recv form simulator
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getData();
+    U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).fwBuffer.getSize();
+
+    for(int i = 0; i< sizeDataRecvEmpirical;i++){
+      printf("%d\n",dataRecvEmpirical[i]);
+    }
+
+    //Clean test
+    this->clearHistory();
+  }     
 
   // ----------------------------------------------------------------------
   // Handlers for typed from ports
@@ -126,7 +159,7 @@ namespace Drv {
         INSTANCE
     );
     this->component.configure(10,"localhost");
-    this->component.open(27);
+    this->component.open(27);   
   }
 
 } // end namespace Drv

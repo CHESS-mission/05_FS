@@ -41,11 +41,12 @@ namespace Drv {
     }
 
     SocketCspStatus SocketCspIpHelper::open(I32 server_address){
+        m_address = server_address;
         int ping = csp_ping(server_address, 1000, 100, CSP_O_NONE);
         if(ping < 0){
             return SOCK_CONNNECT_FAILED;
         }
-        Fw::Logger::logMsg("Connection with EPC with CSP OK");
+        Fw::Logger::logMsg("Connection with EPS with CSP OK");
         conn = csp_connect(CSP_PRIO_NORM,server_address, UDPPort, 1000, CSP_O_NONE);
 		if (conn == NULL) {
             return SOCK_CONNNECT_FAILED;
@@ -59,7 +60,7 @@ namespace Drv {
 
     SocketCspStatus SocketCspIpHelper::send(U8* data, const U32 size, Fw::Buffer& back_data){
 		/* 5. Send packet */
-        I32 returnSize = csp_transaction_persistent(conn,1000,data,size,back_data.getData(),-1);
+        I32 returnSize = csp_transaction_persistent(conn,TIMEOUT,data,size,back_data.getData(),-1);
 		if (!returnSize){
 
             return SOCK_SEND_FAILED;
@@ -68,4 +69,15 @@ namespace Drv {
         return SOCK_SUCCESS;
     }
 
+    SocketCspStatus SocketCspIpHelper::send_transaction(U8 port,U8* data, const U32 size, Fw::Buffer& back_data){
+        		/* 5. Send packet */
+        I32 returnSize = csp_transaction(CSP_PRIO_NORM,m_address,port,TIMEOUT,data,size,back_data.getData(),-1);
+		if (!returnSize){
+
+            return SOCK_SEND_FAILED;
+		}
+        back_data.setSize(returnSize);
+        return SOCK_SUCCESS;
+    }
+    
 }

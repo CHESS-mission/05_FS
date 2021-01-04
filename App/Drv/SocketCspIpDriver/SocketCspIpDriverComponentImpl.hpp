@@ -62,7 +62,8 @@ namespace Drv {
       //!
       void send_handler(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Fw::Buffer &fwBuffer 
+          U8 port, 
+          Fw::Buffer &data 
       );
 
       SocketCspIpHelper m_helper;

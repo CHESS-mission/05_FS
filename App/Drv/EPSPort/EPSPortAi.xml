@@ -1,0 +1,12 @@
+<interface name="EPSCmd" namespace="Drv">
+    <include_header>Fw/Buffer/Buffer.hpp</include_header>
+    <comment>
+    Port to send csp packet to eps
+    </comment>
+    <args>
+        <arg name="port" type="U8">
+		</arg>
+        <arg name="data" type="Fw::Buffer" pass_by="reference">
+        </arg>
+    </args>
+</interface>
