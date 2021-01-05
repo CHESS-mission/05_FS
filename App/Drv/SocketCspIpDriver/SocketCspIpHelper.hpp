@@ -30,7 +30,7 @@ namespace Drv {
         PRIVATE:
 
             csp_conf_t csp_conf;
-            char m_zmq_host[MAX_HOSTNAME_SIZE]; //!< Hostname to supply
+            char m_zmq_host[CSP_MAX_HOSTNAME_SIZE]; //!< Hostname to supply
             I32  m_port; 
             U8   m_address;
             

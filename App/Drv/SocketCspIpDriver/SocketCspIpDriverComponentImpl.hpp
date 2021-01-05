@@ -49,8 +49,8 @@ namespace Drv {
             I32 address,
             const char* zmqHost
         );
-      SocketCspStatus open(I32 server_address);
-      void close(void);
+      SocketCspStatus openSocket(I32 server_address);
+      void closeSocket(void);
 
     PRIVATE:
 
@@ -63,13 +63,14 @@ namespace Drv {
       void send_handler(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
           U8 port, 
-          Fw::Buffer &data 
+          Fw::Buffer &data,
+          U8 isSched
       );
 
       SocketCspIpHelper m_helper;
 
       Fw::Buffer outBuffer;           //!< Fw::Buffer used to pass data
-      U8 outBufferData [MAX_SIZE_PACKET]; //!< Buffer used to store data
+      U8 outBufferData [CSP_MAX_SIZE_PACKET]; //!< Buffer used to store data
 
     };
 

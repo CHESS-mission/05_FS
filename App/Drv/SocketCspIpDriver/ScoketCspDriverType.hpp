@@ -15,20 +15,20 @@ namespace Drv {
     // driver and helper can share
 
     enum SocketCspProtocol {
-        SOCK_PROT_RDP, //!< Send using RDP
-        SOCK_PROT_UDP //!< Send using UDP
+        CSP_SOCK_PROT_RDP, //!< Send using RDP
+        CSP_SOCK_PROT_UDP_CSP //!< Send using UDP
     };
 
     enum SocketCspStatus {
-        SOCK_SUCCESS = 0,
-        SOCK_INIT_FAILED = -1,
-        SOCK_INTERFACE_KISS_FAILED = -2,
-        SOCK_INTERFACE_CAN_FAILED = -3,
-        SOCK_INTERFACE_ZMQ_FAILED = -4,
-        SOCK_LOAD_RTABLE_FAILED = -5,
-        SOCK_CONNNECT_FAILED = -6,
-        SOCK_GET_BUFFER_FAILED = -7,
-        SOCK_SEND_FAILED = -8
+        CSP_SOCK_SUCCESS = 0,
+        CSP_SOCK_INIT_FAILED = -1,
+        CPS_SOCK_INTERFACE_KISS_FAILED = -2,
+        CSP_SOCK_INTERFACE_CAN_FAILED = -3,
+        CSP_SOCK_INTERFACE_ZMQ_FAILED = -4,
+        CSP_SOCK_LOAD_RTABLE_FAILED = -5,
+        CSP_SOCK_CONNNECT_FAILED = -6,
+        CSP_SOCK_GET_BUFFER_FAILED = -7,
+        CSP_SOCK_SEND_FAILED = -8
     };
 
 

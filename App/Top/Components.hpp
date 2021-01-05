@@ -33,6 +33,9 @@
 #include <App/Drv/SocketTcpDriver/SocketTcpDriverComponentImpl.hpp>
 #include <App/ADCS/ADCSComponentImpl.hpp>
 
+#include <App/Drv/SocketCspIpDriver/SocketCspIpDriverComponentImpl.hpp>
+#include <App/EPS/EPSComponentImpl.hpp>
+
 void constructAppArchitecture(void);
 bool constructApp(bool dump, U32 port_number, char *hostname);
 void exitTasks(void);
@@ -67,7 +70,9 @@ extern Drv::SocketIpDriverComponentImpl socketIpDriver;
 extern App::EventActionComponentImpl eventAction;
 
 extern Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS;
-
 extern App::ADCSComponentImpl ADCS;
+
+extern Drv::SocketCspIpDriverComponentImpl socketCspIpDriverEPS;
+extern App::EPSComponentImpl EPS;
 
 #endif

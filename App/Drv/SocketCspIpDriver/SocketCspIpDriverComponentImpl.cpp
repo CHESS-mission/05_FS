@@ -51,10 +51,10 @@ namespace Drv {
       this->m_helper.configure(address,zmqHost);
     }
 
-   SocketCspStatus SocketCspIpDriverComponentImpl::open(I32 server_address){
+   SocketCspStatus SocketCspIpDriverComponentImpl::openSocket(I32 server_address){
         this->m_helper.open(server_address);
    }
-      void SocketCspIpDriverComponentImpl::close(void){
+      void SocketCspIpDriverComponentImpl::closeSocket(void){
         this->m_helper.close();
    }
 
@@ -66,7 +66,8 @@ namespace Drv {
     send_handler(
         const NATIVE_INT_TYPE portNum,
         U8 port,
-        Fw::Buffer &data
+        Fw::Buffer &data,
+        U8 isSched
     )
   {
       U32 sizeBuffer = data.getSize();
@@ -74,7 +75,7 @@ namespace Drv {
       FW_ASSERT(dataBuffer);
 
       this->m_helper.send_transaction(port,dataBuffer,sizeBuffer,outBuffer);
-      recv_out(0, outBuffer);
+      recv_out(0, port, outBuffer,isSched);
 
   }
 

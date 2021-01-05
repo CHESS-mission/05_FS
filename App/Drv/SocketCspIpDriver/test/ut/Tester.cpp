@@ -159,7 +159,7 @@ namespace Drv {
         INSTANCE
     );
     this->component.configure(10,"localhost");
-    this->component.open(27);   
+    this->component.openSocket(27);   
   }
 
 } // end namespace Drv

@@ -38,20 +38,23 @@ include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
 # core components in the topology, which is also added here.
 ##
 
+# Includes
+include_directories(Lib/includes)
+
+
 # Add component subdirectories
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/PingReceiver/")
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/RecvBuffApp/")
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SendBuffApp/")
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/SignalGen/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/EventAction/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/EPS/EPSPort/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/SocketTcpDriver/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/SocketCspIpDriver/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Drv/EPSPort/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ADCS/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/EPS/")
 
 
 # Add Topology subdirectory
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Top/")
 
-# Includes
-include_directories(Lib/includes)

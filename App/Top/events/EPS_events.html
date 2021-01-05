@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EPS:EPS Component Dictionary</title>
+</head>
+<body>
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+th {
+    text-align: left;
+}
+html {
+    font-family: Arial, sans-serif ;
+    font-size: 90% ;
+}
+</style>
+
+<h1><b>Events: EPS:EPS</b></h1>
+
+<table>
+	<thead>
+		<tr style = "border-right: 2px solid black; border-left: 2px solid black; border-top: 2px solid black;">
+			<th rowspan = "2">Event Name</th>
+			<th rowspan = "2">ID</th>
+			<th rowspan = "2">Description</th>
+			<th rowspan = "1" colspan = "4">Arguments</th>
+		</tr>
+		<tr style = "border-right: 2px solid black; ">
+			<th>Argument</th>
+			<th>Type</th>
+			<th>Size</th>
+			<th>Description</th>
+		<tr>
+	</thead>
+	<tbody>
+
+		<tr style = "border: 2px solid black;">
+			<td rowspan="4">MS_CMD_SEND_EPS</td>
+			<td rowspan="4">1071 (0x42f)</td>
+			<td rowspan="4">Send cmd data</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>port</td>
+						<td>U8</td>
+						<td></td>
+						<td>The port id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;">
+						<td>cmd</td>
+						<td>U8</td>
+						<td></td>
+						<td>The cmd id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>payload</td>
+						<td>Fw::LogStringArg&</td>
+						<td>510</td>
+						<td>The command data</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="4">MS_CMD_RECV_EPS</td>
+			<td rowspan="4">1072 (0x430)</td>
+			<td rowspan="4">Received cmd data</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>port</td>
+						<td>U8</td>
+						<td></td>
+						<td>The port id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;">
+						<td>cmd</td>
+						<td>U8</td>
+						<td></td>
+						<td>The command id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>payload</td>
+						<td>Fw::LogStringArg&</td>
+						<td>510</td>
+						<td>The command return data</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="4">MS_CMD_ERROR</td>
+			<td rowspan="4">1073 (0x431)</td>
+			<td rowspan="4">cmd Error</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>port</td>
+						<td>U8</td>
+						<td></td>
+						<td>The port id</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;">
+						<td>cmd</td>
+						<td>U8</td>
+						<td></td>
+						<td>the cmd error</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>status</td>
+						<td>U8</td>
+						<td></td>
+						<td>the status error</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">MS_BATT_VOLT_LOW</td>
+			<td rowspan="2">1074 (0x432)</td>
+			<td rowspan="2">low voltage</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>volt</td>
+						<td>U16</td>
+						<td></td>
+						<td>Voltage</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">MS_BATT_TEMP_HIGH</td>
+			<td rowspan="2">1075 (0x433)</td>
+			<td rowspan="2">High voltage</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>temp</td>
+						<td>U8</td>
+						<td></td>
+						<td>the id error</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">MS_CHNG_BATT_MOD</td>
+			<td rowspan="2">1076 (0x434)</td>
+			<td rowspan="2">Payload Error</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>mode</td>
+						<td>U8</td>
+						<td></td>
+						<td>battery mode</td>
+					</tr>
+		</tr>
+	</tbody>
+</table>
+
+</body>
+</html>

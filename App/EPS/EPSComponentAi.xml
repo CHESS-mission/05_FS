@@ -1,15 +1,15 @@
-<component name="ADCS" kind="active" namespace="App">
+<component name="EPS" kind="active" namespace="App">
     <comment>Component that manage ADCS</comment>
-     <import_port_type>App/Drv/EPSPort/EPSPortAi.xml</import_port_type>
+     <import_port_type>App/EPS/EPSPort/EPSPortAi.xml</import_port_type>
      <import_port_type>Fw/Buffer/BufferSendPortAi.xml</import_port_type>
      <import_port_type>Svc/Sched/SchedPortAi.xml</import_port_type>
     <ports>
-        <port name="DataOut" data_type="Drv::EPSCmd" kind="output">
+        <port name="DataOut" data_type="App::EPSCmd" kind="output">
             <comment>
             Port for sending EPS packet
             </comment>
         </port>
-        <port name="DataIn" data_type="Fw::BufferSend" kind="async_input">
+        <port name="DataIn" data_type="App::EPSCmd" kind="async_input">
             <comment>
             Port for returning EPS Packet
             </comment>
@@ -43,87 +43,103 @@
         </command>
     </commands>
     <telemetry>
-        <channel id="0" name="ADCS_LAST_TM_DATA" data_type="F64">
+        <channel id="0" name="EPS_Voltage_battery_mV" data_type="U16">
             <comment>
-            Tm Value
+            Voltage
             </comment>
         </channel>
-                <channel id="1" name="ADCS_LAST_CMD" data_type="U8">
+        <channel id="1" name="EPS_Battery_mode" data_type="U8">
             <comment>
-            Last Telecommand return
+            Battery mode
+            </comment>
+        </channel>
+        <channel id="2" name="EPS_Temp_Battery_Celsuis" data_type="U16">
+            <comment>
+            Battery Temp
+            </comment>
+        </channel>
+        <channel id="3" name="EPS_LAST_CMD_RETURN" data_type="string" size="510">
+            <comment>
+            Battery mode
             </comment>
         </channel>
     </telemetry>
     <events>
-        <event id="0" name="MS_TM_SEND_ADCS" severity="ACTIVITY_LO" format_string="TM id=%hu send to ADCS"  >
+        <event id="0" name="MS_CMD_SEND_EPS" severity="ACTIVITY_LO" format_string = "Commande send to EPS : port = %hhu, cmd = %hhu, data: %s" >
             <comment>
-            Send Tm command
+            Send cmd data
             </comment>
             <args>
-                <arg name="id" type="U8">
-                    <comment>The telemetry id</comment>
+                <arg name="port" type="U8">
+                    <comment>The port id</comment>
                 </arg>
-            </args>          
-        </event>
-        <event id="1" name="MS_TM_RECV_ADCS" severity="ACTIVITY_LO" format_string = "TM id=%hu recv from ADCS data: %f" >
-            <comment>
-            Received TM data
-            </comment>
-            <args>
-                <arg name="id" type="U8">
-                    <comment>The telemetry id</comment>
+                 <arg name="cmd" type="U8">
+                    <comment>The cmd id</comment>
                 </arg>
-                <arg name="tm" type="F64">
-                    <comment>The telemetry data</comment>
+                <arg name="payload" type="string" size="510">
+                    <comment>The command data</comment>
                 </arg>          
             </args>
         </event>
-        <event id="2" name="MS_TC_SEND_ADCS" severity="ACTIVITY_LO" format_string = "TC id=%hu send to ADCS data: %s" >
+        <event id="1" name="MS_CMD_RECV_EPS" severity="ACTIVITY_LO" format_string = "Commande return from EPS : port = %hhu, cmd = %hhu, data: %s" >
             <comment>
-            Send TC data
+            Received cmd data
             </comment>
             <args>
-                <arg name="id" type="U8">
-                    <comment>The telecommand id</comment>
+                <arg name="port" type="U8">
+                    <comment>The port id</comment>
                 </arg>
-                <arg name="payload" type="string" size="100">
-                    <comment>The telecommand data</comment>
+                <arg name="cmd" type="U8">
+                    <comment>The command id</comment>
+                </arg>
+                <arg name="payload" type="string" size="510">
+                    <comment>The command return data</comment>
                 </arg>          
             </args>
         </event>
-        <event id="3" name="MS_TC_RECV_ADCS" severity="ACTIVITY_LO" format_string = "TC id=%hu recv from ADCS return : %hu" >
+        <event id="2" name="MS_CMD_ERROR" severity="WARNING_LO" format_string = "Error in cmd , port : %hhu, cmd : %hhu, status : %hhu" >
             <comment>
-            Received TC data
+            cmd Error
             </comment>
             <args>
-                <arg name="id" type="U8">
-                    <comment>The telecommand id</comment>
+                <arg name="port" type="U8">
+                    <comment>The port id</comment>
                 </arg>
-                <arg name="tc" type="U8">
-                    <comment>The telecommand return data</comment>
-                </arg>          
+                <arg name="cmd" type="U8">
+                    <comment>the cmd error</comment>
+                </arg>
+                <arg name="status" type="U8">
+                    <comment>the status error</comment>
+                </arg>  
             </args>
         </event>
-        <event id="4" name="MS_TC_PAYLOAD_ERROR" severity="WARNING_LO" format_string = "Error in Commande id : %hu, payload : %s" >
+        <event id="3" name="MS_BATT_VOLT_LOW" severity="WARNING_HI" format_string = "Warning battery voltage low : %hu mV" >
             <comment>
-            Payload Error
+            low voltage
             </comment>
             <args>
-                <arg name="id" type="U8">
-                    <comment>The telecommand id</comment>
-                </arg>
-                <arg name="payload" type="string" size="100">
-                    <comment>the payload error</comment>
+                <arg name="volt" type="U16">
+                    <comment>Voltage</comment>
                 </arg>    
             </args>
         </event>
-        <event id="5" name="MS_ID_ERROR" severity="WARNING_LO" format_string = "Error ADCS in TC or TM id : %hu" >
+         <event id="4" name="MS_BATT_TEMP_HIGH" severity="WARNING_HI" format_string = "Warning battery temperature HIGH : %hu celsius" >
+            <comment>
+            High voltage
+            </comment>
+            <args>
+                <arg name="temp" type="U8">
+                    <comment>the id error</comment>
+                </arg>    
+            </args>
+        </event>
+        <event id="5" name="MS_CHNG_BATT_MOD" severity="WARNING_HI" format_string = "Battery mode change : %hu" >
             <comment>
             Payload Error
             </comment>
             <args>
-                <arg name="id" type="U8">
-                    <comment>the id error</comment>
+                <arg name="mode" type="U8">
+                    <comment>battery mode</comment>
                 </arg>    
             </args>
         </event>

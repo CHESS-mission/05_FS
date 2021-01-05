@@ -1,4 +1,4 @@
-<interface name="EPSCmd" namespace="Drv">
+<interface name="EPSCmd" namespace="App">
     <include_header>Fw/Buffer/Buffer.hpp</include_header>
     <comment>
     Port to send csp packet to eps
@@ -7,6 +7,8 @@
         <arg name="port" type="U8">
 		</arg>
         <arg name="data" type="Fw::Buffer" pass_by="reference">
+        </arg>
+        <arg name="isSched" type="U8">
         </arg>
     </args>
 </interface>

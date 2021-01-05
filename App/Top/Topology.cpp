@@ -106,6 +106,11 @@ App::ADCSComponentImpl ADCS(FW_OPTIONAL_NAME("ADCS"));
 
 Drv::SocketTcpDriverComponentImpl socketTcpDriverADCS(FW_OPTIONAL_NAME("SocketTcpDriverADCS"));
 
+App::EPSComponentImpl EPS(FW_OPTIONAL_NAME("EPS"));
+
+Drv::SocketCspIpDriverComponentImpl socketCspIpDriverEPS(FW_OPTIONAL_NAME("SocketCspIpDriverEPS"));
+
+
 const char* getHealthName(Fw::ObjBase& comp) {
    #if FW_OBJECT_NAMES == 1
        return comp.getObjName();
@@ -159,6 +164,8 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     socketIpDriver.init(0);
 
     socketTcpDriverADCS.init(0);
+    
+    socketCspIpDriverEPS.init(0);
 
     fileUplink.init(30, 0);
     fileDownlink.init(30, 0);
@@ -176,7 +183,8 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     pingRcvr.init(10);
 
     eventAction.init(10);
-    ADCS.init(10);
+    ADCS.init(10,0);
+    EPS.init(10,0);
 
     // Connect rate groups to rate group driver
     constructAppArchitecture();
@@ -208,6 +216,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 	pingRcvr.regCommands();
     eventAction.regCommands();
     ADCS.regCommands();
+    EPS.regCommands();
 
     // read parameters
     prmDb.readParamFile();
@@ -260,6 +269,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     eventAction.start(0, 100, 10*1024);
 
     ADCS.start(0, 100, 10*1024);
+    EPS.start(0, 100, 0*1024);
 
     // Initialize socket server if and only if there is a valid specification
     if (hostname != NULL && port_number != 0)
@@ -269,6 +279,9 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 
     socketTcpDriverADCS.configure("127.0.0.1",5005,1,0);
     socketTcpDriverADCS.openSocket();
+
+    socketCspIpDriverEPS.configure(10,"localhost");
+    socketCspIpDriverEPS.openSocket(27);
     return false;
 
 }
@@ -290,6 +303,7 @@ void exitTasks(void)
     pingRcvr.exit();
     eventAction.exit();
     ADCS.exit();
+    EPS.exit();
     // join the component threads with NULL pointers to free them
     (void) rateGroup1Comp.ActiveComponentBase::join(NULL);
     (void) rateGroup2Comp.ActiveComponentBase::join(NULL);
@@ -306,8 +320,10 @@ void exitTasks(void)
     (void) pingRcvr.ActiveComponentBase::join(NULL);
     (void) eventAction.ActiveComponentBase::join(NULL);
     (void) ADCS.ActiveComponentBase::join(NULL);
+    (void) EPS.ActiveComponentBase::join(NULL);
     socketIpDriver.exitSocketTask();
     (void)socketIpDriver.joinSocketTask(NULL);
     cmdSeq.deallocateBuffer(seqMallocator);
     socketTcpDriverADCS.closeSocket();
+    socketCspIpDriverEPS.closeSocket();
 }

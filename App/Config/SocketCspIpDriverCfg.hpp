@@ -2,10 +2,10 @@
 #define APP_SOCKETCSPDRIVERCFG_HPP
 
 enum SocketCspCfg {
-    UDPPort = 10,
-    MAX_SIZE_PACKET = 256,
-    MAX_HOSTNAME_SIZE = 256,
-    TIMEOUT = 1000
+    CSP_UDPPort = 10,
+    CSP_MAX_SIZE_PACKET = 256,
+    CSP_MAX_HOSTNAME_SIZE = 256,
+    CSP_TIMEOUT = 1000
 };
 
 
