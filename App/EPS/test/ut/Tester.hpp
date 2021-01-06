@@ -1,7 +1,7 @@
 // ======================================================================
-// \title  SocketCspIpDriver/test/ut/Tester.hpp
+// \title  EPS/test/ut/Tester.hpp
 // \author root
-// \brief  hpp file for SocketCspIpDriver test harness implementation class
+// \brief  hpp file for EPS test harness implementation class
 //
 // \copyright
 // Copyright 2009-2015, by the California Institute of Technology.
@@ -14,12 +14,12 @@
 #define TESTER_HPP
 
 #include "GTestBase.hpp"
-#include "App/Drv/SocketCspIpDriver/SocketCspIpDriverComponentImpl.hpp"
+#include "App/EPS/EPSComponentImpl.hpp"
 
-namespace Drv {
+namespace App {
 
   class Tester :
-    public SocketCspIpDriverGTestBase
+    public EPSGTestBase
   {
 
       // ----------------------------------------------------------------------
@@ -52,9 +52,9 @@ namespace Drv {
       // Handlers for typed from ports
       // ----------------------------------------------------------------------
 
-      //! Handler for from_recv
+      //! Handler for from_DataOut
       //!
-      void from_recv_handler(
+      void from_DataOut_handler(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
           U8 port, 
           Fw::Buffer &data, 
@@ -83,10 +83,10 @@ namespace Drv {
 
       //! The component under test
       //!
-      SocketCspIpDriverComponentImpl component;
+      EPSComponentImpl component;
 
   };
 
-} // end namespace Drv
+} // end namespace App
 
 #endif

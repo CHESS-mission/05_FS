@@ -26,7 +26,7 @@
 #define ASSERT_from_recv_SIZE(size) \
   this->assert_from_recv_size(__FILE__, __LINE__, size)
 
-#define ASSERT_from_recv(index, _fwBuffer) \
+#define ASSERT_from_recv(index, _port, _data, _isSched) \
   { \
     ASSERT_GT(this->fromPortHistory_recv->size(), static_cast<U32>(index)) \
     << "\n" \
@@ -38,15 +38,33 @@
     << "  Actual:   " << index << "\n"; \
     const FromPortEntry_recv& _e = \
       this->fromPortHistory_recv->at(index); \
-    ASSERT_EQ(_fwBuffer, _e.fwBuffer) \
+    ASSERT_EQ(_port, _e.port) \
     << "\n" \
     << "  File:     " << __FILE__ << "\n" \
     << "  Line:     " << __LINE__ << "\n" \
-    << "  Value:    Value of argument fwBuffer at index " \
+    << "  Value:    Value of argument port at index " \
     << index \
     << " in history of from_recv\n" \
-    << "  Expected: " << _fwBuffer << "\n" \
-    << "  Actual:   " << _e.fwBuffer << "\n"; \
+    << "  Expected: " << _port << "\n" \
+    << "  Actual:   " << _e.port << "\n"; \
+    ASSERT_EQ(_data, _e.data) \
+    << "\n" \
+    << "  File:     " << __FILE__ << "\n" \
+    << "  Line:     " << __LINE__ << "\n" \
+    << "  Value:    Value of argument data at index " \
+    << index \
+    << " in history of from_recv\n" \
+    << "  Expected: " << _data << "\n" \
+    << "  Actual:   " << _e.data << "\n"; \
+    ASSERT_EQ(_isSched, _e.isSched) \
+    << "\n" \
+    << "  File:     " << __FILE__ << "\n" \
+    << "  Line:     " << __LINE__ << "\n" \
+    << "  Value:    Value of argument isSched at index " \
+    << index \
+    << " in history of from_recv\n" \
+    << "  Expected: " << _isSched << "\n" \
+    << "  Actual:   " << _e.isSched << "\n"; \
   }
 
 namespace Drv {

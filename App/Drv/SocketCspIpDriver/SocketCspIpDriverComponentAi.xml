@@ -5,7 +5,7 @@
     <ports>
 
         <!-- Functional ports -->
-        <port name="recv" data_type="Fw::EPSCmd" kind="output" max_number="1">
+        <port name="recv" data_type="App::EPSCmd" kind="output" max_number="1">
         </port>
 
         <port name="send" data_type="App::EPSCmd" kind="guarded_input" max_number="1">

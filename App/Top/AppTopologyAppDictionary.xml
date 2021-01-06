@@ -672,7 +672,7 @@
     <command component="EPS" mnemonic="MS_SEND_CMD" opcode="0x42f">
       <args>
         <arg name="operation" type="EPS::operation::EPSOp"/>
-        <arg name="payload" len="510" type="string"/>
+        <arg name="payload" len="1000" type="string"/>
       </args>
     </command>
   </commands>
@@ -1441,21 +1441,21 @@
         <arg name="id" type="U8"/>
       </args>
     </event>
-    <event component="EPS" name="MS_CMD_SEND_EPS" id="0x42f" severity="ACTIVITY_LO" format_string="Commande send to EPS : port = %hhu, cmd = %hhu, data: %s">
+    <event component="EPS" name="MS_CMD_SEND_EPS" id="0x42f" severity="ACTIVITY_LO" format_string="Commande send to EPS : port = %hu, cmd = %hu, data: %s">
       <args>
         <arg name="port" type="U8"/>
         <arg name="cmd" type="U8"/>
-        <arg name="payload" len="510" type="string"/>
+        <arg name="payload" len="1000" type="string"/>
       </args>
     </event>
-    <event component="EPS" name="MS_CMD_RECV_EPS" id="0x430" severity="ACTIVITY_LO" format_string="Commande return from EPS : port = %hhu, cmd = %hhu, data: %s">
+    <event component="EPS" name="MS_CMD_RECV_EPS" id="0x430" severity="ACTIVITY_LO" format_string="Commande return from EPS : port = %hu, cmd = %hu, data: %s">
       <args>
         <arg name="port" type="U8"/>
         <arg name="cmd" type="U8"/>
-        <arg name="payload" len="510" type="string"/>
+        <arg name="payload" len="1000" type="string"/>
       </args>
     </event>
-    <event component="EPS" name="MS_CMD_ERROR" id="0x431" severity="WARNING_LO" format_string="Error in cmd , port : %hhu, cmd : %hhu, status : %hhu">
+    <event component="EPS" name="MS_CMD_ERROR" id="0x431" severity="WARNING_LO" format_string="Error in cmd , port : %hu, cmd : %hu, status : %hhu">
       <args>
         <arg name="port" type="U8"/>
         <arg name="cmd" type="U8"/>
@@ -1475,6 +1475,11 @@
     <event component="EPS" name="MS_CHNG_BATT_MOD" id="0x434" severity="WARNING_HI" format_string="Battery mode change : %hu">
       <args>
         <arg name="mode" type="U8"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CMD_PAYLOAD_ERROR" id="0x435" severity="WARNING_LO" format_string="Error in EPS command : payload : %s">
+      <args>
+        <arg name="payload" len="1000" type="string"/>
       </args>
     </event>
   </events>
@@ -1552,7 +1557,7 @@
     <channel component="EPS" name="EPS_Voltage_battery_mV" id="0x42f" description="Voltage" type="U16"/>
     <channel component="EPS" name="EPS_Battery_mode" id="0x430" description="Battery mode" type="U8"/>
     <channel component="EPS" name="EPS_Temp_Battery_Celsuis" id="0x431" description="Battery Temp" type="U16"/>
-    <channel component="EPS" name="EPS_LAST_CMD_RETURN" id="0x432" description="Battery mode" len="510" type="string"/>
+    <channel component="EPS" name="EPS_LAST_CMD_RETURN" id="0x432" description="Battery mode" len="1000" type="string"/>
   </channels>
   <parameters>
     <parameter component="sendBuffComp" name="parameter3" id="0x51" default="12"/>

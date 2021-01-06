@@ -5,8 +5,8 @@ enum IndexEPSTLM {
     EPSCMD = 0,
     EPSSTATUS = 1,
     EPSVBATT = 26,
-    EPSTEMP = 205,
-    EPSBATTMODE = 231
+    EPSTEMP = 206,
+    EPSBATTMODE = 226
 };
 
 enum EPSPort{

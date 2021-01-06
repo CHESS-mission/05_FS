@@ -136,7 +136,7 @@ namespace Drv {
   void SocketCspIpDriverTesterBase ::
     connect_to_send(
         const NATIVE_INT_TYPE portNum,
-        Drv::InputEPSCmdPort *const send
+        App::InputEPSCmdPort *const send
     )
   {
     FW_ASSERT(portNum < this->getNum_to_send(),static_cast<AssertArg>(portNum));
@@ -152,13 +152,14 @@ namespace Drv {
     invoke_to_send(
         const NATIVE_INT_TYPE portNum,
         U8 port,
-        Fw::Buffer &data
+        Fw::Buffer &data,
+        U8 isSched
     )
   {
     FW_ASSERT(portNum < this->getNum_to_send(),static_cast<AssertArg>(portNum));
     FW_ASSERT(portNum < this->getNum_to_send(),static_cast<AssertArg>(portNum));
     this->m_to_send[portNum].invoke(
-        port, data
+        port, data, isSched
     );
   }
 
@@ -177,7 +178,7 @@ namespace Drv {
   // Getters for from ports
   // ----------------------------------------------------------------------
 
-  Fw::InputBufferSendPort *SocketCspIpDriverTesterBase ::
+  App::InputEPSCmdPort *SocketCspIpDriverTesterBase ::
     get_from_recv(const NATIVE_INT_TYPE portNum)
   {
     FW_ASSERT(portNum < this->getNum_from_recv(),static_cast<AssertArg>(portNum));
@@ -192,7 +193,9 @@ namespace Drv {
     from_recv_static(
         Fw::PassiveComponentBase *const callComp,
         const NATIVE_INT_TYPE portNum,
-        Fw::Buffer &fwBuffer
+        U8 port,
+        Fw::Buffer &data,
+        U8 isSched
     )
   {
     FW_ASSERT(callComp);
@@ -200,7 +203,7 @@ namespace Drv {
       static_cast<SocketCspIpDriverTesterBase*>(callComp);
     _testerBase->from_recv_handlerBase(
         portNum,
-        fwBuffer
+        port, data, isSched
     );
   }
 
@@ -221,11 +224,13 @@ namespace Drv {
 
   void SocketCspIpDriverTesterBase ::
     pushFromPortEntry_recv(
-        Fw::Buffer &fwBuffer
+        U8 port,
+        Fw::Buffer &data,
+        U8 isSched
     )
   {
     FromPortEntry_recv _e = {
-      fwBuffer
+      port, data, isSched
     };
     this->fromPortHistory_recv->push_back(_e);
     ++this->fromPortHistorySize;
@@ -238,13 +243,15 @@ namespace Drv {
   void SocketCspIpDriverTesterBase ::
     from_recv_handlerBase(
         const NATIVE_INT_TYPE portNum,
-        Fw::Buffer &fwBuffer
+        U8 port,
+        Fw::Buffer &data,
+        U8 isSched
     )
   {
     FW_ASSERT(portNum < this->getNum_from_recv(),static_cast<AssertArg>(portNum));
     this->from_recv_handler(
         portNum,
-        fwBuffer
+        port, data, isSched
     );
   }
 

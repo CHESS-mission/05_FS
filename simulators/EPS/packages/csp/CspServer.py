@@ -40,7 +40,7 @@ def csp_server(eps):
             if packet is None:
                 break
 
-            if libcsp.conn_dport(conn) == 14:
+            if libcsp.conn_dport(conn) == 7:
                 # print request
                 data = bytearray(libcsp.packet_get_data(packet))
                 length = libcsp.packet_get_length(packet)

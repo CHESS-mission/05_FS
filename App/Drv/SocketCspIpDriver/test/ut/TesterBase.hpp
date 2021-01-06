@@ -51,7 +51,7 @@ namespace Drv {
       //!
       void connect_to_send(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Drv::InputEPSCmdPort *const send /*!< The port*/
+          App::InputEPSCmdPort *const send /*!< The port*/
       );
 
     public:
@@ -65,7 +65,7 @@ namespace Drv {
       //!
       //! \return from_recv[portNum]
       //!
-      Fw::InputBufferSendPort* get_from_recv(
+      App::InputEPSCmdPort* get_from_recv(
           const NATIVE_INT_TYPE portNum /*!< The port number*/
       );
 
@@ -180,14 +180,18 @@ namespace Drv {
       //!
       virtual void from_recv_handler(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Fw::Buffer &fwBuffer 
+          U8 port, 
+          Fw::Buffer &data, 
+          U8 isSched 
       ) = 0;
 
       //! Handler base function for from_recv
       //!
       void from_recv_handlerBase(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Fw::Buffer &fwBuffer 
+          U8 port, 
+          Fw::Buffer &data, 
+          U8 isSched 
       );
 
     protected:
@@ -206,13 +210,17 @@ namespace Drv {
 
       //! Push an entry on the history for from_recv
       void pushFromPortEntry_recv(
-          Fw::Buffer &fwBuffer 
+          U8 port, 
+          Fw::Buffer &data, 
+          U8 isSched 
       );
 
       //! A history entry for from_recv
       //!
       typedef struct {
-          Fw::Buffer fwBuffer;
+          U8 port;
+          Fw::Buffer data;
+          U8 isSched;
       } FromPortEntry_recv;
 
       //! The history for from_recv
@@ -231,7 +239,8 @@ namespace Drv {
       void invoke_to_send(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
           U8 port, 
-          Fw::Buffer &data 
+          Fw::Buffer &data, 
+          U8 isSched 
       );
 
     public:
@@ -274,7 +283,7 @@ namespace Drv {
 
       //! To port connected to send
       //!
-      Drv::OutputEPSCmdPort m_to_send[1];
+      App::OutputEPSCmdPort m_to_send[1];
 
     private:
 
@@ -284,7 +293,7 @@ namespace Drv {
 
       //! From port connected to recv
       //!
-      Fw::InputBufferSendPort m_from_recv[1];
+      App::InputEPSCmdPort m_from_recv[1];
 
     private:
 
@@ -297,7 +306,9 @@ namespace Drv {
       static void from_recv_static(
           Fw::PassiveComponentBase *const callComp, /*!< The component instance*/
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
-          Fw::Buffer &fwBuffer 
+          U8 port, 
+          Fw::Buffer &data, 
+          U8 isSched 
       );
 
   };

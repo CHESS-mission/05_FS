@@ -44,8 +44,7 @@ namespace App {
       //!
       ~EPSComponentImpl(void);
 
-      void stringToHex (const char*, U8[]);
-      void hexToString (char*, U8[], U16 size);
+
 
     PRIVATE:
 
@@ -86,7 +85,13 @@ namespace App {
 
       Fw::Buffer dataSendCmdBuffer;
       U8 battMode = 2;
+
+          
+      void stringToHex (const char*, U8[]);
+      void hexToString (char*, U8[], U16 size);
+      bool isPayloadOK(const char*,NATIVE_UINT_TYPE);
     };
+
 
 } // end namespace App
 

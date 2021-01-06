@@ -16,6 +16,7 @@
 #include "App/Config/EPSCfg.hpp"
 #include "App/EPS/EPSHkAnalyser.hpp"
 #include <stdio.h>
+#include <cctype>
 
 namespace App {
 
@@ -61,7 +62,6 @@ namespace App {
   U8* returnData = data.getData();
   U32 returnSize = data.getSize();
   U8 status = returnData[EPSSTATUS];
-
   if(status){
     log_WARNING_LO_MS_CMD_ERROR(port,returnData[EPSCMD],returnData[EPSSTATUS]);
 
@@ -86,7 +86,7 @@ namespace App {
     }
 
     }else{
-      char returnString[returnSize+1];
+      char returnString[returnSize*3];
       hexToString(returnString,returnData,returnSize);
       Fw::LogStringArg logString(returnString);
       log_ACTIVITY_LO_MS_CMD_RECV_EPS(port,returnData[EPSCMD],logString);
@@ -105,7 +105,7 @@ namespace App {
     )
   {
     dataSendCmdBuffer.setSize(1);
-    U8* hexData = {0x00};
+    U8 hexData[] = {0x00};
     dataSendCmdBuffer.setData(hexData);
 
     this->DataOut_out(0,EPS_INST_TLM_PORT,dataSendCmdBuffer,1);
@@ -125,8 +125,13 @@ namespace App {
   {
     const char* data = payload.toChar();
     Fw::LogStringArg eventLog(data);
-    const NATIVE_UINT_TYPE len = payload.length();
-    U8 hexData[len]; 
+    if(!isPayloadOK(data,payload.length())){
+      log_WARNING_LO_MS_CMD_PAYLOAD_ERROR(eventLog);
+      this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_EXECUTION_ERROR);
+      return;
+    }
+    const NATIVE_UINT_TYPE len = payload.length()/2;
+    U8 hexData[len];
     stringToHex(data,hexData);
     dataSendCmdBuffer.setSize(len);
     dataSendCmdBuffer.setData(hexData);
@@ -152,7 +157,6 @@ namespace App {
       FW_ASSERT(0,operation);
       break;
     } 
-
     this->DataOut_out(0,port,dataSendCmdBuffer,0);
     Fw::LogStringArg logString(data);
     log_ACTIVITY_LO_MS_CMD_SEND_EPS(port,hexData[EPSCMD],logString);
@@ -160,13 +164,13 @@ namespace App {
   }
 
   void EPSComponentImpl::stringToHex(const char* data, U8 hexArray[]){
-      for (size_t count = 3; count < sizeof data/sizeof *data; count++) {
+      for (size_t count = 0; count < sizeof data/sizeof *data; count++) {
         sscanf(data, "%2hhx", &hexArray[count]);
         data += 2;
     }
   }
   void EPSComponentImpl::hexToString (char* string, U8 hex[], U16 size){
-  char* endofbuf = string + sizeof(string);
+      char* endofbuf = string + size/2*sizeof(char);
       for (int i = 0; i < size; i++)
       {
           if (string + 3 < endofbuf)
@@ -178,6 +182,26 @@ namespace App {
               string += sprintf(string, "%02X", hex[i]);
           }
       }
+    }
+
+    bool EPSComponentImpl::isPayloadOK(const char* payload,NATIVE_UINT_TYPE len){
+        if(len % 2 == 1){
+          return false;
+        }
+
+      bool flag = true;
+
+      for (int i=0; i<len; i++)
+      {
+          if (!isxdigit(payload[i]))
+          {
+              flag = false;
+              break;
+          }
+      }
+      
+      return flag;
+
     }
 
 } // end namespace App

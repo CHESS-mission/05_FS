@@ -1,7 +1,7 @@
 // ====================================================================== 
-// \title  SocketCspIpDriver.hpp
+// \title  EPS.hpp
 // \author root
-// \brief  cpp file for SocketCspIpDriver test harness implementation class
+// \brief  cpp file for EPS test harness implementation class
 //
 // \copyright
 // Copyright 2009-2015, by the California Institute of Technology.
@@ -14,8 +14,9 @@
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
+#define QUEUE_DEPTH 10
 
-namespace Drv {
+namespace App {
 
   // ----------------------------------------------------------------------
   // Construction and destruction 
@@ -24,10 +25,10 @@ namespace Drv {
   Tester ::
     Tester(void) : 
 #if FW_OBJECT_NAMES == 1
-      SocketCspIpDriverGTestBase("Tester", MAX_HISTORY_SIZE),
-      component("SocketCspIpDriver")
+      EPSGTestBase("Tester", MAX_HISTORY_SIZE),
+      component("EPS")
 #else
-      SocketCspIpDriverGTestBase(MAX_HISTORY_SIZE),
+      EPSGTestBase(MAX_HISTORY_SIZE),
       component()
 #endif
   {
@@ -48,36 +49,8 @@ namespace Drv {
   void Tester ::
     toDo(void) 
   {
-            // set test data
-    U8 tmId = 128;
-    U32 sizeDataSend = 5;
-    U8 dataSend[]={0x1F,0x7F,tmId,0x1F,0xFF};
-
-    U32 sizeDataRecvTheoritical = 6;
-    U8 tmReturnTheoritical = 10;
-    U8 dataRecvTheoretical[] ={0x00};
-
-    Fw::Buffer bufferSend;
-
-    bufferSend.setData(dataSend);
-    bufferSend.setSize(sizeDataSend);
-
-    //Invok send port in
-    this->invoke_to_send(0,14,bufferSend,0);
-    //Verify port out
-    ASSERT_FROM_PORT_HISTORY_SIZE(1);
-    ASSERT_from_recv_SIZE(1);
-
-    //Verify data recv form simulator
-    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();
-    U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getSize();
-
-    for(int i = 0; i< sizeDataRecvEmpirical;i++){
-      printf("%d\n",dataRecvEmpirical[i]);
-    }
-
-    //Clean test
-    this->clearHistory();
+    Fw::CmdStringArg argString("");
+    this->sendCmd_MS_SEND_CMD(0,10,EPSComponentBase::EPS_INST_TLM,argString);
   }
 
   // ----------------------------------------------------------------------
@@ -85,14 +58,14 @@ namespace Drv {
   // ----------------------------------------------------------------------
 
   void Tester ::
-    from_recv_handler(
+    from_DataOut_handler(
         const NATIVE_INT_TYPE portNum,
         U8 port,
         Fw::Buffer &data,
         U8 isSched
     )
   {
-    this->pushFromPortEntry_recv(port, data, isSched);
+    this->pushFromPortEntry_DataOut(port, data, isSched);
   }
 
   // ----------------------------------------------------------------------
@@ -103,16 +76,64 @@ namespace Drv {
     connectPorts(void) 
   {
 
-    // send
-    this->connect_to_send(
+    // DataIn
+    this->connect_to_DataIn(
         0,
-        this->component.get_send_InputPort(0)
+        this->component.get_DataIn_InputPort(0)
     );
 
-    // recv
-    this->component.set_recv_OutputPort(
+    // Schedin
+    this->connect_to_Schedin(
+        0,
+        this->component.get_Schedin_InputPort(0)
+    );
+
+    // CmdDisp
+    this->connect_to_CmdDisp(
+        0,
+        this->component.get_CmdDisp_InputPort(0)
+    );
+
+    // DataOut
+    this->component.set_DataOut_OutputPort(
         0, 
-        this->get_from_recv(0)
+        this->get_from_DataOut(0)
+    );
+
+    // CmdStatus
+    this->component.set_CmdStatus_OutputPort(
+        0, 
+        this->get_from_CmdStatus(0)
+    );
+
+    // CmdReg
+    this->component.set_CmdReg_OutputPort(
+        0, 
+        this->get_from_CmdReg(0)
+    );
+
+    // Tlm
+    this->component.set_Tlm_OutputPort(
+        0, 
+        this->get_from_Tlm(0)
+    );
+
+    // Time
+    this->component.set_Time_OutputPort(
+        0, 
+        this->get_from_Time(0)
+    );
+
+    // Log
+    this->component.set_Log_OutputPort(
+        0, 
+        this->get_from_Log(0)
+    );
+
+    // LogText
+    this->component.set_LogText_OutputPort(
+        0, 
+        this->get_from_LogText(0)
     );
 
 
@@ -125,11 +146,8 @@ namespace Drv {
   {
     this->init();
     this->component.init(
-        INSTANCE
+        QUEUE_DEPTH, INSTANCE
     );
-
-    this->component.configure(10,"localhost");
-    this->component.openSocket(27);   
   }
 
-} // end namespace Drv
+} // end namespace App

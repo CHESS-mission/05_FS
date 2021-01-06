@@ -5,7 +5,7 @@
 #include "Tester.hpp"
 
 TEST(Nominal, ToDo) {
-    Drv::Tester tester;
+    App::Tester tester;
     tester.toDo();
 }
 

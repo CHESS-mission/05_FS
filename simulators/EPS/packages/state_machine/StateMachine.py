@@ -31,7 +31,13 @@ class EPSStateMachine(StateMachine):
         return f"{self.current_state} set, volt = {self.volt}"
 
     def request_cmd(self, data:bytearray):
-        print(data)
-        return bytearray([10,12,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+        self.volt = 10 if self.volt == 11 else 11
+        back_data = bytearray(232)
+        back_data[0] = data[0]
+        back_data[1] = 0
+        back_data[26] = self.volt
+        back_data[206] = 50
+        back_data[226] = 2
+        return back_data
 
 
