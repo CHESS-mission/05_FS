@@ -1,4 +1,6 @@
 
+## Build Fprime 
+
 App/build-artifacts/
 
 App/build-fprime-automatic-native/
@@ -7,8 +9,11 @@ App/build-fprime-automatic-native-ut/
 
 App/logs/
 
+## venv
 fprime-venv
 
 .idea
 .editorconfig
 .vscode/
+__pycache__
+## Python cache
