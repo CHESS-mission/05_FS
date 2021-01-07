@@ -47,6 +47,7 @@ def csp_server(eps):
                 print ("got packet, len=" + str(length) + ", data=" + ''.join('{:02x}'.format(x) for x in data))
                 # send reply
                 back_data = eps.request_cmd(data)
+                print(f"volt : {back_data[26]}")
                 print(f'sending data back to client : data {back_data}\n')
                 reply = libcsp.buffer_get(1)
                 libcsp.packet_set_data(reply, back_data)

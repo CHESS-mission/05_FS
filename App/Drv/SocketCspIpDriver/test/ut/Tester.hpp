@@ -44,7 +44,8 @@ namespace Drv {
 
       //! To do
       //!
-      void toDo(void);
+      void testSendCmdPort7(void);
+      void testSendSchedPort7(void);
 
     private:
 

@@ -11,6 +11,7 @@
 // ====================================================================== 
 
 #include "Tester.hpp"
+#include "App/Config/EPSCfg.hpp"
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
@@ -46,16 +47,26 @@ namespace Drv {
   // ----------------------------------------------------------------------
 
   void Tester ::
-    toDo(void) 
+    testSendCmdPort7(void) 
   {
-            // set test data
-    U8 tmId = 128;
-    U32 sizeDataSend = 5;
-    U8 dataSend[]={0x1F,0x7F,tmId,0x1F,0xFF};
+        // set test data
+    U8 port = 7;
+    U8 cmd = 0x00;
+    U32 sizeDataSend = 1;
+    U8 dataSend[]={cmd};
+    U8 sched = 0;
 
-    U32 sizeDataRecvTheoritical = 6;
-    U8 tmReturnTheoritical = 10;
-    U8 dataRecvTheoretical[] ={0x00};
+    U8 portRecvTheoritical = 7;
+    U8 schedRecvTheoritical = 0;
+    U32 sizeDataRecvTheoritical = 232;
+    U8 dataRecvTheoretical[sizeDataRecvTheoritical] = {0};
+
+
+    dataRecvTheoretical[EPSCMD] = cmd;
+    dataRecvTheoretical[EPSSTATUS] = 0;
+    dataRecvTheoretical[EPSVBATT] = 11;
+    dataRecvTheoretical[EPSTEMP] = 50;
+    dataRecvTheoretical[EPSBATTMODE] = 2;
 
     Fw::Buffer bufferSend;
 
@@ -63,23 +74,81 @@ namespace Drv {
     bufferSend.setSize(sizeDataSend);
 
     //Invok send port in
-    this->invoke_to_send(0,14,bufferSend,0);
+    this->invoke_to_send(0,port,bufferSend,sched);
     //Verify port out
     ASSERT_FROM_PORT_HISTORY_SIZE(1);
     ASSERT_from_recv_SIZE(1);
 
     //Verify data recv form simulator
-    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();;
     U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getSize();
+    U8 portEmpirical = this->fromPortHistory_recv->at(0).port;
+    U8 schedEmpirical = this->fromPortHistory_recv->at(0).isSched;
 
-    for(int i = 0; i< sizeDataRecvEmpirical;i++){
-      printf("%d\n",dataRecvEmpirical[i]);
+    ASSERT_EQ(sizeDataRecvTheoritical,sizeDataRecvEmpirical);
+
+    for(int i = 0 ; i< sizeDataRecvTheoritical;i++){
+      ASSERT_EQ(dataRecvTheoretical[i],dataRecvEmpirical[i]);
     }
 
+    ASSERT_EQ(portRecvTheoritical,portEmpirical);
+    ASSERT_EQ(schedRecvTheoritical,schedEmpirical);
+    
     //Clean test
     this->clearHistory();
   }
 
+void Tester ::
+    testSendSchedPort7(void) 
+  {
+        // set test data
+    U8 port = 7;
+    U8 cmd = 0x00;
+    U32 sizeDataSend = 1;
+    U8 dataSend[]={cmd};
+    U8 sched = 1;
+
+    U8 portRecvTheoritical = 7;
+    U8 schedRecvTheoritical = 1;
+    U32 sizeDataRecvTheoritical = 232;
+    U8 dataRecvTheoretical[sizeDataRecvTheoritical] = {0};
+
+
+    dataRecvTheoretical[EPSCMD] = cmd;
+    dataRecvTheoretical[EPSSTATUS] = 0;
+    dataRecvTheoretical[EPSVBATT] = 10;
+    dataRecvTheoretical[EPSTEMP] = 50;
+    dataRecvTheoretical[EPSBATTMODE] = 2;
+
+    Fw::Buffer bufferSend;
+
+    bufferSend.setData(dataSend);
+    bufferSend.setSize(sizeDataSend);
+
+    //Invok send port in
+    this->invoke_to_send(0,port,bufferSend,sched);
+    //Verify port out
+    ASSERT_FROM_PORT_HISTORY_SIZE(1);
+    ASSERT_from_recv_SIZE(1);
+
+    //Verify data recv form simulator
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();;
+    U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getSize();
+    U8 portEmpirical = this->fromPortHistory_recv->at(0).port;
+    U8 schedEmpirical = this->fromPortHistory_recv->at(0).isSched;
+
+    ASSERT_EQ(sizeDataRecvTheoritical,sizeDataRecvEmpirical);
+
+    for(int i = 0 ; i< sizeDataRecvTheoritical;i++){
+      ASSERT_EQ(dataRecvTheoretical[i],dataRecvEmpirical[i]);
+    }
+
+    ASSERT_EQ(portRecvTheoritical,portEmpirical);
+    ASSERT_EQ(schedRecvTheoritical,schedEmpirical);
+    
+    //Clean test
+    this->clearHistory();
+  }
   // ----------------------------------------------------------------------
   // Handlers for typed from ports
   // ----------------------------------------------------------------------
