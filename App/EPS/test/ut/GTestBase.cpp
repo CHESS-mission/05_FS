@@ -707,6 +707,104 @@ namespace App {
   }
 
   // ----------------------------------------------------------------------
+  // Event: MS_CMD_PAYLOAD_ERROR
+  // ----------------------------------------------------------------------
+
+  void EPSGTestBase ::
+    assertEvents_MS_CMD_PAYLOAD_ERROR_size(
+        const char *const __callSiteFileName,
+        const U32 __callSiteLineNumber,
+        const U32 size
+    ) const
+  {
+    ASSERT_EQ(size, this->eventHistory_MS_CMD_PAYLOAD_ERROR->size())
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Size of history for event MS_CMD_PAYLOAD_ERROR\n"
+      << "  Expected: " << size << "\n"
+      << "  Actual:   " << this->eventHistory_MS_CMD_PAYLOAD_ERROR->size() << "\n";
+  }
+
+  void EPSGTestBase ::
+    assertEvents_MS_CMD_PAYLOAD_ERROR(
+        const char *const __callSiteFileName,
+        const U32 __callSiteLineNumber,
+        const U32 __index,
+        const char *const payload
+    ) const
+  {
+    ASSERT_GT(this->eventHistory_MS_CMD_PAYLOAD_ERROR->size(), __index)
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Index into history of event MS_CMD_PAYLOAD_ERROR\n"
+      << "  Expected: Less than size of history ("
+      << this->eventHistory_MS_CMD_PAYLOAD_ERROR->size() << ")\n"
+      << "  Actual:   " << __index << "\n";
+    const EventEntry_MS_CMD_PAYLOAD_ERROR& e =
+      this->eventHistory_MS_CMD_PAYLOAD_ERROR->at(__index);
+    ASSERT_STREQ(payload, e.payload.toChar())
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Value of argument payload at index "
+      << __index
+      << " in history of event MS_CMD_PAYLOAD_ERROR\n"
+      << "  Expected: " << payload << "\n"
+      << "  Actual:   " << e.payload.toChar() << "\n";
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_CMD_PORT_ERROR
+  // ----------------------------------------------------------------------
+
+  void EPSGTestBase ::
+    assertEvents_MS_CMD_PORT_ERROR_size(
+        const char *const __callSiteFileName,
+        const U32 __callSiteLineNumber,
+        const U32 size
+    ) const
+  {
+    ASSERT_EQ(size, this->eventHistory_MS_CMD_PORT_ERROR->size())
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Size of history for event MS_CMD_PORT_ERROR\n"
+      << "  Expected: " << size << "\n"
+      << "  Actual:   " << this->eventHistory_MS_CMD_PORT_ERROR->size() << "\n";
+  }
+
+  void EPSGTestBase ::
+    assertEvents_MS_CMD_PORT_ERROR(
+        const char *const __callSiteFileName,
+        const U32 __callSiteLineNumber,
+        const U32 __index,
+        const U8 port
+    ) const
+  {
+    ASSERT_GT(this->eventHistory_MS_CMD_PORT_ERROR->size(), __index)
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Index into history of event MS_CMD_PORT_ERROR\n"
+      << "  Expected: Less than size of history ("
+      << this->eventHistory_MS_CMD_PORT_ERROR->size() << ")\n"
+      << "  Actual:   " << __index << "\n";
+    const EventEntry_MS_CMD_PORT_ERROR& e =
+      this->eventHistory_MS_CMD_PORT_ERROR->at(__index);
+    ASSERT_EQ(port, e.port)
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Value of argument port at index "
+      << __index
+      << " in history of event MS_CMD_PORT_ERROR\n"
+      << "  Expected: " << port << "\n"
+      << "  Actual:   " << e.port << "\n";
+  }
+
+  // ----------------------------------------------------------------------
   // From ports
   // ----------------------------------------------------------------------
 

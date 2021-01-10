@@ -92,7 +92,7 @@
                 <arg name="cmd" type="U8">
                     <comment>The command id</comment>
                 </arg>
-                <arg name="payload" type="string" size="1000">
+                <arg name="payload" type="string" size="3000">
                     <comment>The command return data</comment>
                 </arg>          
             </args>
@@ -151,6 +151,16 @@
                 <arg name="payload" type="string" size="1000">
                     <comment>the payload error</comment>
                 </arg>    
+            </args>
+        </event>
+        <event id="7" name="MS_CMD_PORT_ERROR" severity="WARNING_LO" format_string = "Error in EPS command : port : %s" >
+            <comment>
+            Payload Error
+            </comment>
+            <args>
+                <arg name="port" type="U8">
+                    <comment>The port id</comment>
+                </arg> 
             </args>
         </event>
     </events>

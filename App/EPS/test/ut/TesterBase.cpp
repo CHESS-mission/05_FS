@@ -62,6 +62,10 @@ namespace App {
       new History<EventEntry_MS_BATT_TEMP_HIGH>(maxHistorySize);
     this->eventHistory_MS_CHNG_BATT_MOD =
       new History<EventEntry_MS_CHNG_BATT_MOD>(maxHistorySize);
+    this->eventHistory_MS_CMD_PAYLOAD_ERROR =
+      new History<EventEntry_MS_CMD_PAYLOAD_ERROR>(maxHistorySize);
+    this->eventHistory_MS_CMD_PORT_ERROR =
+      new History<EventEntry_MS_CMD_PORT_ERROR>(maxHistorySize);
     // Initialize histories for typed user output ports
     this->fromPortHistory_DataOut =
       new History<FromPortEntry_DataOut>(maxHistorySize);
@@ -89,6 +93,8 @@ namespace App {
     delete this->eventHistory_MS_BATT_VOLT_LOW;
     delete this->eventHistory_MS_BATT_TEMP_HIGH;
     delete this->eventHistory_MS_CHNG_BATT_MOD;
+    delete this->eventHistory_MS_CMD_PAYLOAD_ERROR;
+    delete this->eventHistory_MS_CMD_PORT_ERROR;
     // Destroy port histories
     delete this->fromPortHistory_DataOut;
   }
@@ -1321,6 +1327,76 @@ namespace App {
 
       }
 
+      case EPSComponentBase::EVENTID_MS_CMD_PAYLOAD_ERROR:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 1,_numArgs,1);
+
+#endif
+        Fw::LogStringArg payload;
+        _status = args.deserialize(payload);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_WARNING_LO_MS_CMD_PAYLOAD_ERROR(payload);
+
+        break;
+
+      }
+
+      case EPSComponentBase::EVENTID_MS_CMD_PORT_ERROR:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 1,_numArgs,1);
+
+#endif
+        U8 port;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
+        }
+#endif
+        _status = args.deserialize(port);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_WARNING_LO_MS_CMD_PORT_ERROR(port);
+
+        break;
+
+      }
+
       default: {
         FW_ASSERT(0, id);
         break;
@@ -1340,6 +1416,8 @@ namespace App {
     this->eventHistory_MS_BATT_VOLT_LOW->clear();
     this->eventHistory_MS_BATT_TEMP_HIGH->clear();
     this->eventHistory_MS_CHNG_BATT_MOD->clear();
+    this->eventHistory_MS_CMD_PAYLOAD_ERROR->clear();
+    this->eventHistory_MS_CMD_PORT_ERROR->clear();
   }
 
 #if FW_ENABLE_TEXT_LOGGING
@@ -1519,6 +1597,38 @@ namespace App {
       mode
     };
     eventHistory_MS_CHNG_BATT_MOD->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_CMD_PAYLOAD_ERROR
+  // ----------------------------------------------------------------------
+
+  void EPSTesterBase ::
+    logIn_WARNING_LO_MS_CMD_PAYLOAD_ERROR(
+        Fw::LogStringArg& payload
+    )
+  {
+    EventEntry_MS_CMD_PAYLOAD_ERROR e = {
+      payload
+    };
+    eventHistory_MS_CMD_PAYLOAD_ERROR->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_CMD_PORT_ERROR
+  // ----------------------------------------------------------------------
+
+  void EPSTesterBase ::
+    logIn_WARNING_LO_MS_CMD_PORT_ERROR(
+        U8 port
+    )
+  {
+    EventEntry_MS_CMD_PORT_ERROR e = {
+      port
+    };
+    eventHistory_MS_CMD_PORT_ERROR->push_back(e);
     ++this->eventsSize;
   }
 

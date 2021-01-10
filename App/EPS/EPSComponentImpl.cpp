@@ -67,31 +67,33 @@ namespace App {
 
   }else{
     if(isSched){
-    EPSHkAnalyser helper(data);
-    U8 mode = helper.getbattMode();
-    U16 voltage = helper.getvBatt();
-    U16 temp = helper.getTemp();
-    tlmWrite_EPS_Battery_mode(mode);
-    tlmWrite_EPS_Voltage_battery_mV(voltage);
-    tlmWrite_EPS_Temp_Battery_Celsuis(temp);
+      EPSHkAnalyser helper(data);
+      U8 mode = helper.getbattMode();
+      U16 voltage = helper.getvBatt();
+      U16 temp = helper.getTemp();
+      tlmWrite_EPS_Battery_mode(mode);
+      tlmWrite_EPS_Voltage_battery_mV(voltage);
+      tlmWrite_EPS_Temp_Battery_Celsuis(temp);
 
-    if(mode != this->battMode){
-      log_WARNING_HI_MS_CHNG_BATT_MOD(mode);
-    }
-    if(voltage < EPS_LIMIT_LOW_BATTERY){
-      log_WARNING_HI_MS_BATT_VOLT_LOW(voltage);
-    }
-    if(temp > EPS_LIMIT_TEMP_HIGH){
-      log_WARNING_HI_MS_BATT_TEMP_HIGH(temp);
-    }
-
+      if(mode != this->battMode){
+        log_WARNING_HI_MS_CHNG_BATT_MOD(mode);
+      }
+      if(voltage < EPS_LIMIT_LOW_BATTERY){
+        log_WARNING_HI_MS_BATT_VOLT_LOW(voltage);
+      }
+      if(temp > EPS_LIMIT_TEMP_HIGH){
+        log_WARNING_HI_MS_BATT_TEMP_HIGH(temp);
+      }
+              
     }else{
+      if(port == EPS_INST_TLM_PORT){
       char returnString[returnSize*3];
       hexToString(returnString,returnData,returnSize);
       Fw::LogStringArg logString(returnString);
       log_ACTIVITY_LO_MS_CMD_RECV_EPS(port,returnData[EPSCMD],logString);
-      Fw::TlmString string(returnString);
-      this->tlmWrite_EPS_LAST_CMD_RETURN(string);
+      Fw::TlmString tlmString(returnString);
+      this->tlmWrite_EPS_LAST_CMD_RETURN(tlmString);
+      }
     }
   }
 
@@ -154,7 +156,9 @@ namespace App {
         port = EPS_TIME_SYNC_PORT;
         break;
       default:
-      FW_ASSERT(0,operation);
+        this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_EXECUTION_ERROR);
+        log_WARNING_LO_MS_CMD_PORT_ERROR(operation);
+        return;
       break;
     } 
     this->DataOut_out(0,port,dataSendCmdBuffer,0);
@@ -170,7 +174,7 @@ namespace App {
     }
   }
   void EPSComponentImpl::hexToString (char* string, U8 hex[], U16 size){
-      char* endofbuf = string + size/2*sizeof(char);
+      char* endofbuf = string + size*3*sizeof(char);
       for (int i = 0; i < size; i++)
       {
           if (string + 3 < endofbuf)

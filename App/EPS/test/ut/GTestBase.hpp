@@ -100,6 +100,18 @@
 #define ASSERT_EVENTS_MS_CHNG_BATT_MOD(index, _mode) \
   this->assertEvents_MS_CHNG_BATT_MOD(__FILE__, __LINE__, index, _mode)
 
+#define ASSERT_EVENTS_MS_CMD_PAYLOAD_ERROR_SIZE(size) \
+  this->assertEvents_MS_CMD_PAYLOAD_ERROR_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_CMD_PAYLOAD_ERROR(index, _payload) \
+  this->assertEvents_MS_CMD_PAYLOAD_ERROR(__FILE__, __LINE__, index, _payload)
+
+#define ASSERT_EVENTS_MS_CMD_PORT_ERROR_SIZE(size) \
+  this->assertEvents_MS_CMD_PORT_ERROR_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_CMD_PORT_ERROR(index, _port) \
+  this->assertEvents_MS_CMD_PORT_ERROR(__FILE__, __LINE__, index, _port)
+
 // ----------------------------------------------------------------------
 // Macros for typed user from port history assertions
 // ----------------------------------------------------------------------
@@ -434,6 +446,44 @@ namespace App {
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
           const U8 mode /*!< battery mode*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_CMD_PAYLOAD_ERROR
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_CMD_PAYLOAD_ERROR_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_CMD_PAYLOAD_ERROR(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const char *const payload /*!< the payload error*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_CMD_PORT_ERROR
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_CMD_PORT_ERROR_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_CMD_PORT_ERROR(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const U8 port /*!< The port id*/
       ) const;
 
     protected:

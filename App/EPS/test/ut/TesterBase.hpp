@@ -675,6 +675,52 @@ namespace App {
     protected:
 
       // ----------------------------------------------------------------------
+      // Event: MS_CMD_PAYLOAD_ERROR
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_CMD_PAYLOAD_ERROR
+      //!
+      virtual void logIn_WARNING_LO_MS_CMD_PAYLOAD_ERROR(
+          Fw::LogStringArg& payload /*!< the payload error*/
+      );
+
+      //! A history entry for event MS_CMD_PAYLOAD_ERROR
+      //!
+      typedef struct {
+        Fw::LogStringArg payload;
+      } EventEntry_MS_CMD_PAYLOAD_ERROR;
+
+      //! The history of MS_CMD_PAYLOAD_ERROR events
+      //!
+      History<EventEntry_MS_CMD_PAYLOAD_ERROR>
+        *eventHistory_MS_CMD_PAYLOAD_ERROR;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_CMD_PORT_ERROR
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_CMD_PORT_ERROR
+      //!
+      virtual void logIn_WARNING_LO_MS_CMD_PORT_ERROR(
+          U8 port /*!< The port id*/
+      );
+
+      //! A history entry for event MS_CMD_PORT_ERROR
+      //!
+      typedef struct {
+        U8 port;
+      } EventEntry_MS_CMD_PORT_ERROR;
+
+      //! The history of MS_CMD_PORT_ERROR events
+      //!
+      History<EventEntry_MS_CMD_PORT_ERROR>
+        *eventHistory_MS_CMD_PORT_ERROR;
+
+    protected:
+
+      // ----------------------------------------------------------------------
       // Telemetry dispatch
       // ----------------------------------------------------------------------
 

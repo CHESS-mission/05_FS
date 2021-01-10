@@ -44,7 +44,15 @@ namespace App {
 
       //! To do
       //!
-      void toDo(void);
+      void cmdCmdGoodpayloadGoodPort(void);
+      void cmdCmdbadPayload(void);
+      /*void cmdCmdbadPort(void);*/
+      void portStatusOKSched(void);
+      void portStatusOKNoSched(void);
+      void portStatusNOK(void);
+      void portTestLowVolt(void);
+      void portTestHighTemp(void);
+      void portChangeMode(void);
 
     private:
 
