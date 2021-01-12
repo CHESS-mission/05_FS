@@ -20,6 +20,9 @@
 ##
 project(App C CXX)
 cmake_minimum_required(VERSION 3.5)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
 ##
 # Section 2: F prime Core
 #
@@ -36,7 +39,6 @@ include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
 # This section includes deployment specific directories. This allows use of non-
 # core components in the topology, which is also added here.
 ##
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 # Add component subdirectories
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/PingReceiver/")
