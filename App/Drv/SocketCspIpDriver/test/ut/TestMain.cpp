@@ -14,6 +14,12 @@ TEST(Nominal, TestSendCMD) {
     tester.testSendSchedPort7();
 }
 
+TEST(Nominal, TestPing) {
+    TEST_CASE(CspIpSocket.3, "Test sending ping");
+    Drv::Tester tester;
+    tester.testSendPing();
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

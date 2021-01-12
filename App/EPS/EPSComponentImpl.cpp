@@ -14,6 +14,7 @@
 #include <App/EPS/EPSComponentImpl.hpp>
 #include "Fw/Types/BasicTypes.hpp"
 #include "App/Config/EPSCfg.hpp"
+#include "App/Config/SocketCspIpDriverCfg.hpp"
 #include "App/EPS/EPSHkAnalyser.hpp"
 #include <stdio.h>
 #include <cctype>
@@ -62,6 +63,11 @@ namespace App {
   U8* returnData = data.getData();
   U32 returnSize = data.getSize();
   U8 status = returnData[EPSSTATUS];
+  if(port == 1){
+    U32 ping = bytesToInt(returnData);
+    log_ACTIVITY_LO_MS_PING((I32)ping);
+    return;
+  }
   if(status){
     log_WARNING_LO_MS_CMD_ERROR(port,returnData[EPSCMD],returnData[EPSSTATUS]);
 
@@ -167,6 +173,19 @@ namespace App {
     this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
   }
 
+    void EPSComponentImpl ::
+    MS_SEND_PING_cmdHandler(
+        const FwOpcodeType opCode,
+        const U32 cmdSeq
+    )
+  {
+    U8 noData[0];
+    dataSendCmdBuffer.setData(noData);
+    dataSendCmdBuffer.setSize(0);
+    this->DataOut_out(0,CSP_PING_PORT,dataSendCmdBuffer,0);
+    this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
+  }
+
   void EPSComponentImpl::stringToHex(const char* data, U8 hexArray[]){
       for (size_t count = 0; count < sizeof data/sizeof *data; count++) {
         sscanf(data, "%2hhx", &hexArray[count]);
@@ -206,6 +225,11 @@ namespace App {
       
       return flag;
 
+    }
+
+    U32 EPSComponentImpl::bytesToInt (U8* bytes){
+        return  (U32)bytes[0] << 24 | (U32)bytes[1] << 16 
+        | (U32)bytes[2] << 8 | (U32)bytes[3];
     }
 
 } // end namespace App

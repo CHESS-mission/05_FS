@@ -12,6 +12,7 @@
 
 #include "Tester.hpp"
 #include "App/Config/EPSCfg.hpp"
+#include "App/Config/SocketCspIpDriverCfg.hpp"
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
@@ -80,7 +81,7 @@ namespace Drv {
     ASSERT_from_recv_SIZE(1);
 
     //Verify data recv form simulator
-    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();;
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();
     U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getSize();
     U8 portEmpirical = this->fromPortHistory_recv->at(0).port;
     U8 schedEmpirical = this->fromPortHistory_recv->at(0).isSched;
@@ -132,7 +133,7 @@ void Tester ::
     ASSERT_from_recv_SIZE(1);
 
     //Verify data recv form simulator
-    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();;
+    U8* dataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getData();
     U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getSize();
     U8 portEmpirical = this->fromPortHistory_recv->at(0).port;
     U8 schedEmpirical = this->fromPortHistory_recv->at(0).isSched;
@@ -149,6 +150,42 @@ void Tester ::
     //Clean test
     this->clearHistory();
   }
+
+void Tester::testSendPing(void){
+          // set test data
+    U8 port = CSP_PING_PORT;
+    U32 sizeDataSend = 0;
+    U8 dataSend[sizeDataSend];
+    U8 sched = 0;
+
+    U8 portRecvTheoritical = CSP_PING_PORT;
+    U8 schedRecvTheoritical = 0;
+    U32 sizeDataRecvTheoritical = 4;
+
+    Fw::Buffer bufferSend;
+
+    bufferSend.setData(dataSend);
+    bufferSend.setSize(sizeDataSend);
+
+    //Invok send port in
+    this->invoke_to_send(0,port,bufferSend,sched);
+    //Verify port out
+    ASSERT_FROM_PORT_HISTORY_SIZE(1);
+    ASSERT_from_recv_SIZE(1);
+
+    //Verify data recv form simulator
+    U32 sizeDataRecvEmpirical = this->fromPortHistory_recv->at(0).data.getSize();
+    U8 portEmpirical = this->fromPortHistory_recv->at(0).port;
+    U8 schedEmpirical = this->fromPortHistory_recv->at(0).isSched;
+
+    ASSERT_EQ(sizeDataRecvTheoritical,sizeDataRecvEmpirical);
+    ASSERT_EQ(portRecvTheoritical,portEmpirical);
+    ASSERT_EQ(schedRecvTheoritical,schedEmpirical);
+    
+    //Clean test
+    this->clearHistory();
+}
+  
   // ----------------------------------------------------------------------
   // Handlers for typed from ports
   // ----------------------------------------------------------------------

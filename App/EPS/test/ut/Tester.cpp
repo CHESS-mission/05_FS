@@ -12,6 +12,7 @@
 
 #include "Tester.hpp"
 #include "App/Config/EPSCfg.hpp"
+#include "App/Config/SocketCspIpDriverCfg.hpp"
 
 #define INSTANCE 0
 #define MAX_HISTORY_SIZE 10
@@ -47,7 +48,7 @@ namespace App {
   // Tests 
   // ----------------------------------------------------------------------
 
-  void Tester::cmdCmdGoodpayloadGoodPort(void){
+void Tester::cmdCmdGoodpayloadGoodPort(void){
  //Init data for TM test
     EPSComponentBase::EPSOp operation = EPSComponentBase::EPS_INST_TLM;
     Fw::CmdStringArg goodPayload1("00");
@@ -474,6 +475,94 @@ namespace App {
     ASSERT_EVENTS_SIZE(1);
     ASSERT_EVENTS_MS_BATT_TEMP_HIGH_SIZE(1);
     ASSERT_EVENTS_MS_BATT_TEMP_HIGH(0,data[EPSTEMP]);
+
+    this->clearHistory();
+  }
+  
+
+  void Tester::cmdSendPing(void){
+
+
+    U8 portTheoritical = (U8)CSP_PING_PORT;
+    U8 schedTheoritical = 0;
+    U32 sizeTheoritical = 0; 
+
+    //Send MS_SEND:PING badPayload1 command
+    
+    this->sendCmd_MS_SEND_PING(0,10);
+    //Dispatch the message queue
+    this->component.doDispatch();
+
+    //Verify port param
+    U32 sizeEmpirical = this->fromPortHistory_DataOut->at(0).data.getSize();
+    U8 portEmpirical = this->fromPortHistory_DataOut->at(0).port;
+    U8 schedEmpirical = this->fromPortHistory_DataOut->at(0).isSched;
+
+    ASSERT_EQ(portTheoritical,portEmpirical);
+    ASSERT_EQ(sizeTheoritical,sizeEmpirical);
+    ASSERT_EQ(schedTheoritical,schedEmpirical);
+
+    //Verify command response
+    ASSERT_CMD_RESPONSE_SIZE(1);
+    ASSERT_CMD_RESPONSE(0,EPSComponentBase::OPCODE_MS_SEND_PING,10,
+    Fw::COMMAND_OK);
+
+    this->clearHistory();
+  }
+
+  void Tester::cmdPortPingOk(void){
+    //Init data for cmd test
+    Fw::Buffer bufferData;
+    U8 port = CSP_PING_PORT;
+    U8 sched = 0;
+    U8 dataSize = 4;
+    U8 data[dataSize] = {0};
+    data[3] = 0x0A;
+    bufferData.setData(data);
+    bufferData.setSize(dataSize);
+    //Invoke DataIn port
+    this->invoke_to_DataIn(0,port,bufferData,sched);
+    //Dispatch the message queue
+    this->component.doDispatch();
+
+    I32 pingEmpirical = 10;
+    //Verify Telemetry
+    ASSERT_TLM_SIZE(0);
+
+    //Verify Event
+    ASSERT_EVENTS_SIZE(1);
+    ASSERT_EVENTS_MS_PING_SIZE(1);
+    ASSERT_EVENTS_MS_PING(0,pingEmpirical);
+
+    this->clearHistory();
+  }
+
+    void Tester::cmdPortPingNOK(void){
+    //Init data for cmd test
+    Fw::Buffer bufferData;
+    U8 port = CSP_PING_PORT;
+    U8 sched = 0;
+    U8 dataSize = 4;
+    U8 data[dataSize] = {0};
+    data[3] = 0xFF;
+    data[2] = 0xFF;
+    data[1] = 0xFF;
+    data[0] = 0xFF;
+    bufferData.setData(data);
+    bufferData.setSize(dataSize);
+    //Invoke DataIn port
+    this->invoke_to_DataIn(0,port,bufferData,sched);
+    //Dispatch the message queue
+    this->component.doDispatch();
+
+    I32 pingEmpirical = -1;
+    //Verify Telemetry
+    ASSERT_TLM_SIZE(0);
+
+    //Verify Event
+    ASSERT_EVENTS_SIZE(1);
+    ASSERT_EVENTS_MS_PING_SIZE(1);
+    ASSERT_EVENTS_MS_PING(0,pingEmpirical);
 
     this->clearHistory();
   }

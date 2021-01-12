@@ -30,7 +30,12 @@ TEST(Nominal, TestPort) {
     tester.portTestHighTemp();
 }
 
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+TEST(Nominal, TestPing) {
+    App::Tester tester;
+    TEST_CASE(EPS.9,"Test cmd send ping");
+    tester.cmdSendPing();
+    TEST_CASE(EPS.10,"Test port ping");
+    tester.cmdPortPingOk();
+    TEST_CASE(EPS.11,"Test port ping not ok");
+    tester.cmdPortPingOk();
 }

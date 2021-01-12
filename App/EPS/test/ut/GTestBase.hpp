@@ -112,6 +112,12 @@
 #define ASSERT_EVENTS_MS_CMD_PORT_ERROR(index, _port) \
   this->assertEvents_MS_CMD_PORT_ERROR(__FILE__, __LINE__, index, _port)
 
+#define ASSERT_EVENTS_MS_PING_SIZE(size) \
+  this->assertEvents_MS_PING_size(__FILE__, __LINE__, size)
+
+#define ASSERT_EVENTS_MS_PING(index, _port) \
+  this->assertEvents_MS_PING(__FILE__, __LINE__, index, _port)
+
 // ----------------------------------------------------------------------
 // Macros for typed user from port history assertions
 // ----------------------------------------------------------------------
@@ -484,6 +490,25 @@ namespace App {
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
           const U8 port /*!< The port id*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_PING
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_PING_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+      void assertEvents_MS_PING(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 __index, /*!< The index*/
+          const I32 port /*!< port response ms*/
       ) const;
 
     protected:

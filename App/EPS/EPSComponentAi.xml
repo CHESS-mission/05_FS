@@ -41,6 +41,11 @@
                 </arg>                     
              </args>
         </command>
+         <command kind="async" opcode="1" mnemonic="MS_SEND_PING">
+            <comment>
+            Send Ping to EPS
+            </comment>
+        </command>
     </commands>
     <telemetry>
         <channel id="0" name="EPS_Voltage_battery_mV" data_type="U16">
@@ -160,6 +165,16 @@
             <args>
                 <arg name="port" type="U8">
                     <comment>The port id</comment>
+                </arg> 
+            </args>
+        </event>
+        <event id="8" name="MS_PING" severity="ACTIVITY_LO" format_string = "Ping EPS : %d ms" >
+            <comment>
+            Payload Error
+            </comment>
+            <args>
+                <arg name="port" type="I32">
+                    <comment>port response ms</comment>
                 </arg> 
             </args>
         </event>

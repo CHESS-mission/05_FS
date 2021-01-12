@@ -66,6 +66,8 @@ namespace App {
       new History<EventEntry_MS_CMD_PAYLOAD_ERROR>(maxHistorySize);
     this->eventHistory_MS_CMD_PORT_ERROR =
       new History<EventEntry_MS_CMD_PORT_ERROR>(maxHistorySize);
+    this->eventHistory_MS_PING =
+      new History<EventEntry_MS_PING>(maxHistorySize);
     // Initialize histories for typed user output ports
     this->fromPortHistory_DataOut =
       new History<FromPortEntry_DataOut>(maxHistorySize);
@@ -95,6 +97,7 @@ namespace App {
     delete this->eventHistory_MS_CHNG_BATT_MOD;
     delete this->eventHistory_MS_CMD_PAYLOAD_ERROR;
     delete this->eventHistory_MS_CMD_PORT_ERROR;
+    delete this->eventHistory_MS_PING;
     // Destroy port histories
     delete this->fromPortHistory_DataOut;
   }
@@ -783,6 +786,40 @@ namespace App {
 
   }
 
+  // ----------------------------------------------------------------------
+  // Command: MS_SEND_PING
+  // ----------------------------------------------------------------------
+
+  void EPSTesterBase ::
+    sendCmd_MS_SEND_PING(
+        const NATIVE_INT_TYPE instance,
+        const U32 cmdSeq
+    )
+  {
+
+    // Serialize arguments
+
+    Fw::CmdArgBuffer buff;
+
+    // Call output command port
+
+    FwOpcodeType _opcode;
+    const U32 idBase = this->getIdBase();
+    _opcode = EPSComponentBase::OPCODE_MS_SEND_PING + idBase;
+
+    if (this->m_to_CmdDisp[0].isConnected()) {
+      this->m_to_CmdDisp[0].invoke(
+          _opcode,
+          cmdSeq,
+          buff
+      );
+    }
+    else {
+      printf("Test Command Output port not connected!\n");
+    }
+
+  }
+
 
   void EPSTesterBase ::
     sendRawCmd(FwOpcodeType opcode, U32 cmdSeq, Fw::CmdArgBuffer& args) {
@@ -1397,6 +1434,47 @@ namespace App {
 
       }
 
+      case EPSComponentBase::EVENTID_MS_PING:
+      {
+
+        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
+#if FW_AMPCS_COMPATIBLE
+        // Deserialize the number of arguments.
+        U8 _numArgs;
+        _status = args.deserialize(_numArgs);
+        FW_ASSERT(
+          _status == Fw::FW_SERIALIZE_OK,
+          static_cast<AssertArg>(_status)
+        );
+        // verify they match expected.
+        FW_ASSERT(_numArgs == 1,_numArgs,1);
+
+#endif
+        I32 port;
+#if FW_AMPCS_COMPATIBLE
+        {
+          // Deserialize the argument size
+          U8 _argSize;
+          _status = args.deserialize(_argSize);
+          FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+          );
+          FW_ASSERT(_argSize == sizeof(I32),_argSize,sizeof(I32));
+        }
+#endif
+        _status = args.deserialize(port);
+        FW_ASSERT(
+            _status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_status)
+        );
+
+        this->logIn_ACTIVITY_LO_MS_PING(port);
+
+        break;
+
+      }
+
       default: {
         FW_ASSERT(0, id);
         break;
@@ -1418,6 +1496,7 @@ namespace App {
     this->eventHistory_MS_CHNG_BATT_MOD->clear();
     this->eventHistory_MS_CMD_PAYLOAD_ERROR->clear();
     this->eventHistory_MS_CMD_PORT_ERROR->clear();
+    this->eventHistory_MS_PING->clear();
   }
 
 #if FW_ENABLE_TEXT_LOGGING
@@ -1629,6 +1708,22 @@ namespace App {
       port
     };
     eventHistory_MS_CMD_PORT_ERROR->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_PING
+  // ----------------------------------------------------------------------
+
+  void EPSTesterBase ::
+    logIn_ACTIVITY_LO_MS_PING(
+        I32 port
+    )
+  {
+    EventEntry_MS_PING e = {
+      port
+    };
+    eventHistory_MS_PING->push_back(e);
     ++this->eventsSize;
   }
 

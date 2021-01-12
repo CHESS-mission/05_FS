@@ -71,6 +71,7 @@ namespace Drv {
 
       Fw::Buffer outBuffer;           //!< Fw::Buffer used to pass data
       U8 outBufferData [CSP_MAX_SIZE_PACKET]; //!< Buffer used to store data
+      void intToU8BigEndian(U32 data, U8* bytes);
 
     };
 

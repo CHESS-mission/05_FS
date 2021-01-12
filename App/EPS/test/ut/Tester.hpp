@@ -54,6 +54,10 @@ namespace App {
       void portTestHighTemp(void);
       void portChangeMode(void);
 
+      void cmdSendPing(void);
+      void cmdPortPingOk(void);
+      void cmdPortPingNOK(void);
+
     private:
 
       // ----------------------------------------------------------------------

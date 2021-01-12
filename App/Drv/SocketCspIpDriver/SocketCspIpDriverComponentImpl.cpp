@@ -72,11 +72,24 @@ namespace Drv {
   {
       U32 sizeBuffer = data.getSize();
       U8* dataBuffer = data.getData();
-      FW_ASSERT(dataBuffer);
+      if(port == 1){
+        I32 pingMs = m_helper.ping();
+        outBuffer.setSize(4);
+        intToU8BigEndian(pingMs,outBuffer.getData());
 
-      this->m_helper.send_transaction(port,dataBuffer,sizeBuffer,outBuffer);
-      recv_out(0, port, outBuffer,isSched);
+      }else{
+        FW_ASSERT(dataBuffer);
+        this->m_helper.send_transaction(port,dataBuffer,sizeBuffer,outBuffer);
+      }
+    recv_out(0, port, outBuffer,isSched);
 
+  }
+
+  void SocketCspIpDriverComponentImpl::intToU8BigEndian(U32 data, U8* bytes){
+      bytes[3] =  data & 0x000000ff;
+      bytes[2] = (data & 0x0000ff00) >> 8;
+      bytes[1] = (data & 0x00ff0000) >> 16;
+      bytes[0] = (data & 0xff000000) >> 24;
   }
 
 } // end namespace Drv

@@ -46,6 +46,7 @@ namespace Drv {
       //!
       void testSendCmdPort7(void);
       void testSendSchedPort7(void);
+      void testSendPing(void);
 
     private:
 

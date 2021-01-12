@@ -430,6 +430,13 @@ namespace App {
           const Fw::CmdStringArg& payload /*!< The payload data*/
       );
 
+      //! Send a MS_SEND_PING command
+      //!
+      void sendCmd_MS_SEND_PING(
+          const NATIVE_INT_TYPE instance, /*!< The instance number*/
+          const U32 cmdSeq /*!< The command sequence number*/
+      );
+
     protected:
 
       // ----------------------------------------------------------------------
@@ -717,6 +724,29 @@ namespace App {
       //!
       History<EventEntry_MS_CMD_PORT_ERROR>
         *eventHistory_MS_CMD_PORT_ERROR;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_PING
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_PING
+      //!
+      virtual void logIn_ACTIVITY_LO_MS_PING(
+          I32 port /*!< port response ms*/
+      );
+
+      //! A history entry for event MS_PING
+      //!
+      typedef struct {
+        I32 port;
+      } EventEntry_MS_PING;
+
+      //! The history of MS_PING events
+      //!
+      History<EventEntry_MS_PING>
+        *eventHistory_MS_PING;
 
     protected:
 

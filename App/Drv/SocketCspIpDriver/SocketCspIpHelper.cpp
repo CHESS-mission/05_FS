@@ -49,7 +49,7 @@ namespace Drv {
      Fw::Logger::logMsg("Connected to %u for %s using %s\n", server_address,
                            reinterpret_cast<POINTER_CAST>("EPS"),
                            reinterpret_cast<POINTER_CAST>("UDP"));
-        conn = csp_connect(CSP_PRIO_NORM,server_address, CSP_UDPPort, 1000, CSP_O_NONE);
+        conn = csp_connect(CSP_PRIO_NORM,server_address, CSP_UDP_PORT, 1000, CSP_O_NONE);
 		if (conn == NULL) {
             return CSP_SOCK_CONNNECT_FAILED;
 		}
@@ -82,4 +82,7 @@ namespace Drv {
         return CSP_SOCK_SUCCESS;
     }
     
+    U32 SocketCspIpHelper::ping(void){
+        return csp_ping(m_address, CSP_PING_TIMEOUT, CSP_PING_SIZE, CSP_O_NONE);
+    }
 }

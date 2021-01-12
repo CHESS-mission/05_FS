@@ -83,7 +83,7 @@ html {
 					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
 						<td>payload</td>
 						<td>Fw::LogStringArg&</td>
-						<td>1000</td>
+						<td>3000</td>
 						<td>The command return data</td>
 					</tr>
 		</tr>
@@ -152,6 +152,28 @@ html {
 						<td>Fw::LogStringArg&</td>
 						<td>1000</td>
 						<td>the payload error</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">MS_CMD_PORT_ERROR</td>
+			<td rowspan="2">1078 (0x436)</td>
+			<td rowspan="2">Payload Error</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>port</td>
+						<td>U8</td>
+						<td></td>
+						<td>The port id</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="2">MS_PING</td>
+			<td rowspan="2">1079 (0x437)</td>
+			<td rowspan="2">Payload Error</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;border-bottom: 2px solid black;">
+						<td>port</td>
+						<td>I32</td>
+						<td></td>
+						<td>port response ms</td>
 					</tr>
 		</tr>
 	</tbody>

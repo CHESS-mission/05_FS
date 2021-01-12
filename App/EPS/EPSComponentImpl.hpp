@@ -83,6 +83,13 @@ namespace App {
           const Fw::CmdStringArg& payload /*!< The payload data*/
       );
 
+       //! Implementation for MS_SEND_PING command handler
+      //! Send Ping to EPS
+      void MS_SEND_PING_cmdHandler(
+          const FwOpcodeType opCode, /*!< The opcode*/
+          const U32 cmdSeq /*!< The command sequence number*/
+      );
+
       Fw::Buffer dataSendCmdBuffer;
       U8 battMode = 2;
 
@@ -90,6 +97,7 @@ namespace App {
       void stringToHex (const char*, U8[]);
       void hexToString (char*, U8[], U16 size);
       bool isPayloadOK(const char*,NATIVE_UINT_TYPE);
+      U32 bytesToInt (U8* bytes);
     };
 
 

@@ -675,6 +675,9 @@
         <arg name="payload" len="1000" type="string"/>
       </args>
     </command>
+    <command component="EPS" mnemonic="MS_SEND_PING" opcode="0x430">
+      <args/>
+    </command>
   </commands>
   <events>
     <event component="cmdDisp" name="OpCodeRegistered" id="0x79" severity="DIAGNOSTIC" format_string="Opcode 0x%04X registered to port %d slot %d">
@@ -1452,7 +1455,7 @@
       <args>
         <arg name="port" type="U8"/>
         <arg name="cmd" type="U8"/>
-        <arg name="payload" len="1000" type="string"/>
+        <arg name="payload" len="3000" type="string"/>
       </args>
     </event>
     <event component="EPS" name="MS_CMD_ERROR" id="0x431" severity="WARNING_LO" format_string="Error in cmd , port : %hu, cmd : %hu, status : %hhu">
@@ -1480,6 +1483,16 @@
     <event component="EPS" name="MS_CMD_PAYLOAD_ERROR" id="0x435" severity="WARNING_LO" format_string="Error in EPS command : payload : %s">
       <args>
         <arg name="payload" len="1000" type="string"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CMD_PORT_ERROR" id="0x436" severity="WARNING_LO" format_string="Error in EPS command : port : %s">
+      <args>
+        <arg name="port" type="U8"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_PING" id="0x437" severity="ACTIVITY_LO" format_string="Ping EPS : %d ms">
+      <args>
+        <arg name="port" type="I32"/>
       </args>
     </event>
   </events>
