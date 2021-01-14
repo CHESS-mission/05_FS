@@ -907,7 +907,19 @@
           <source component = "eventLogger" port = "PktSend" type = "Com" num = "0"/>
           <target component = "groundIf" port = "downlinkPort" type = "Com" num = "0"/>
      </connection>
+     
+     <connection name = "eventLoggerReports">
+          <!-- To comment if EventAction is used -->
+          <source component = "eventLogger" port = "LogSend" type = "Log" num = "0"/>
+          <target component = "groundIf" port = "eventReport" type = "Log" num = "0"/>
+     </connection>
 
+     <connection name = "chanTlmHkReports">
+          <!-- To comment if EventAction is used -->
+          <source component = "chanTlm" port = "TlmSend" type = "Tlm" num = "0"/>
+          <target component = "groundIf" port = "hkReport" type = "Tlm" num = "0"/>
+     </connection>
+     
      <connection name = "chanTlmPkts">
           <source component = "chanTlm" port = "PktSend" type = "Com" num = "0"/>
           <target component = "groundIf" port = "downlinkPort" type = "Com" num = "0"/>
@@ -952,10 +964,13 @@
           <source component = "cmdSeq" port = "seqDone" type = "CmdResponse" num = "0"/>
           <target component = "eventAction" port = "seqResp" type = "CmdResponse" num = "0"/>
      </connection>
+
+     <!-- To uncomment if PUSAdapter is used. @todo allow using both
      <connection name = "eventActionLog">
           <source component = "eventLogger" port = "LogSend" type = "Log" num = "0"/>
           <target component = "eventAction" port = "logRecv" type = "Log" num = "0"/>
      </connection>
+     -->
 
      <!-- ADCS connections-->
 
