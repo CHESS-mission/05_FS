@@ -22,6 +22,7 @@ project(App C CXX)
 cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+add_definitions(-D_PUS)
 
 ##
 # Section 2: F prime Core
