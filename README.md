@@ -16,6 +16,17 @@ Follow this guide to start with CHESS FS development : [Quick start guide](https
 - CMake 3.5 or newer (3.10.2 used)
 - Python 3.5+, PIP and Python Virtual Environment
 
+
+### Cloning the project
+Clone this repository and ensure recursively initalise [FPrime](https://github.com/CHESS-mission/fprime) submodule. In FPrime submodule, clone [PUSOpen](https://github.com/CHESS-mission/pusopen) as a *Lib* folder at root level (this is caused due to license restrictions).
+
+```
+git clone --recurse-submodules -j8 https://github.com/CHESS-mission/05_FS.git
+cd fprime
+git clone https://github.com/CHESS-mission/pusopen.git Lib
+```
+
+
 ### Installing
 
 See [Quick start guide](https://hackmd.io/@jonathanmichel/SyKt6xV9v) for details.
