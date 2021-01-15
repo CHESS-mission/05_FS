@@ -18,7 +18,13 @@ Follow this guide to start with CHESS FS development : [Quick start guide](https
 
 
 ### Cloning the project
-Clone this repository and ensure recursively initalise [FPrime](https://github.com/CHESS-mission/fprime) submodule. In FPrime submodule, clone [PUSOpen](https://github.com/CHESS-mission/pusopen) in a *Lib* folder at root level (this is caused due to license restrictions).
+Clone this repository and ensure recursively initalise [FPrime](https://github.com/CHESS-mission/fprime) submodule. In FPrime submodule, clone [PUSOpen](https://github.com/CHESS-mission/pusopen) as a *Lib* folder at root level (this is caused due to license restrictions).
+
+```
+git clone --recurse-submodules -j8 https://github.com/CHESS-mission/05_FS.git
+cd fprime
+git clone https://github.com/CHESS-mission/pusopen.git Lib
+```
 
 
 ### Installing
