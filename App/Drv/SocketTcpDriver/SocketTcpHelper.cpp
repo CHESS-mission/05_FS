@@ -11,6 +11,7 @@
 #include <Fw/Logger/Logger.hpp>
 #include <iostream>
 
+
 // This implementation has primarily implemented to isolate
 // the socket interface from the F' Fw::Buffer class.
 // There is a macro in VxWorks (m_data) that collides with
@@ -201,7 +202,7 @@ namespace Drv {
                 total += sent;
             }
         }
-        valread = ::read( this->m_socketOutFd , backBuffer.getData(), MAX_RECV_BUFFER_SIZE);
+        valread = ::read( this->m_socketOutFd , backBuffer.getData(), TCP_MAX_RECV_BUFFER_SIZE);
         backBuffer.setSize(valread);
     }
 }

@@ -12,6 +12,7 @@
 #include <Drv/SocketIpDriver/SocketIpDriverTypes.hpp>
 #include <SocketIpDriverCfg.hpp>
 #include <Fw/Buffer/Buffer.hpp>
+#include "App/Config/SocketTcpDriverCfg.hpp"
 
 
 namespace Drv {
