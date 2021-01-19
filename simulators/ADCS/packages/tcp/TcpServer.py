@@ -1,5 +1,4 @@
 import socket
-from ADCS.packages.state_machine.StateMachine import ADCSStateMachine
 
 
 def manage_data(data,adcs):

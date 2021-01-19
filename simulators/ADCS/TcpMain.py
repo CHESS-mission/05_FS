@@ -2,8 +2,8 @@
 
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-from ADCS.packages.state_machine.StateMachine import ADCSStateMachine
-from ADCS.packages.tcp.TcpServer import runTCP
+from packages.state_machine.StateMachine import ADCSStateMachine
+from packages.tcp.TcpServer import runTCP
 
 
 

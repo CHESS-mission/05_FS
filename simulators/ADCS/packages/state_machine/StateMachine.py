@@ -1,5 +1,5 @@
 from statemachine import StateMachine, State
-from ADCS.packages.package.UART import Uart
+from packages.package.UART import Uart
 
 
 class ADCSStateMachine(StateMachine):
