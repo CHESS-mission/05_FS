@@ -47,12 +47,6 @@ Svc::GroundInterfaceComponentImpl groundIf(FW_OPTIONAL_NAME("GNDIF"));
 // Driver Component
 Drv::BlockDriverImpl blockDrv(FW_OPTIONAL_NAME("BDRV"));
 
-// Reference Implementation Components
-
-Ref::RecvBuffImpl recvBuffComp(FW_OPTIONAL_NAME("RBC"));
-
-Ref::SendBuffImpl sendBuffComp(FW_OPTIONAL_NAME("SBC"));
-
 #if FW_ENABLE_TEXT_LOGGING
 Svc::ConsoleTextLoggerImpl textLogger(FW_OPTIONAL_NAME("TLOG"));
 #endif
@@ -85,16 +79,6 @@ Svc::BufferManager fileDownlinkBufferManager(FW_OPTIONAL_NAME("fileDownlinkBuffe
 Svc::BufferManager fileUplinkBufferManager(FW_OPTIONAL_NAME("fileUplinkBufferManager"), UPLINK_BUFFER_STORE_SIZE, UPLINK_BUFFER_QUEUE_SIZE);
 
 Svc::HealthImpl health(FW_OPTIONAL_NAME("health"));
-
-Ref::SignalGen signalGen1(FW_OPTIONAL_NAME("signalGen1"));
-
-Ref::SignalGen signalGen2(FW_OPTIONAL_NAME("signalGen2"));
-
-Ref::SignalGen signalGen3(FW_OPTIONAL_NAME("signalGen3"));
-
-Ref::SignalGen signalGen4(FW_OPTIONAL_NAME("signalGen4"));
-
-Ref::SignalGen signalGen5(FW_OPTIONAL_NAME("signalGen5"));
 
 Svc::AssertFatalAdapterComponentImpl fatalAdapter(FW_OPTIONAL_NAME("fatalAdapter"));
 
@@ -134,10 +118,6 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     // Initialize block driver
     blockDrv.init(10);
 
-    // Send/Receive example hardware components
-    recvBuffComp.init();
-    sendBuffComp.init(10);
-
 #if FW_ENABLE_TEXT_LOGGING
     textLogger.init();
 #endif
@@ -165,11 +145,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     fileManager.init(30, 0);
     fileUplinkBufferManager.init(0);
     fileDownlinkBufferManager.init(1);
-    signalGen1.init(10,0);
-    signalGen2.init(10,1);
-    signalGen3.init(10,2);
-    signalGen4.init(10,3);
-    signalGen5.init(10,4);
+
     fatalAdapter.init(0);
     fatalHandler.init(0);
     health.init(25, 0);
@@ -191,19 +167,12 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     }
 
     /* Register commands */
-    sendBuffComp.regCommands();
-    recvBuffComp.regCommands();
     cmdSeq.regCommands();
     cmdDisp.regCommands();
     eventLogger.regCommands();
     prmDb.regCommands();
     fileDownlink.regCommands();
     fileManager.regCommands();
-    signalGen1.regCommands();
-    signalGen2.regCommands();
-    signalGen3.regCommands();
-    signalGen4.regCommands();
-	signalGen5.regCommands();
 	health.regCommands();
 	pingRcvr.regCommands();
     eventAction.regCommands();
@@ -211,8 +180,6 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 
     // read parameters
     prmDb.readParamFile();
-    recvBuffComp.loadParameters();
-    sendBuffComp.loadParameters();
 
     // set health ping entries
 

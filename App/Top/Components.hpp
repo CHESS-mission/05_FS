@@ -17,10 +17,7 @@
 #include <Svc/BufferManager/BufferManager.hpp>
 #include <Svc/Health/HealthComponentImpl.hpp>
 
-#include <Ref/RecvBuffApp/RecvBuffComponentImpl.hpp>
-#include <Ref/SendBuffApp/SendBuffComponentImpl.hpp>
 #include <Ref/PingReceiver/PingReceiverComponentImpl.hpp>
-#include <Ref/SignalGen/SignalGen.hpp>
 #include <Svc/AssertFatalAdapter/AssertFatalAdapterComponentImpl.hpp>
 #include <Svc/FatalHandler/FatalHandlerComponentImpl.hpp>
 #include <Drv/BlockDriver/BlockDriverImpl.hpp>
@@ -58,9 +55,6 @@ extern Svc::HealthImpl health;
 
 extern Drv::BlockDriverImpl blockDrv;
 
-extern Ref::RecvBuffImpl recvBuffComp;
-extern Ref::SendBuffImpl sendBuffComp;
-extern Ref::SignalGen signalGen1 , signalGen2, signalGen3, signalGen4, signalGen5;
 extern Ref::PingReceiverComponentImpl pingRcvr;
 extern Drv::SocketIpDriverComponentImpl socketIpDriver;
 
