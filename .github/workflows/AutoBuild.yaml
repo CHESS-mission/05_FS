@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: install pat package
-        run: sudo apt install pkg-config
+        run: sudo apt install libzmw3-dev
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
