@@ -13,4 +13,5 @@ sudo ./simulators/EPS/zmqproxy &
 
 #launch EPS simulator
 export LD_LIBRARY_PATH=packages/csp/lib
-python simulators/EPS/CspMain.py &
+cd simulators/EPS/packages/csp/lib
+ls -la
