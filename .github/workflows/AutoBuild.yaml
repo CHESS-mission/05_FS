@@ -16,6 +16,9 @@ jobs:
       # checkout the repository
       - uses: actions/checkout@v2
 
+      - name: install pat package
+        run: sudo apt install pkg-config
+
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
         with:
