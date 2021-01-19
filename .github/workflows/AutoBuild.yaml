@@ -16,10 +16,15 @@ jobs:
       # checkout the repository
       - uses: actions/checkout@v2
 
+      # checkout PUSopen
       - uses: actions/checkout@v2
         with:
           repository: CHESS-mission/pusopen
           token: ${{ secrets.PUS_TOKEN }}
+          path: lib
+
+      - name : verify structure
+        run: tree -L2 
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
