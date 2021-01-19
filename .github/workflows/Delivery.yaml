@@ -14,8 +14,17 @@ jobs:
     name: Cross-compile
 
     steps:
-      # checkout the repository
+      # checkout the repository with submodules
       - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      # checkout PUSopen into fprime
+      - uses: actions/checkout@v2
+        with:
+          repository: CHESS-mission/pusopen
+          token: ${{ secrets.PUS_TOKEN }}
+          path: fprime/Lib
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
@@ -29,9 +38,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           sudo apt install cmake -y
-
-      - name: init submodule
-        run: git submodule update --init
 
       #prepare (download & export variable) the RPI toolchain
       - name: Toolchain installation
