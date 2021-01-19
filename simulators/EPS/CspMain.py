@@ -2,8 +2,8 @@
 
 # Press Maj+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import packages.csp.CspServer as cspServer
-from packages.state_machine.StateMachine import EPSStateMachine
+import EPS.packages.csp.CspServer as cspServer
+from EPS.packages.state_machine.StateMachine import EPSStateMachine
 
 
 # Press the green button in the gutter to run the script.

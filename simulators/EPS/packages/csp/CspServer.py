@@ -15,7 +15,7 @@ import time
 import sys
 import threading
 
-import packages.csp.lib.libcsp_py3 as libcsp
+import EPS.packages.csp.lib.libcsp_py3 as libcsp
 
 
 def csp_server(eps):
