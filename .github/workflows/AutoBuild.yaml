@@ -110,9 +110,6 @@ jobs:
       - name: init submodule
         run: git submodule update --init
 
-      - name: start zmqproxy
-        run: ./simulators/EPS/zmqproxy  
-
       - name: start simulators
         run: ./scripts-ci/start-simulators.sh
         

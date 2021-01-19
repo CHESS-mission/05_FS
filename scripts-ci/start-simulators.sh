@@ -6,6 +6,9 @@ python -m pip install python-statemachine
 #simulators start
 python simulators/ADCS/TcpMain.py &
 
+#start zmq
+sudo chmod 777 simulator/EPS/zmqproxy
+sudo ./simulator/EPS/zmqproxy
 
 #launch EPS simulator
 export LD_LIBRARY_PATH=simulators/EPS/packages/csp/lib
