@@ -8,7 +8,7 @@ python simulators/ADCS/TcpMain.py &
 
 
 #launch zmqproxy
-sudo /bin/bash ./simulators/EPS/zmqproxy &
+sudo ./simulators/EPS/zmqproxy &
 
 #launch EPS simulator
 export LD_LIBRARY_PATH=simulators/EPS/packages/csp/lib
