@@ -56,6 +56,9 @@ jobs:
     name: Static code Analysis
     steps:
 
+      - name: install apt package
+        run: sudo apt install libzmq3-dev
+
       - name: download buld folder
         uses: actions/download-artifact@v2
         with:
@@ -87,6 +90,9 @@ jobs:
     steps:
       # checkout the repository
       - uses: actions/checkout@v2
+
+      - name: install apt package
+        run: sudo apt install libzmq3-dev
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
