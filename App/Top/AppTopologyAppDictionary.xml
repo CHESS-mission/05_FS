@@ -123,6 +123,112 @@
       <item name="HEALTH_PING_DISABLED" value="0"/>
       <item name="HEALTH_PING_ENABLED" value="1"/>
     </enum>
+    <enum type="SendBuff::SendState::ActiveState">
+      <item name="SEND_IDLE" value="0"/>
+      <item name="SEND_ACTIVE" value="1"/>
+    </enum>
+    <enum type="Ref::PacketStat::PacketStatus::PacketRecvStatus">
+      <item name="PACKET_STATE_NO_PACKETS" value="0"/>
+      <item name="PACKET_STATE_OK" value="1"/>
+      <item name="PACKET_STATE_ERRORS" value="3" description="Receiver has seen errors"/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="Ref::SignalType">
+      <item name="TRIANGLE" value="0" description=""/>
+      <item name="SQUARE" value="1" description=""/>
+      <item name="SINE" value="2" description=""/>
+      <item name="NOISE" value="3" description=""/>
+    </enum>
+    <enum type="EPS::operation::EPSOp">
+      <item name="EPS_DIRECT_CONTROL" value="0"/>
+      <item name="EPS_CONF_MGMT" value="1"/>
+      <item name="EPS_RESET_PORT" value="2"/>
+      <item name="EPS_INST_TLM" value="3"/>
+      <item name="EPS_TIME_SYNC" value="4"/>
+    </enum>
   </enums>
   <serializables/>
   <arrays/>
@@ -291,6 +397,15 @@
         <arg name="id" type="U8"/>
         <arg name="payload" len="100" type="string"/>
       </args>
+    </command>
+    <command component="EPS" mnemonic="MS_SEND_CMD" opcode="0x42f">
+      <args>
+        <arg name="operation" type="EPS::operation::EPSOp"/>
+        <arg name="payload" len="1000" type="string"/>
+      </args>
+    </command>
+    <command component="EPS" mnemonic="MS_SEND_PING" opcode="0x430">
+      <args/>
     </command>
   </commands>
   <events>
@@ -981,6 +1096,57 @@
         <arg name="id" type="U8"/>
       </args>
     </event>
+    <event component="EPS" name="MS_CMD_SEND_EPS" id="0x42f" severity="ACTIVITY_LO" format_string="Commande send to EPS : port = %hu, cmd = %hu, data: %s">
+      <args>
+        <arg name="port" type="U8"/>
+        <arg name="cmd" type="U8"/>
+        <arg name="payload" len="1000" type="string"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CMD_RECV_EPS" id="0x430" severity="ACTIVITY_LO" format_string="Commande return from EPS : port = %hu, cmd = %hu, data: %s">
+      <args>
+        <arg name="port" type="U8"/>
+        <arg name="cmd" type="U8"/>
+        <arg name="payload" len="3000" type="string"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CMD_ERROR" id="0x431" severity="WARNING_LO" format_string="Error in cmd , port : %hu, cmd : %hu, status : %hhu">
+      <args>
+        <arg name="port" type="U8"/>
+        <arg name="cmd" type="U8"/>
+        <arg name="status" type="U8"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_BATT_VOLT_LOW" id="0x432" severity="WARNING_HI" format_string="Warning battery voltage low : %hu mV">
+      <args>
+        <arg name="volt" type="U16"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_BATT_TEMP_HIGH" id="0x433" severity="WARNING_HI" format_string="Warning battery temperature HIGH : %hu celsius">
+      <args>
+        <arg name="temp" type="U8"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CHNG_BATT_MOD" id="0x434" severity="WARNING_HI" format_string="Battery mode change : %hu">
+      <args>
+        <arg name="mode" type="U8"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CMD_PAYLOAD_ERROR" id="0x435" severity="WARNING_LO" format_string="Error in EPS command : payload : %s">
+      <args>
+        <arg name="payload" len="1000" type="string"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_CMD_PORT_ERROR" id="0x436" severity="WARNING_LO" format_string="Error in EPS command : port : %s">
+      <args>
+        <arg name="port" type="U8"/>
+      </args>
+    </event>
+    <event component="EPS" name="MS_PING" id="0x437" severity="ACTIVITY_LO" format_string="Ping EPS : %d ms">
+      <args>
+        <arg name="port" type="I32"/>
+      </args>
+    </event>
   </events>
   <channels>
     <channel component="cmdDisp" name="CommandsDispatched" id="0x79" description="Number of commands dispatched" type="U32"/>
@@ -1013,6 +1179,10 @@
     <channel component="blockDrv" name="BD_Cycles" id="0x1e1" description="Driver cycle count" type="U32"/>
     <channel component="ADCS" name="ADCS_LAST_TM_DATA" id="0x41a" description="Tm Value" type="F64"/>
     <channel component="ADCS" name="ADCS_LAST_CMD" id="0x41b" description="Last Telecommand return" type="U8"/>
+    <channel component="EPS" name="EPS_Voltage_battery_mV" id="0x42f" description="Voltage" type="U16"/>
+    <channel component="EPS" name="EPS_Battery_mode" id="0x430" description="Battery mode" type="U8"/>
+    <channel component="EPS" name="EPS_Temp_Battery_Celsuis" id="0x431" description="Battery Temp" type="U16"/>
+    <channel component="EPS" name="EPS_LAST_CMD_RETURN" id="0x432" description="Battery mode" len="1000" type="string"/>
   </channels>
   <parameters/>
 </dictionary>

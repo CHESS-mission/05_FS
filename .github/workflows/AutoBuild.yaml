@@ -25,6 +25,9 @@ jobs:
           token: ${{ secrets.PUS_TOKEN }}
           path: fprime/Lib
 
+      - name: install apt package
+        run: sudo apt install libzmq3-dev
+
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
         with:
@@ -100,6 +103,9 @@ jobs:
           token: ${{ secrets.PUS_TOKEN }}
           path: fprime/Lib
 
+      - name: install apt package
+        run: sudo apt install libzmq3-dev
+
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
         with:
@@ -114,7 +120,7 @@ jobs:
           sudo apt install cmake -y
 
       - name: start simulators
-        run: ./scripts-ci/start-simulators.sh
+        run: ./scripts-ci/start-simulators.sh       
         
       # Init the virtual environnement (project script)
       - name: Prepare venv
@@ -143,6 +149,9 @@ jobs:
           repository: CHESS-mission/pusopen
           token: ${{ secrets.PUS_TOKEN }}
           path: fprime/Lib
+
+      - name: install apt package
+        run: sudo apt install libzmq3-dev
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2

@@ -31,6 +31,8 @@
      <import_component_type>App/EventAction/EventActionComponentAi.xml</import_component_type>
     <import_component_type>App/Drv/SocketTcpDriver/SocketTcpDriverComponentAi.xml</import_component_type>
      <import_component_type>App/ADCS/ADCSComponentAi.xml</import_component_type>
+     <import_component_type>App/Drv/SocketCspIpDriver/SocketCspIpDriverComponentAi.xml</import_component_type>
+     <import_component_type>App/EPS/EPSComponentAi.xml</import_component_type>
 
 
      <!-- Declare component instances - must match names in Components.hpp -->
@@ -56,6 +58,8 @@
     <!-- Communications driver. May be swapped with other comm drivers like UART -->
     <instance namespace="Drv" name="socketIpDriver" type="SocketIpDriver" base_id="601" base_id_window="20" />
     <instance namespace="Drv" name="socketTcpDriverADCS" type="SocketTcpDriver" base_id="1000" base_id_window="5" />
+    <instance namespace="Drv" name="socketCspIpDriverEPS" type="SocketCspIpDriver" base_id="1006" base_id_window="5" />
+
 
      <!-- Rate Group Components -->
 
@@ -72,6 +76,7 @@
      <!-- Mission components -->
      <instance namespace="App" name="eventAction" type="EventAction" base_id="641" base_id_window="20" />
      <instance namespace="App" name="ADCS" type="ADCS" base_id="1050" base_id_window="20" />
+     <instance namespace="App" name="EPS" type="EPS" base_id="1071" base_id_window="20" />
 
 
      <!-- Connections -->
@@ -735,7 +740,7 @@
 
    <!-- Event Logger Text Connections -->
    
-   <connection name = "MathSenderTextLog">
+   <connection name = "ADCSTextLog">
        <source component = "ADCS" port = "LogText" type = "LogText" num = "0"/>
         <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
    </connection>
@@ -762,6 +767,72 @@
 <connection name = "TcpADCSDriver">
        <source component = "socketTcpDriverADCS" port = "recv" type = "Fw::BufferSend" num = "0"/>
         <target component = "ADCS" port = "DataIn" type = "Fw::BufferSend" num = "0"/>
+</connection>
+
+<!-- EPS connections-->
+
+     <!-- Command Registration Ports - Registration port number must match dispatch port for each component -->
+
+   <connection name = "EPSReg">
+        <source component = "EPS" port = "CmdReg" type = "CmdReg" num = "0"/>
+        <target component = "cmdDisp" port = "compCmdReg" type = "CmdReg" num = "26"/>
+   </connection>
+   
+    <!-- Command Dispatch Ports - Dispatch port number must match registration port for each component -->
+
+   <connection name = "EPSDisp">
+        <source component = "cmdDisp" port = "compCmdSend" type = "Cmd" num = "26"/>
+        <target component = "EPS" port = "CmdDisp" type = "Cmd" num = "0"/>
+   </connection>
+  
+    <!-- Command Reply Ports - Go to the same response port on the dispatcher -->
+
+   <connection name = "EPSReply">
+      <source component = "EPS" port = "CmdStatus" type = "CmdResponse" num = "0"/>
+      <target component = "cmdDisp" port = "compCmdStat" type = "CmdResponse" num = "0"/>
+   </connection>
+
+      <!-- Event Logger Binary Connections -->
+   
+   <connection name = "EPSLog">
+       <source component = "EPS" port = "Log" type = "Log" num = "0"/>
+        <target component = "eventLogger" port = "LogRecv" type = "Log" num = "0"/>
+   </connection>
+
+   <!-- Event Logger Text Connections -->
+   
+   <connection name = "EPSTextLog">
+       <source component = "EPS" port = "LogText" type = "LogText" num = "0"/>
+        <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
+   </connection>
+
+      <!-- Telemetry Connections -->
+
+   <connection name = "EPSTlm">
+       <source component = "EPS" port = "Tlm" type = "Tlm" num = "0"/>
+        <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
+   </connection>
+
+      <!-- Time Connections -->
+
+   <connection name = "EPSTime">
+       <source component = "EPS" port = "Time" type = "Time" num = "0"/>
+        <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
+   </connection>
+
+<connection name = "EPSCspDriver">
+       <source component = "EPS" port = "DataOut" type = "App::EPSCmd" num = "0"/>
+        <target component = "socketCspIpDriverEPS" port = "send" type = "App::EPSCmd" num = "0"/>
+</connection>
+
+<connection name = "CspEPSDriver">
+       <source component = "socketCspIpDriverEPS" port = "recv" type = "App::EPSCmd" num = "0"/>
+        <target component = "EPS" port = "DataIn" type = "App::EPSCmdd" num = "0"/>
+</connection>
+   <!-- Scheduler Connection -->
+<connection name = "EPSRG">
+     <source component = "rateGroup1Comp" port = "RateGroupMemberOut" type = "Sched" num = "3"/>
+     <target component = "EPS" port = "Schedin" type = "Sched" num = "0"/>
 </connection>
 
 </assembly>

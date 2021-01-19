@@ -1,5 +1,3 @@
-
-
 #include <App/Config/ADCSCfg.hpp>
 #include <App/ADCS/ADCSHelper.hpp>
 

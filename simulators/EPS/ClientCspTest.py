@@ -7,7 +7,7 @@
 # $ ./build/zmqproxy
 #
 # Run client against server using ZMQ:
-# $ LD_LIBRARY_PATH=build PYTHONPATH=build python3 examples/testClientCsp.py -z localhost
+# $ LD_LIBRARY_PATH=build PYTHONPATH=build python3 examples/python_bindings_example_client.py -z localhost
 #
 
 import os

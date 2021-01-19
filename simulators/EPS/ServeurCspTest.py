@@ -7,7 +7,7 @@
 # $ ./build/zmqproxy
 #
 # Run server, default enabling ZMQ interface:
-# $ LD_LIBRARY_PATH=build PYTHONPATH=build python3 examples/CspServer.py
+# $ LD_LIBRARY_PATH=build PYTHONPATH=build python3 examples/python_bindings_example_server.py
 #
 
 import os
@@ -17,11 +17,8 @@ import threading
 
 import packages.csp.lib.libcsp_py3 as libcsp
 
-def manage_data(data,adcs):
-    orbit = data[0]
-    adcs.switcher(orbit)
 
-def csp_server(adcs):
+def csp_server():
     sock = libcsp.socket()
     libcsp.bind(sock, libcsp.CSP_ANY)
     libcsp.listen(sock, 5)
@@ -38,7 +35,7 @@ def csp_server(adcs):
 
         while True:
             # Read all packets on the connection
-            packet = libcsp.read(conn, 100)
+            packet = libcsp.read(conn, 256)
             if packet is None:
                 break
 
@@ -48,7 +45,6 @@ def csp_server(adcs):
                 length = libcsp.packet_get_length(packet)
                 print ("got packet, len=" + str(length) + ", data=" + ''.join('{:02x}'.format(x) for x in data))
                 # send reply
-                manage_data(data, adcs)
                 data[0] = data[0] + 1
                 reply = libcsp.buffer_get(1)
                 libcsp.packet_set_data(reply, data)
@@ -59,7 +55,7 @@ def csp_server(adcs):
                 libcsp.service_handler(conn, packet)
 
 
-def init(adcs):
+if __name__ == "__main__":
 
     # init csp
     libcsp.init(27, "test_service", "bindings", "1.2.3", 10, 300)
@@ -75,4 +71,4 @@ def init(adcs):
     libcsp.print_routes()
 
     # start CSP server
-    threading.Thread(target=csp_server,args=(adcs,)).start()
+    threading.Thread(target=csp_server).start()
