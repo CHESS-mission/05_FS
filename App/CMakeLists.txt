@@ -20,7 +20,9 @@
 ##
 project(App C CXX)
 cmake_minimum_required(VERSION 3.5)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
 ##
 # Section 2: F prime Core
 #
