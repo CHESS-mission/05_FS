@@ -24,7 +24,7 @@ jobs:
           path: lib
 
       - name : verify structure
-        run: tree -L2 
+        run: tree -L 2 
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
