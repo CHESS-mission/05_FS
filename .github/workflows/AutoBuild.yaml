@@ -21,7 +21,7 @@ jobs:
         with:
           repository: CHESS-mission/pusopen
           token: ${{ secrets.PUS_TOKEN }}
-          path: Lib
+          path: fprime/Lib
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
@@ -97,7 +97,7 @@ jobs:
         with:
           repository: CHESS-mission/pusopen
           token: ${{ secrets.PUS_TOKEN }}
-          path: Lib
+          path: fprime/Lib
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
@@ -138,10 +138,7 @@ jobs:
         with:
           repository: CHESS-mission/pusopen
           token: ${{ secrets.PUS_TOKEN }}
-          path: Lib
-
-      - name : Verify struct
-        run : tree -L 4
+          path: fprime/Lib
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
