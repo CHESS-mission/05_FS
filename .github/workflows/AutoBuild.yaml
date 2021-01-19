@@ -141,7 +141,7 @@ jobs:
           path: Lib
 
       - name : Verify struct
-        uses : tree -L 3
+        run : tree -L 4
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
