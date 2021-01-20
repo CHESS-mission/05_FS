@@ -4,8 +4,10 @@
 #include <Fw/Logger/Logger.hpp>
 #include <Os/Log.hpp>
 #include <Fw/Types/MallocAllocator.hpp>
+#include <Svc/TlmChan/TlmTypes.hpp>
+#include <Os/Mutex.hpp>
 
-#if defined TGT_OS_TYPE_LINUX || TGT_OS_TYPE_DARWIN
+#if (defined TGT_OS_TYPE_LINUX) || (defined TGT_OS_TYPE_DARWIN)
 #include <getopt.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -94,6 +96,13 @@ App::EPSComponentImpl EPS(FW_OPTIONAL_NAME("EPS"));
 
 Drv::SocketCspIpDriverComponentImpl socketCspIpDriverEPS(FW_OPTIONAL_NAME("SocketCspIpDriverEPS"));
 
+
+#ifdef _PUS
+Os::Mutex PO_STACK_MUTEX; /*!< Protect access to PUSOpen stack */
+
+S_PO_PARAM PO_PARAM ;
+
+#endif
 
 const char* getHealthName(Fw::ObjBase& comp) {
    #if FW_OBJECT_NAMES == 1

@@ -395,6 +395,10 @@
           <source component = "blockDrv" port = "Tlm" type = "Tlm" num = "0"/>
           <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
      </connection>
+     <connection name = "ADCSTlm">
+          <source component = "ADCS" port = "Tlm" type = "Tlm" num = "0"/>
+          <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
+     </connection>
 
      <!-- Time Connections -->
      <connection name = "prmDbTime">
@@ -469,7 +473,11 @@
           <source component = "eventAction" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
-
+     <connection name = "ADCSTime">
+          <source component = "ADCS" port = "Time" type = "Time" num = "0"/>
+          <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
+     </connection>
+     
      <!-- Rate Group Connections -->
 
      <!-- Linux Timer Connection -->
@@ -662,7 +670,6 @@
      </connection>
 
      <connection name = "chanTlmHkReports">
-          <!-- To comment if EventAction is used -->
           <source component = "chanTlm" port = "TlmSend" type = "Tlm" num = "0"/>
           <target component = "groundIf" port = "hkReport" type = "Tlm" num = "0"/>
      </connection>
@@ -745,19 +752,7 @@
         <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
    </connection>
 
-      <!-- Telemetry Connections -->
 
-   <connection name = "ADCSTlm">
-       <source component = "ADCS" port = "Tlm" type = "Tlm" num = "0"/>
-        <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
-   </connection>
-
-      <!-- Time Connections -->
-
-   <connection name = "ADCSTime">
-       <source component = "ADCS" port = "Time" type = "Time" num = "0"/>
-        <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
-   </connection>
 
 <connection name = "ADCSTcpDriver">
        <source component = "ADCS" port = "DataOut" type = "Fw::BufferSend" num = "0"/>

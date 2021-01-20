@@ -33,6 +33,8 @@
 #include <App/Drv/SocketCspIpDriver/SocketCspIpDriverComponentImpl.hpp>
 #include <App/EPS/EPSComponentImpl.hpp>
 
+#include <Os/Mutex.hpp>
+
 void constructAppArchitecture(void);
 bool constructApp(bool dump, U32 port_number, char *hostname);
 void exitTasks(void);
@@ -68,5 +70,9 @@ extern App::ADCSComponentImpl ADCS;
 
 extern Drv::SocketCspIpDriverComponentImpl socketCspIpDriverEPS;
 extern App::EPSComponentImpl EPS;
+
+#if defined _PUS
+extern Os::Mutex PO_STACK_MUTEX;
+#endif
 
 #endif
