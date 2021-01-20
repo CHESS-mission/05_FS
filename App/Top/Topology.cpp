@@ -200,7 +200,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     prmDb.readParamFile();
 
     // set health ping entries
-
+    // warnCycles, fatalCycles, entryName
     Svc::HealthImpl::PingEntry pingEntries[] = {
         {3, 5, getHealthName(rateGroup1Comp)}, // 0
         {3, 5, getHealthName(rateGroup2Comp)}, // 1
@@ -215,6 +215,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
         {3, 5, getHealthName(pingRcvr)},       // 10
         {3, 5, getHealthName(blockDrv)},       // 11
         {3, 5, getHealthName(fileManager)},    // 12
+        {3, 5, getHealthName(EPS)},            // 13
     };
 
     // register ping table
