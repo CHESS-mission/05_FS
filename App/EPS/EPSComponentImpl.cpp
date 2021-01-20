@@ -51,6 +51,18 @@ namespace App {
   // ----------------------------------------------------------------------
   // Handler implementations for user-defined typed input ports
   // ----------------------------------------------------------------------
+  void EPSComponentImpl ::
+    PingIn_handler(
+        const NATIVE_INT_TYPE portNum,
+        U32 key
+    )
+  {
+    U8 noData[0];
+    m_key = key;
+    dataSendCmdBuffer.setData(noData);
+    dataSendCmdBuffer.setSize(0);
+    this->DataOut_out(0,CSP_PING_PORT,dataSendCmdBuffer,0);
+  }
 
   void EPSComponentImpl ::
     DataIn_handler(
@@ -65,7 +77,9 @@ namespace App {
   U8 status = returnData[EPSSTATUS];
   if(port == 1){
     U32 ping = bytesToInt(returnData);
-    log_ACTIVITY_LO_MS_PING((I32)ping);
+    if((I32)ping != -1){
+       PingOut_out(0,m_key);
+    }
     return;
   }
   if(status){
@@ -170,19 +184,6 @@ namespace App {
     this->DataOut_out(0,port,dataSendCmdBuffer,0);
     Fw::LogStringArg logString(data);
     log_ACTIVITY_LO_MS_CMD_SEND_EPS(port,hexData[EPSCMD],logString);
-    this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
-  }
-
-    void EPSComponentImpl ::
-    MS_SEND_PING_cmdHandler(
-        const FwOpcodeType opCode,
-        const U32 cmdSeq
-    )
-  {
-    U8 noData[0];
-    dataSendCmdBuffer.setData(noData);
-    dataSendCmdBuffer.setSize(0);
-    this->DataOut_out(0,CSP_PING_PORT,dataSendCmdBuffer,0);
     this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
   }
 

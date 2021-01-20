@@ -632,6 +632,14 @@
           <source component = "fileManager" port = "pingOut" type = "Ping" num = "0"/>
           <target component = "health" port = "PingReturn" type = "Ping" num = "12"/>
      </connection>
+          <connection name = "EPSPingSend">
+          <source component = "health" port = "PingSend" type = "Ping" num = "13"/>
+          <target component = "EPS" port = "pingIn" type = "Ping" num = "0"/>
+     </connection>
+     <connection name = "EPSPingRecv">
+          <source component = "EPS" port = "pingOut" type = "Ping" num = "0"/>
+          <target component = "health" port = "PingReturn" type = "Ping" num = "13"/>
+     </connection>
 
      <!-- Socket Ground System Connections -->
 
