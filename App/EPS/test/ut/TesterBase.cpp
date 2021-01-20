@@ -66,11 +66,11 @@ namespace App {
       new History<EventEntry_MS_CMD_PAYLOAD_ERROR>(maxHistorySize);
     this->eventHistory_MS_CMD_PORT_ERROR =
       new History<EventEntry_MS_CMD_PORT_ERROR>(maxHistorySize);
-    this->eventHistory_MS_PING =
-      new History<EventEntry_MS_PING>(maxHistorySize);
     // Initialize histories for typed user output ports
     this->fromPortHistory_DataOut =
       new History<FromPortEntry_DataOut>(maxHistorySize);
+    this->fromPortHistory_PingOut =
+      new History<FromPortEntry_PingOut>(maxHistorySize);
     // Clear history
     this->clearHistory();
   }
@@ -97,9 +97,10 @@ namespace App {
     delete this->eventHistory_MS_CHNG_BATT_MOD;
     delete this->eventHistory_MS_CMD_PAYLOAD_ERROR;
     delete this->eventHistory_MS_CMD_PORT_ERROR;
-    delete this->eventHistory_MS_PING;
     // Destroy port histories
     delete this->fromPortHistory_DataOut;
+    // Destroy port histories
+    delete this->fromPortHistory_PingOut;
   }
 
   void EPSTesterBase ::
@@ -137,6 +138,35 @@ namespace App {
           _port
       );
       this->m_from_DataOut[_port].setObjName(_portName);
+#endif
+
+    }
+
+    // Attach input port PingOut
+
+    for (
+        NATIVE_INT_TYPE _port = 0;
+        _port < this->getNum_from_PingOut();
+        ++_port
+    ) {
+
+      this->m_from_PingOut[_port].init();
+      this->m_from_PingOut[_port].addCallComp(
+          this,
+          from_PingOut_static
+      );
+      this->m_from_PingOut[_port].setPortNum(_port);
+
+#if FW_OBJECT_NAMES == 1
+      char _portName[120];
+      (void) snprintf(
+          _portName,
+          sizeof(_portName),
+          "%s_from_PingOut[%d]",
+          this->m_objName,
+          _port
+      );
+      this->m_from_PingOut[_port].setObjName(_portName);
 #endif
 
     }
@@ -363,6 +393,29 @@ namespace App {
 
     }
 
+    // Initialize output port PingIn
+
+    for (
+        NATIVE_INT_TYPE _port = 0;
+        _port < this->getNum_to_PingIn();
+        ++_port
+    ) {
+      this->m_to_PingIn[_port].init();
+
+#if FW_OBJECT_NAMES == 1
+      char _portName[120];
+      snprintf(
+          _portName,
+          sizeof(_portName),
+          "%s_to_PingIn[%d]",
+          this->m_objName,
+          _port
+      );
+      this->m_to_PingIn[_port].setObjName(_portName);
+#endif
+
+    }
+
   }
 
   // ----------------------------------------------------------------------
@@ -385,6 +438,18 @@ namespace App {
     getNum_to_Schedin(void) const
   {
     return (NATIVE_INT_TYPE) FW_NUM_ARRAY_ELEMENTS(this->m_to_Schedin);
+  }
+
+  NATIVE_INT_TYPE EPSTesterBase ::
+    getNum_to_PingIn(void) const
+  {
+    return (NATIVE_INT_TYPE) FW_NUM_ARRAY_ELEMENTS(this->m_to_PingIn);
+  }
+
+  NATIVE_INT_TYPE EPSTesterBase ::
+    getNum_from_PingOut(void) const
+  {
+    return (NATIVE_INT_TYPE) FW_NUM_ARRAY_ELEMENTS(this->m_from_PingOut);
   }
 
   NATIVE_INT_TYPE EPSTesterBase ::
@@ -456,6 +521,16 @@ namespace App {
   }
 
   void EPSTesterBase ::
+    connect_to_PingIn(
+        const NATIVE_INT_TYPE portNum,
+        Svc::InputPingPort *const PingIn
+    )
+  {
+    FW_ASSERT(portNum < this->getNum_to_PingIn(),static_cast<AssertArg>(portNum));
+    this->m_to_PingIn[portNum].addCallPort(PingIn);
+  }
+
+  void EPSTesterBase ::
     connect_to_CmdDisp(
         const NATIVE_INT_TYPE portNum,
         Fw::InputCmdPort *const CmdDisp
@@ -498,6 +573,19 @@ namespace App {
     );
   }
 
+  void EPSTesterBase ::
+    invoke_to_PingIn(
+        const NATIVE_INT_TYPE portNum,
+        U32 key
+    )
+  {
+    FW_ASSERT(portNum < this->getNum_to_PingIn(),static_cast<AssertArg>(portNum));
+    FW_ASSERT(portNum < this->getNum_to_PingIn(),static_cast<AssertArg>(portNum));
+    this->m_to_PingIn[portNum].invoke(
+        key
+    );
+  }
+
   // ----------------------------------------------------------------------
   // Connection status for to ports
   // ----------------------------------------------------------------------
@@ -517,6 +605,13 @@ namespace App {
   }
 
   bool EPSTesterBase ::
+    isConnected_to_PingIn(const NATIVE_INT_TYPE portNum)
+  {
+    FW_ASSERT(portNum < this->getNum_to_PingIn(), static_cast<AssertArg>(portNum));
+    return this->m_to_PingIn[portNum].isConnected();
+  }
+
+  bool EPSTesterBase ::
     isConnected_to_CmdDisp(const NATIVE_INT_TYPE portNum)
   {
     FW_ASSERT(portNum < this->getNum_to_CmdDisp(), static_cast<AssertArg>(portNum));
@@ -532,6 +627,13 @@ namespace App {
   {
     FW_ASSERT(portNum < this->getNum_from_DataOut(),static_cast<AssertArg>(portNum));
     return &this->m_from_DataOut[portNum];
+  }
+
+  Svc::InputPingPort *EPSTesterBase ::
+    get_from_PingOut(const NATIVE_INT_TYPE portNum)
+  {
+    FW_ASSERT(portNum < this->getNum_from_PingOut(),static_cast<AssertArg>(portNum));
+    return &this->m_from_PingOut[portNum];
   }
 
   Fw::InputCmdResponsePort *EPSTesterBase ::
@@ -597,6 +699,22 @@ namespace App {
     _testerBase->from_DataOut_handlerBase(
         portNum,
         port, data, isSched
+    );
+  }
+
+  void EPSTesterBase ::
+    from_PingOut_static(
+        Fw::PassiveComponentBase *const callComp,
+        const NATIVE_INT_TYPE portNum,
+        U32 key
+    )
+  {
+    FW_ASSERT(callComp);
+    EPSTesterBase* _testerBase =
+      static_cast<EPSTesterBase*>(callComp);
+    _testerBase->from_PingOut_handlerBase(
+        portNum,
+        key
     );
   }
 
@@ -691,6 +809,7 @@ namespace App {
   {
     this->fromPortHistorySize = 0;
     this->fromPortHistory_DataOut->clear();
+    this->fromPortHistory_PingOut->clear();
   }
 
   // ----------------------------------------------------------------------
@@ -712,6 +831,22 @@ namespace App {
   }
 
   // ----------------------------------------------------------------------
+  // From port: PingOut
+  // ----------------------------------------------------------------------
+
+  void EPSTesterBase ::
+    pushFromPortEntry_PingOut(
+        U32 key
+    )
+  {
+    FromPortEntry_PingOut _e = {
+      key
+    };
+    this->fromPortHistory_PingOut->push_back(_e);
+    ++this->fromPortHistorySize;
+  }
+
+  // ----------------------------------------------------------------------
   // Handler base functions for from ports
   // ----------------------------------------------------------------------
 
@@ -727,6 +862,19 @@ namespace App {
     this->from_DataOut_handler(
         portNum,
         port, data, isSched
+    );
+  }
+
+  void EPSTesterBase ::
+    from_PingOut_handlerBase(
+        const NATIVE_INT_TYPE portNum,
+        U32 key
+    )
+  {
+    FW_ASSERT(portNum < this->getNum_from_PingOut(),static_cast<AssertArg>(portNum));
+    this->from_PingOut_handler(
+        portNum,
+        key
     );
   }
 
@@ -772,40 +920,6 @@ namespace App {
     FwOpcodeType _opcode;
     const U32 idBase = this->getIdBase();
     _opcode = EPSComponentBase::OPCODE_MS_SEND_CMD + idBase;
-
-    if (this->m_to_CmdDisp[0].isConnected()) {
-      this->m_to_CmdDisp[0].invoke(
-          _opcode,
-          cmdSeq,
-          buff
-      );
-    }
-    else {
-      printf("Test Command Output port not connected!\n");
-    }
-
-  }
-
-  // ----------------------------------------------------------------------
-  // Command: MS_SEND_PING
-  // ----------------------------------------------------------------------
-
-  void EPSTesterBase ::
-    sendCmd_MS_SEND_PING(
-        const NATIVE_INT_TYPE instance,
-        const U32 cmdSeq
-    )
-  {
-
-    // Serialize arguments
-
-    Fw::CmdArgBuffer buff;
-
-    // Call output command port
-
-    FwOpcodeType _opcode;
-    const U32 idBase = this->getIdBase();
-    _opcode = EPSComponentBase::OPCODE_MS_SEND_PING + idBase;
 
     if (this->m_to_CmdDisp[0].isConnected()) {
       this->m_to_CmdDisp[0].invoke(
@@ -1434,47 +1548,6 @@ namespace App {
 
       }
 
-      case EPSComponentBase::EVENTID_MS_PING:
-      {
-
-        Fw::SerializeStatus _status = Fw::FW_SERIALIZE_OK;
-#if FW_AMPCS_COMPATIBLE
-        // Deserialize the number of arguments.
-        U8 _numArgs;
-        _status = args.deserialize(_numArgs);
-        FW_ASSERT(
-          _status == Fw::FW_SERIALIZE_OK,
-          static_cast<AssertArg>(_status)
-        );
-        // verify they match expected.
-        FW_ASSERT(_numArgs == 1,_numArgs,1);
-
-#endif
-        I32 port;
-#if FW_AMPCS_COMPATIBLE
-        {
-          // Deserialize the argument size
-          U8 _argSize;
-          _status = args.deserialize(_argSize);
-          FW_ASSERT(
-            _status == Fw::FW_SERIALIZE_OK,
-            static_cast<AssertArg>(_status)
-          );
-          FW_ASSERT(_argSize == sizeof(I32),_argSize,sizeof(I32));
-        }
-#endif
-        _status = args.deserialize(port);
-        FW_ASSERT(
-            _status == Fw::FW_SERIALIZE_OK,
-            static_cast<AssertArg>(_status)
-        );
-
-        this->logIn_ACTIVITY_LO_MS_PING(port);
-
-        break;
-
-      }
-
       default: {
         FW_ASSERT(0, id);
         break;
@@ -1496,7 +1569,6 @@ namespace App {
     this->eventHistory_MS_CHNG_BATT_MOD->clear();
     this->eventHistory_MS_CMD_PAYLOAD_ERROR->clear();
     this->eventHistory_MS_CMD_PORT_ERROR->clear();
-    this->eventHistory_MS_PING->clear();
   }
 
 #if FW_ENABLE_TEXT_LOGGING
@@ -1708,22 +1780,6 @@ namespace App {
       port
     };
     eventHistory_MS_CMD_PORT_ERROR->push_back(e);
-    ++this->eventsSize;
-  }
-
-  // ----------------------------------------------------------------------
-  // Event: MS_PING
-  // ----------------------------------------------------------------------
-
-  void EPSTesterBase ::
-    logIn_ACTIVITY_LO_MS_PING(
-        I32 port
-    )
-  {
-    EventEntry_MS_PING e = {
-      port
-    };
-    eventHistory_MS_PING->push_back(e);
     ++this->eventsSize;
   }
 

@@ -54,7 +54,7 @@ namespace App {
       void portTestHighTemp(void);
       void portChangeMode(void);
 
-      void cmdSendPing(void);
+      void portPingIn(void);
       void cmdPortPingOk(void);
       void cmdPortPingNOK(void);
 
@@ -71,6 +71,13 @@ namespace App {
           U8 port, 
           Fw::Buffer &data, 
           U8 isSched 
+      );
+
+      //! Handler for from_PingOut
+      //!
+      void from_PingOut_handler(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
       );
 
     private:

@@ -61,6 +61,13 @@ namespace App {
           Svc::InputSchedPort *const Schedin /*!< The port*/
       );
 
+      //! Connect PingIn to to_PingIn[portNum]
+      //!
+      void connect_to_PingIn(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          Svc::InputPingPort *const PingIn /*!< The port*/
+      );
+
       //! Connect CmdDisp to to_CmdDisp[portNum]
       //!
       void connect_to_CmdDisp(
@@ -80,6 +87,14 @@ namespace App {
       //! \return from_DataOut[portNum]
       //!
       App::InputEPSCmdPort* get_from_DataOut(
+          const NATIVE_INT_TYPE portNum /*!< The port number*/
+      );
+
+      //! Get the port that receives input from PingOut
+      //!
+      //! \return from_PingOut[portNum]
+      //!
+      Svc::InputPingPort* get_from_PingOut(
           const NATIVE_INT_TYPE portNum /*!< The port number*/
       );
 
@@ -258,6 +273,20 @@ namespace App {
           U8 isSched 
       );
 
+      //! Handler prototype for from_PingOut
+      //!
+      virtual void from_PingOut_handler(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
+      ) = 0;
+
+      //! Handler base function for from_PingOut
+      //!
+      void from_PingOut_handlerBase(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
+      );
+
     protected:
 
       // ----------------------------------------------------------------------
@@ -292,6 +321,22 @@ namespace App {
       History<FromPortEntry_DataOut>
         *fromPortHistory_DataOut;
 
+      //! Push an entry on the history for from_PingOut
+      void pushFromPortEntry_PingOut(
+          U32 key /*!< Value to return to pinger*/
+      );
+
+      //! A history entry for from_PingOut
+      //!
+      typedef struct {
+          U32 key;
+      } FromPortEntry_PingOut;
+
+      //! The history for from_PingOut
+      //!
+      History<FromPortEntry_PingOut>
+        *fromPortHistory_PingOut;
+
     protected:
 
       // ----------------------------------------------------------------------
@@ -312,6 +357,13 @@ namespace App {
       void invoke_to_Schedin(
           const NATIVE_INT_TYPE portNum, /*!< The port number*/
           NATIVE_UINT_TYPE context /*!< The call order*/
+      );
+
+      //! Invoke the to port connected to PingIn
+      //!
+      void invoke_to_PingIn(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
       );
 
     public:
@@ -337,6 +389,18 @@ namespace App {
       //! \return The number of to_Schedin ports
       //!
       NATIVE_INT_TYPE getNum_to_Schedin(void) const;
+
+      //! Get the number of to_PingIn ports
+      //!
+      //! \return The number of to_PingIn ports
+      //!
+      NATIVE_INT_TYPE getNum_to_PingIn(void) const;
+
+      //! Get the number of from_PingOut ports
+      //!
+      //! \return The number of from_PingOut ports
+      //!
+      NATIVE_INT_TYPE getNum_from_PingOut(void) const;
 
       //! Get the number of to_CmdDisp ports
       //!
@@ -406,6 +470,14 @@ namespace App {
 
       //! Check whether port is connected
       //!
+      //! Whether to_PingIn[portNum] is connected
+      //!
+      bool isConnected_to_PingIn(
+          const NATIVE_INT_TYPE portNum /*!< The port number*/
+      );
+
+      //! Check whether port is connected
+      //!
       //! Whether to_CmdDisp[portNum] is connected
       //!
       bool isConnected_to_CmdDisp(
@@ -428,13 +500,6 @@ namespace App {
           const U32 cmdSeq, /*!< The command sequence number*/
           EPSComponentBase::EPSOp operation, /*!< operation argument*/
           const Fw::CmdStringArg& payload /*!< The payload data*/
-      );
-
-      //! Send a MS_SEND_PING command
-      //!
-      void sendCmd_MS_SEND_PING(
-          const NATIVE_INT_TYPE instance, /*!< The instance number*/
-          const U32 cmdSeq /*!< The command sequence number*/
       );
 
     protected:
@@ -728,29 +793,6 @@ namespace App {
     protected:
 
       // ----------------------------------------------------------------------
-      // Event: MS_PING
-      // ----------------------------------------------------------------------
-
-      //! Handle event MS_PING
-      //!
-      virtual void logIn_ACTIVITY_LO_MS_PING(
-          I32 port /*!< port response ms*/
-      );
-
-      //! A history entry for event MS_PING
-      //!
-      typedef struct {
-        I32 port;
-      } EventEntry_MS_PING;
-
-      //! The history of MS_PING events
-      //!
-      History<EventEntry_MS_PING>
-        *eventHistory_MS_PING;
-
-    protected:
-
-      // ----------------------------------------------------------------------
       // Telemetry dispatch
       // ----------------------------------------------------------------------
 
@@ -896,6 +938,10 @@ namespace App {
       //!
       Svc::OutputSchedPort m_to_Schedin[1];
 
+      //! To port connected to PingIn
+      //!
+      Svc::OutputPingPort m_to_PingIn[1];
+
       //! To port connected to CmdDisp
       //!
       Fw::OutputCmdPort m_to_CmdDisp[1];
@@ -909,6 +955,10 @@ namespace App {
       //! From port connected to DataOut
       //!
       App::InputEPSCmdPort m_from_DataOut[1];
+
+      //! From port connected to PingOut
+      //!
+      Svc::InputPingPort m_from_PingOut[1];
 
       //! From port connected to CmdStatus
       //!
@@ -950,6 +1000,14 @@ namespace App {
           U8 port, 
           Fw::Buffer &data, 
           U8 isSched 
+      );
+
+      //! Static function for port from_PingOut
+      //!
+      static void from_PingOut_static(
+          Fw::PassiveComponentBase *const callComp, /*!< The component instance*/
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
       );
 
       //! Static function for port from_CmdStatus

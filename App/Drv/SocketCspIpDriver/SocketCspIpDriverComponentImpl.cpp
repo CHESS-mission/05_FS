@@ -72,7 +72,7 @@ namespace Drv {
   {
       U32 sizeBuffer = data.getSize();
       U8* dataBuffer = data.getData();
-      if(port == 1){
+      if(port == (U8)CSP_PING_PORT){
         I32 pingMs = m_helper.ping();
         outBuffer.setSize(4);
         intToU8BigEndian(pingMs,outBuffer.getData());

@@ -112,12 +112,6 @@
 #define ASSERT_EVENTS_MS_CMD_PORT_ERROR(index, _port) \
   this->assertEvents_MS_CMD_PORT_ERROR(__FILE__, __LINE__, index, _port)
 
-#define ASSERT_EVENTS_MS_PING_SIZE(size) \
-  this->assertEvents_MS_PING_size(__FILE__, __LINE__, size)
-
-#define ASSERT_EVENTS_MS_PING(index, _port) \
-  this->assertEvents_MS_PING(__FILE__, __LINE__, index, _port)
-
 // ----------------------------------------------------------------------
 // Macros for typed user from port history assertions
 // ----------------------------------------------------------------------
@@ -167,6 +161,32 @@
     << " in history of from_DataOut\n" \
     << "  Expected: " << _isSched << "\n" \
     << "  Actual:   " << _e.isSched << "\n"; \
+  }
+
+#define ASSERT_from_PingOut_SIZE(size) \
+  this->assert_from_PingOut_size(__FILE__, __LINE__, size)
+
+#define ASSERT_from_PingOut(index, _key) \
+  { \
+    ASSERT_GT(this->fromPortHistory_PingOut->size(), static_cast<U32>(index)) \
+    << "\n" \
+    << "  File:     " << __FILE__ << "\n" \
+    << "  Line:     " << __LINE__ << "\n" \
+    << "  Value:    Index into history of from_PingOut\n" \
+    << "  Expected: Less than size of history (" \
+    << this->fromPortHistory_PingOut->size() << ")\n" \
+    << "  Actual:   " << index << "\n"; \
+    const FromPortEntry_PingOut& _e = \
+      this->fromPortHistory_PingOut->at(index); \
+    ASSERT_EQ(_key, _e.key) \
+    << "\n" \
+    << "  File:     " << __FILE__ << "\n" \
+    << "  Line:     " << __LINE__ << "\n" \
+    << "  Value:    Value of argument key at index " \
+    << index \
+    << " in history of from_PingOut\n" \
+    << "  Expected: " << _key << "\n" \
+    << "  Actual:   " << _e.key << "\n"; \
   }
 
 namespace App {
@@ -495,25 +515,6 @@ namespace App {
     protected:
 
       // ----------------------------------------------------------------------
-      // Event: MS_PING
-      // ----------------------------------------------------------------------
-
-      void assertEvents_MS_PING_size(
-          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
-          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
-          const U32 size /*!< The asserted size*/
-      ) const;
-
-      void assertEvents_MS_PING(
-          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
-          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
-          const U32 __index, /*!< The index*/
-          const I32 port /*!< port response ms*/
-      ) const;
-
-    protected:
-
-      // ----------------------------------------------------------------------
       // From ports
       // ----------------------------------------------------------------------
 
@@ -530,6 +531,18 @@ namespace App {
       // ----------------------------------------------------------------------
 
       void assert_from_DataOut_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // From port: PingOut
+      // ----------------------------------------------------------------------
+
+      void assert_from_PingOut_size(
           const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 size /*!< The asserted size*/

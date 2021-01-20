@@ -298,7 +298,7 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     this->component.doDispatch();
 
 
-    char dataTheoritical[dataSize*3];
+    char dataTheoritical[dataSize*3] = {0};
     for(int i = 0; i< dataSize;i++){
       switch(i){
         case EPSCMD:
@@ -320,7 +320,6 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
           strcat(dataTheoritical,":00");
           break;
       }
-
     }
 
     //Verify Event
@@ -480,16 +479,14 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
   }
   
 
-  void Tester::cmdSendPing(void){
-
-
+  void Tester::portPingIn(void){
     U8 portTheoritical = (U8)CSP_PING_PORT;
     U8 schedTheoritical = 0;
     U32 sizeTheoritical = 0; 
 
     //Send MS_SEND:PING badPayload1 command
     
-    this->sendCmd_MS_SEND_PING(0,10);
+    this->invoke_to_PingIn(0,10);
     //Dispatch the message queue
     this->component.doDispatch();
 
@@ -502,10 +499,6 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     ASSERT_EQ(sizeTheoritical,sizeEmpirical);
     ASSERT_EQ(schedTheoritical,schedEmpirical);
 
-    //Verify command response
-    ASSERT_CMD_RESPONSE_SIZE(1);
-    ASSERT_CMD_RESPONSE(0,EPSComponentBase::OPCODE_MS_SEND_PING,10,
-    Fw::COMMAND_OK);
 
     this->clearHistory();
   }
@@ -525,14 +518,11 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     //Dispatch the message queue
     this->component.doDispatch();
 
-    I32 pingEmpirical = 10;
     //Verify Telemetry
     ASSERT_TLM_SIZE(0);
 
-    //Verify Event
-    ASSERT_EVENTS_SIZE(1);
-    ASSERT_EVENTS_MS_PING_SIZE(1);
-    ASSERT_EVENTS_MS_PING(0,pingEmpirical);
+    //Verify port out
+    ASSERT_from_PingOut_SIZE(1);
 
     this->clearHistory();
   }
@@ -555,14 +545,11 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     //Dispatch the message queue
     this->component.doDispatch();
 
-    I32 pingEmpirical = -1;
     //Verify Telemetry
     ASSERT_TLM_SIZE(0);
 
-    //Verify Event
-    ASSERT_EVENTS_SIZE(1);
-    ASSERT_EVENTS_MS_PING_SIZE(1);
-    ASSERT_EVENTS_MS_PING(0,pingEmpirical);
+    //Verify port out
+    ASSERT_from_PingOut_SIZE(0);
 
     this->clearHistory();
   }
@@ -580,6 +567,15 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     )
   {
     this->pushFromPortEntry_DataOut(port, data, isSched);
+  }
+
+  void Tester ::
+    from_PingOut_handler(
+        const NATIVE_INT_TYPE portNum,
+        U32 key
+    )
+  {
+    this->pushFromPortEntry_PingOut(key);
   }
 
   // ----------------------------------------------------------------------
@@ -602,6 +598,12 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
         this->component.get_Schedin_InputPort(0)
     );
 
+    // PingIn
+    this->connect_to_PingIn(
+        0,
+        this->component.get_PingIn_InputPort(0)
+    );
+
     // CmdDisp
     this->connect_to_CmdDisp(
         0,
@@ -612,6 +614,12 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     this->component.set_DataOut_OutputPort(
         0, 
         this->get_from_DataOut(0)
+    );
+
+    // PingOut
+    this->component.set_PingOut_OutputPort(
+        0, 
+        this->get_from_PingOut(0)
     );
 
     // CmdStatus

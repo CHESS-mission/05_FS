@@ -1,7 +1,3 @@
-// ----------------------------------------------------------------------
-// TestMain.cpp
-// ----------------------------------------------------------------------
-
 #include <Fw/Test/UnitTest.hpp>
 #include "Tester.hpp"
 
@@ -32,10 +28,10 @@ TEST(Nominal, TestPort) {
 
 TEST(Nominal, TestPing) {
     App::Tester tester;
-    TEST_CASE(EPS.9,"Test cmd send ping");
-    tester.cmdSendPing();
+    TEST_CASE(EPS.9,"Test port ping in");
+    tester.portPingIn();
     TEST_CASE(EPS.10,"Test port ping");
     tester.cmdPortPingOk();
     TEST_CASE(EPS.11,"Test port ping not ok");
-    tester.cmdPortPingOk();
+    tester.cmdPortPingNOK();
 }

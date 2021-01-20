@@ -16,6 +16,7 @@
 #include "App/Drv/SocketCspIpDriver/SocketCspIpDriverComponentAc.hpp"
 #include "App/Drv/SocketCspIpDriver/ScoketCspDriverType.hpp"
 #include "App/Drv/SocketCspIpDriver/SocketCspIpHelper.hpp"
+#include "App/Config/SocketCspIpDriverCfg.hpp"
 
 namespace Drv {
 

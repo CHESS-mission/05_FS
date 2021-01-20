@@ -805,55 +805,6 @@ namespace App {
   }
 
   // ----------------------------------------------------------------------
-  // Event: MS_PING
-  // ----------------------------------------------------------------------
-
-  void EPSGTestBase ::
-    assertEvents_MS_PING_size(
-        const char *const __callSiteFileName,
-        const U32 __callSiteLineNumber,
-        const U32 size
-    ) const
-  {
-    ASSERT_EQ(size, this->eventHistory_MS_PING->size())
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Size of history for event MS_PING\n"
-      << "  Expected: " << size << "\n"
-      << "  Actual:   " << this->eventHistory_MS_PING->size() << "\n";
-  }
-
-  void EPSGTestBase ::
-    assertEvents_MS_PING(
-        const char *const __callSiteFileName,
-        const U32 __callSiteLineNumber,
-        const U32 __index,
-        const I32 port
-    ) const
-  {
-    ASSERT_GT(this->eventHistory_MS_PING->size(), __index)
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Index into history of event MS_PING\n"
-      << "  Expected: Less than size of history ("
-      << this->eventHistory_MS_PING->size() << ")\n"
-      << "  Actual:   " << __index << "\n";
-    const EventEntry_MS_PING& e =
-      this->eventHistory_MS_PING->at(__index);
-    ASSERT_EQ(port, e.port)
-      << "\n"
-      << "  File:     " << __callSiteFileName << "\n"
-      << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Value of argument port at index "
-      << __index
-      << " in history of event MS_PING\n"
-      << "  Expected: " << port << "\n"
-      << "  Actual:   " << e.port << "\n";
-  }
-
-  // ----------------------------------------------------------------------
   // From ports
   // ----------------------------------------------------------------------
 
@@ -891,6 +842,26 @@ namespace App {
       << "  Value:    Size of history for from_DataOut\n"
       << "  Expected: " << size << "\n"
       << "  Actual:   " << this->fromPortHistory_DataOut->size() << "\n";
+  }
+
+  // ----------------------------------------------------------------------
+  // From port: PingOut
+  // ----------------------------------------------------------------------
+
+  void EPSGTestBase ::
+    assert_from_PingOut_size(
+        const char *const __callSiteFileName,
+        const U32 __callSiteLineNumber,
+        const U32 size
+    ) const
+  {
+    ASSERT_EQ(size, this->fromPortHistory_PingOut->size())
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Size of history for from_PingOut\n"
+      << "  Expected: " << size << "\n"
+      << "  Actual:   " << this->fromPortHistory_PingOut->size() << "\n";
   }
 
 } // end namespace App

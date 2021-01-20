@@ -75,7 +75,7 @@ namespace App {
   U8* returnData = data.getData();
   U32 returnSize = data.getSize();
   U8 status = returnData[EPSSTATUS];
-  if(port == 1){
+  if(port == (U8)CSP_PING_PORT){
     U32 ping = bytesToInt(returnData);
     if((I32)ping != -1){
        PingOut_out(0,m_key);
