@@ -110,7 +110,7 @@
                 </arg>          
             </args>
         </event>
-        <event id="2" name="MS_CMD_ERROR" severity="WARNING_LO" format_string = "Error in cmd , port : %hu, cmd : %hu, status : %hhu" >
+        <event id="2" name="MS_CMD_ERROR" severity="WARNING_LO" format_string = "Error in cmd , port : %hu, cmd : %hu, status : %hu" >
             <comment>
             cmd Error
             </comment>

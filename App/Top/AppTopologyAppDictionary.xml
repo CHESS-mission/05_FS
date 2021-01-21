@@ -1008,7 +1008,7 @@
         <arg name="payload" len="3000" type="string"/>
       </args>
     </event>
-    <event component="EPS" name="MS_CMD_ERROR" id="0x431" severity="WARNING_LO" format_string="Error in cmd , port : %hu, cmd : %hu, status : %hhu">
+    <event component="EPS" name="MS_CMD_ERROR" id="0x431" severity="WARNING_LO" format_string="Error in cmd , port : %hu, cmd : %hu, status : %hu">
       <args>
         <arg name="port" type="U8"/>
         <arg name="cmd" type="U8"/>
