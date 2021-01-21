@@ -4,8 +4,8 @@
 #include <Fw/Logger/Logger.hpp>
 #include <Os/Log.hpp>
 #include <Fw/Types/MallocAllocator.hpp>
-#include <Svc/TlmChan/TlmTypes.hpp>
 #include <Os/Mutex.hpp>
+#include "../fprime/Lib/mdb/hk_param.h"
 
 #if (defined TGT_OS_TYPE_LINUX) || (defined TGT_OS_TYPE_DARWIN)
 #include <getopt.h>
@@ -24,6 +24,12 @@ enum
 };
 
 Os::Log osLogger;
+
+#ifdef _PUS
+Os::Mutex PO_STACK_MUTEX; /*!< Protect access to PUSOpen stack */
+
+s_PARAM PARAM;
+#endif
 
 // Registry
 #if FW_OBJECT_REGISTRATION == 1
@@ -96,13 +102,6 @@ App::EPSComponentImpl EPS(FW_OPTIONAL_NAME("EPS"));
 
 Drv::SocketCspIpDriverComponentImpl socketCspIpDriverEPS(FW_OPTIONAL_NAME("SocketCspIpDriverEPS"));
 
-
-#ifdef _PUS
-Os::Mutex PO_STACK_MUTEX; /*!< Protect access to PUSOpen stack */
-
-S_PO_PARAM PO_PARAM ;
-
-#endif
 
 const char* getHealthName(Fw::ObjBase& comp) {
    #if FW_OBJECT_NAMES == 1
@@ -259,8 +258,8 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
 
     socketCspIpDriverEPS.configure(10,"localhost");
     socketCspIpDriverEPS.openSocket(27);
-    return false;
 
+    return false;
 }
 
 void exitTasks(void)

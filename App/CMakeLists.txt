@@ -21,9 +21,9 @@
 project(App C CXX)
 cmake_minimum_required(VERSION 3.5)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-#add_definitions(-D_PUS)     # to use PUS with GS
-add_definitions(-D_GDS)    # to use F' GDS (without PUS)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+add_definitions(-D_PUS)     # to use PUS with GS
+#add_definitions(-D_GDS)    # to use F' GDS (without PUS)
 
 ##
 # Section 2: F prime Core
@@ -42,9 +42,16 @@ include("${FPRIME_FRAMEWORK_PATH}/cmake/FPrime-Code.cmake")
 # core components in the topology, which is also added here.
 ##
 
+# Generate PUSOpen mission database c file from xml description
+## NOT WORKING (?) - Do it manually when changes in pusopen_onboard_mdb.xml
+add_custom_command(
+    OUTPUT ${FPRIME_FRAMEWORK_PATH}/Lib/mdb/pusopen_onboard_mdb.c
+    WORKING_DIR ${FPRIME_FRAMEWORK_PATH}/Lib
+    COMMAND mono ./bin/poconfig.exe ./mdb/pusopen_onboard_mdb.xml ./Lib/mdb/pusopen_onboard_mdb.c 
+)
+
 # Includes
 include_directories(Lib/includes)
-
 
 # Add component subdirectories
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/PingReceiver/")
