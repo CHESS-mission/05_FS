@@ -672,8 +672,7 @@
      </connection>
      
      <connection name = "eventLoggerReports">
-          <!-- To comment if EventAction is used -->
-          <source component = "eventLogger" port = "LogSend" type = "Log" num = "0"/>
+          <source component = "eventLogger" port = "LogSend" type = "Log" num = "1"/>
           <target component = "groundIf" port = "eventReport" type = "Log" num = "0"/>
      </connection>
 
@@ -716,12 +715,10 @@
           <target component = "eventAction" port = "seqResp" type = "CmdResponse" num = "0"/>
      </connection>
 
-     <!-- To uncomment if PUSAdapter is used. @todo allow using both
      <connection name = "eventActionLog">
           <source component = "eventLogger" port = "LogSend" type = "Log" num = "0"/>
           <target component = "eventAction" port = "logRecv" type = "Log" num = "0"/>
      </connection>
-     -->
 
      <!-- ADCS connections-->
 

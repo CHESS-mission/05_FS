@@ -1,0 +1,163 @@
+        -:    0:Source:/home/jonathan/tm/CHESS/05_FS/App/EventAction/EventActionComponentImpl.cpp
+        -:    0:Programs:2
+        -:    1:// ======================================================================
+        -:    2:// \title  EventActionComponentImpl.cpp
+        -:    3:// \author jonathan
+        -:    4:// \brief  cpp file for EventAction component implementation class
+        -:    5://
+        -:    6:// \copyright
+        -:    7:// Copyright 2009-2015, by the California Institute of Technology.
+        -:    8:// ALL RIGHTS RESERVED.  United States Government Sponsorship
+        -:    9:// acknowledged.
+        -:   10://
+        -:   11:// ======================================================================
+        -:   12:
+        -:   13:#include <App/EventAction/EventActionComponentImpl.hpp>
+        -:   14:
+        -:   15:#include "Fw/Log/LogString.hpp"
+        -:   16:#include "Fw/Types/BasicTypes.hpp"
+        -:   17:#include "Fw/Types/EightyCharString.hpp"
+        -:   18:
+        -:   19:namespace App {
+        -:   20:
+        -:   21:// ----------------------------------------------------------------------
+        -:   22:// Construction, initialization, and destruction
+        -:   23:// ----------------------------------------------------------------------
+        -:   24:
+       30:   25:EventActionComponentImpl ::EventActionComponentImpl(const char *const compName)
+       30:   26:    : EventActionComponentBase(compName) {}
+        -:   27:
+       30:   28:void EventActionComponentImpl ::init(const NATIVE_INT_TYPE queueDepth,
+        -:   29:                                     const NATIVE_INT_TYPE instance) {
+       30:   30:    EventActionComponentBase::init(queueDepth, instance);
+        -:   31:
+       90:   32:    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+        -:   33:         slot++) {
+       60:   34:        this->m_eventActionTable[slot].id = 0;
+       60:   35:        this->m_eventActionTable[slot].used = false;
+       60:   36:        this->m_eventActionTable[slot].sequence = Fw::EightyCharString("");
+        -:   37:    }
+       30:   38:}
+        -:   39:
+       30:   40:EventActionComponentImpl ::~EventActionComponentImpl(void) {}
+        -:   41:
+        -:   42:// ----------------------------------------------------------------------
+        -:   43:// Handler implementations for user-defined typed input ports
+        -:   44:// ----------------------------------------------------------------------
+        -:   45:
+    #####:   46:void EventActionComponentImpl ::seqResp_handler(const NATIVE_INT_TYPE portNum,
+        -:   47:                                                FwOpcodeType opCode, U32 cmdSeq,
+        -:   48:                                                Fw::CommandResponse response) {
+        -:   49:    // @todo Are we supposed to send events from EventAction depeding on
+        -:   50:    // CmdDispatcher response given the fact it already does it ?
+        -:   51:    // Ex: Invalid sequence name or sequence completed
+    #####:   52:}
+        -:   53:
+        6:   54:void EventActionComponentImpl ::logRecv_handler(const NATIVE_INT_TYPE portNum,
+        -:   55:                                                FwEventIdType id,
+        -:   56:                                                Fw::Time &timeTag,
+        -:   57:                                                Fw::LogSeverity severity,
+        -:   58:                                                Fw::LogBuffer &args) {
+        -:   59:    // @todo Avoid event-sequence loop by detecting if an event triggers a
+        -:   60:    // sequence that could emit the same event !
+       18:   61:    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+        -:   62:         slot++) {
+       18:   63:        if ((this->m_eventActionTable[slot].used) and
+        6:   64:            (this->m_eventActionTable[slot].id == id)) {
+        -:   65:            Fw::LogStringArg log(
+        6:   66:                this->m_eventActionTable[slot].sequence.toChar());
+        3:   67:            this->log_ACTIVITY_HI_EVAC_RUN(id, log);
+        -:   68:            Fw::EightyCharString file(
+        6:   69:                this->m_eventActionTable[slot].sequence.toChar());
+        3:   70:            this->seqRun_out(0, file);
+        -:   71:        }
+        -:   72:    }
+        6:   73:}
+        -:   74:
+        -:   75:// ----------------------------------------------------------------------
+        -:   76:// Command handler implementations
+        -:   77:// ----------------------------------------------------------------------
+       36:   78:void EventActionComponentImpl ::EVAC_ADD_cmdHandler(
+        -:   79:    const FwOpcodeType opCode, const U32 cmdSeq, U32 id,
+        -:   80:    const Fw::CmdStringArg &sequence) {
+       36:   81:    bool slotFound = false;
+        -:   82:
+        -:   83:    // make sure ID is not zero. Zero is reserved for ID filter.
+       36:   84:    FW_ASSERT(id != 0);
+        -:   85:
+        -:   86:    // check that event is not already registered
+      102:   87:    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+        -:   88:         slot++) {
+       72:   89:        if ((this->m_eventActionTable[slot].id == id) and
+        3:   90:            (this->m_eventActionTable[slot].used == true)) {
+        -:   91:            Fw::LogStringArg seq(
+        6:   92:                this->m_eventActionTable[slot].sequence.toChar());
+        3:   93:            this->log_WARNING_HI_EVAC_ALREADY_REGISTERED(id, seq);
+        3:   94:            this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
+        3:   95:            return;
+        -:   96:        }
+        -:   97:    }
+        -:   98:
+        -:   99:    // Try to add event in entries list
+       99:  100:    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+        -:  101:         slot++) {
+       66:  102:        if ((not this->m_eventActionTable[slot].used) and (not slotFound)) {
+       30:  103:            this->m_eventActionTable[slot].id = id;
+       30:  104:            this->m_eventActionTable[slot].used = true;
+       30:  105:            this->m_eventActionTable[slot].sequence =
+       60:  106:                Fw::EightyCharString(sequence.toChar());
+        -:  107:
+       30:  108:            slotFound = true;
+        -:  109:        }
+        -:  110:    }
+        -:  111:
+       33:  112:    if (not slotFound) {
+        3:  113:        this->log_WARNING_LO_EVAC_LIST_FULL(id);
+        3:  114:        this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
+        3:  115:        return;
+        -:  116:    }
+        -:  117:
+       60:  118:    Fw::LogStringArg seqLog(sequence.toChar());
+       30:  119:    this->log_ACTIVITY_HI_EVAC_ADDED(seqLog, id);
+       30:  120:    this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+        -:  121:}
+        -:  122:
+        9:  123:void EventActionComponentImpl ::EVAC_REMOVE_cmdHandler(
+        -:  124:    const FwOpcodeType opCode, const U32 cmdSeq, U32 id) {
+       21:  125:    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+        -:  126:         slot++) {
+       21:  127:        if ((this->m_eventActionTable[slot].used) and
+        6:  128:            (this->m_eventActionTable[slot].id == id)) {
+        -:  129:            Fw::LogStringArg seq(
+        6:  130:                this->m_eventActionTable[slot].sequence.toChar());
+        3:  131:            this->log_ACTIVITY_HI_EVAC_REMOVED(seq, id);
+        -:  132:
+        -:  133:            // Clear slot
+        3:  134:            this->m_eventActionTable[slot].id = 0;
+        3:  135:            this->m_eventActionTable[slot].used = false;
+        3:  136:            this->m_eventActionTable[slot].sequence = Fw::EightyCharString();
+        -:  137:
+        3:  138:            this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+        3:  139:            return;
+        -:  140:        }
+        -:  141:    }
+        -:  142:
+        6:  143:    this->log_WARNING_LO_EVAC_NOT_FOUND(id);
+        6:  144:    this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_EXECUTION_ERROR);
+        -:  145:}
+        -:  146:
+        6:  147:void EventActionComponentImpl ::EVAC_DUMP_cmdHandler(const FwOpcodeType opCode,
+        -:  148:                                                     const U32 cmdSeq) {
+       18:  149:    for (U32 slot = 0; slot < FW_NUM_ARRAY_ELEMENTS(this->m_eventActionTable);
+        -:  150:         slot++) {
+       12:  151:        if (this->m_eventActionTable[slot].used) {
+        -:  152:            Fw::LogStringArg seq(
+       12:  153:                this->m_eventActionTable[slot].sequence.toChar());
+        6:  154:            this->log_ACTIVITY_HI_EVAC_DUMP(seq,
+        -:  155:                                            this->m_eventActionTable[slot].id);
+        -:  156:        }
+        -:  157:    }
+        6:  158:    this->cmdResponse_out(opCode, cmdSeq, Fw::COMMAND_OK);
+        6:  159:}
+        -:  160:
+        9:  161:}  // end namespace App

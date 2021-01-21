@@ -1,0 +1,83 @@
+test 1
+    Start 1: App_EventAction_ut_exe
+
+1: Test command: /home/jonathan/tm/CHESS/05_FS/App/build-fprime-automatic-native-ut/bin/Linux/App_EventAction_ut_exe
+1: Test timeout computed to be: 9.99988e+06
+1: [==========] Running 10 tests from 1 test suite.
+1: [----------] Global test environment set-up.
+1: [----------] 10 tests from Nominal
+1: [ RUN      ] Nominal.AddTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.1: Add event-sequence entry
+1: ***************************************
+1: [       OK ] Nominal.AddTest (0 ms)
+1: [ RUN      ] Nominal.RemoveExistingTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.2: Remove existing event-sequence entry
+1: ***************************************
+1: [       OK ] Nominal.RemoveExistingTest (0 ms)
+1: [ RUN      ] Nominal.RemoveEmptyTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.1: Remove event-sequence entry when empty
+1: ***************************************
+1: [       OK ] Nominal.RemoveEmptyTest (0 ms)
+1: [ RUN      ] Nominal.RemoveUnexistingTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.4: Remove unexisting event-sequence entry
+1: ***************************************
+1: [       OK ] Nominal.RemoveUnexistingTest (0 ms)
+1: [ RUN      ] Nominal.DumpEmptyTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.5: Dump event-sequence entry when empty
+1: ***************************************
+1: [       OK ] Nominal.DumpEmptyTest (0 ms)
+1: [ RUN      ] Nominal.DumpTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.6: Dump event-sequence entries
+1: ***************************************
+1: [       OK ] Nominal.DumpTest (0 ms)
+1: [ RUN      ] Nominal.AddFulltest
+1:
+1: ***************************************
+1: TESTCASE EventAction.7: Add event-sequence entry when full
+1: ***************************************
+1: [       OK ] Nominal.AddFulltest (0 ms)
+1: [ RUN      ] Nominal.AddSameTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.8: Add two event-sequence entries for the same event id
+1: ***************************************
+1: [       OK ] Nominal.AddSameTest (1 ms)
+1: [ RUN      ] Nominal.EntryCorrespondingEventTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.9: Add event-sequence entry and receive corresponding event
+1: ***************************************
+1:
+1: ***************************************
+1: (RQ)       seq.bin sequence file in CmdDispatcher
+1: ***************************************
+1: [       OK ] Nominal.EntryCorrespondingEventTest (0 ms)
+1: [ RUN      ] Nominal.EntryNonCorrespondingEventTest
+1:
+1: ***************************************
+1: TESTCASE EventAction.10: Add event-sequence entry and receive non-corresponding event
+1: ***************************************
+1: [       OK ] Nominal.EntryNonCorrespondingEventTest (0 ms)
+1: [----------] 10 tests from Nominal (1 ms total)
+1:
+1: [----------] Global test environment tear-down
+1: [==========] 10 tests from 1 test suite ran. (1 ms total)
+1: [  PASSED  ] 10 tests.
+1/1 Test #1: App_EventAction_ut_exe ...........   Passed    0.05 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.06 sec
+[100%] Built target App_EventAction_check

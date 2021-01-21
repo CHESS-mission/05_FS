@@ -1,0 +1,18 @@
+File '/home/jonathan/tm/CHESS/05_FS/App/EventAction/EventActionComponentImpl.cpp'
+Lines executed:96.97% of 66
+Creating 'EventActionComponentImpl.cpp.gcov'
+
+File '/usr/include/c++/7/iostream'
+Lines executed:100.00% of 1
+Creating 'iostream.gcov'
+
+File '/home/jonathan/tm/CHESS/05_FS/App/EventAction/EventActionComponentImpl.hpp'
+Lines executed:100.00% of 1
+Creating 'EventActionComponentImpl.hpp.gcov'
+
+File '/home/jonathan/tm/CHESS/05_FS/App/build-fprime-automatic-native-ut/App/EventAction/EventActionComponentAc.cpp'
+Lines executed:80.85% of 585
+Creating 'EventActionComponentAc.cpp.gcov'
+
+Lines executed:82.54% of 653
+[100%] Built target App_EventAction_coverage

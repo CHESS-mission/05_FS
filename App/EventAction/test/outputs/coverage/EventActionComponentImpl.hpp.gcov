@@ -1,5 +1,5 @@
-        -:    0:Source:/home/jonathan/Documents/mse/tm/FlightSoftware/FPrime/05_FS/App/EventAction/EventActionComponentImpl.hpp
-        -:    0:Programs:3
+        -:    0:Source:/home/jonathan/tm/CHESS/05_FS/App/EventAction/EventActionComponentImpl.hpp
+        -:    0:Programs:2
         -:    1:// ======================================================================
         -:    2:// \title  EventActionComponentImpl.hpp
         -:    3:// \author jonathan
@@ -97,7 +97,7 @@
         -:   95:    // ----------------------------------------------------------------------
         -:   96:    // Custom code
         -:   97:    // ----------------------------------------------------------------------
-       80:   98:    struct EventActionEntry {
+      120:   98:    struct EventActionEntry {
         -:   99:        bool used;                      //!< if entry has been used yet
         -:  100:        FwEventIdType id;               //!< event id to detect
         -:  101:        Fw::EightyCharString sequence;  //!< sequence to launch
