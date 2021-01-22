@@ -1,12 +1,10 @@
 #ifndef HK_PARAM_H
 #define HK_PARAM_H
 
-#define PO_PARAM_SIZE 8
+// Temporary implementation
+// Parameters used in PUS3 hk report #1
 
-struct s_po_hk_parameters {
-  uint16_t hk_id;
-  uint32_t value;
-};
+#define PO_PARAM_SIZE 8
 
 struct s_PARAM {
   uint32_t PR_NumPings;
