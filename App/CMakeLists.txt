@@ -51,7 +51,8 @@ add_custom_command(
 )
 
 # Includes
-include_directories(Lib/includes)
+include_directories(Lib/includes)   # App Lib (CSP)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../gs/mdb) # hk_param.h in Topology.cpp
 
 # Add component subdirectories
 add_fprime_subdirectory("${FPRIME_FRAMEWORK_PATH}/Ref/PingReceiver/")

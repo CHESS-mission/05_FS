@@ -5,7 +5,7 @@
 #include <Os/Log.hpp>
 #include <Fw/Types/MallocAllocator.hpp>
 #include <Os/Mutex.hpp>
-#include "../fprime/Lib/mdb/hk_param.h"
+#include "hk_param.h"
 
 #if (defined TGT_OS_TYPE_LINUX) || (defined TGT_OS_TYPE_DARWIN)
 #include <getopt.h>
