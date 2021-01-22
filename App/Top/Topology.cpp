@@ -196,7 +196,7 @@ bool constructApp(bool dump, U32 port_number, char *hostname)
     EPS.regCommands();
 
     // read parameters
-    prmDb.readParamFile();
+    // prmDb.readParamFile();
 
     // set health ping entries
     // warnCycles, fatalCycles, entryName
