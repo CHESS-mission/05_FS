@@ -12,10 +12,19 @@ TEST(Nominal, TestSendTMData){
 
 TEST(Nominal, TestSendTCData){
     Drv::Tester tester;
-    TEST_CASE(TcpSocket.1, "test sending TC  to python ADCS simulator");
+    TEST_CASE(TcpSocket.2, "test sending TC  to python ADCS simulator");
     tester.testSendTC();
-    TEST_CASE(TcpSocket.2, "test sending TC with wrong CRC to python ADCS simulator");
+    TEST_CASE(TcpSocket.3, "test sending TC with wrong CRC to python ADCS simulator");
     tester.testSendTCWrongCrc();
+    
+}
+
+TEST(Nominal, TestSendBadUARTFrame){
+    Drv::Tester tester;
+    TEST_CASE(TcpSocket.4, "test sending TM with a bad start byte");
+    tester.testSendTMWrongStartByte();
+    TEST_CASE(TcpSocket.5, "test sending TM with a bad end byte");
+    tester.testSendTMWrongEndByte();
     
 }
 

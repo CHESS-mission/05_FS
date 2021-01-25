@@ -5,9 +5,9 @@ def manage_data(data,adcs):
     orbit = data[0]
     adcs.switcher(orbit)
 
-def runTCP(adcs):
-    TCP_IP = '127.0.0.1'
-    TCP_PORT = 5005
+def runTCP(simulator,ip,port):
+    TCP_IP = ip
+    TCP_PORT = port
     BUFFER_SIZE = 2046
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,7 +25,7 @@ def runTCP(adcs):
                 if data:
 
                     print(f"Data Received : {data}")
-                    back_data = adcs.request(data)
+                    back_data = simulator.request(data)
                     print(f'sending data back to client : data {back_data}\n')
                     conn.send(back_data)
                 else:
