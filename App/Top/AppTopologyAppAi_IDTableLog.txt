@@ -1,12 +1,12 @@
      INSTANCE NAME      | BASE ID (HEX) | REQUESTED WINDOW SIZE | DIFFERENCED ID WINDOW SIZE | LARGEST COMPONENT INTERNAL ID | MAX AMOUNT OF IDS
      fatalHandler       |    1 (0x1)    |          20           |             20             |             None              |         0        
-    rateGroup1Comp      |   21 (0x15)   |          20           |             20             |               2               |         2        
+      rateGroup1        |   21 (0x15)   |          20           |             20             |               2               |         2        
        pingRcvr         |   41 (0x29)   |          20           |             20             |               2               |         2        
         chanTlm         |   61 (0x3d)   |          20           |             60             |             None              |         0        
         cmdDisp         |  121 (0x79)   |          20           |             20             |              10               |        10        
          prmDb          |  141 (0x8d)   |          20           |             20             |               8               |         8        
-    rateGroup2Comp      |  161 (0xa1)   |          20           |             80             |               2               |         2        
-    rateGroup3Comp      |  241 (0xf1)   |          20           |             20             |               2               |         2        
+      rateGroup2        |  161 (0xa1)   |          20           |             80             |               2               |         2        
+      rateGroup3        |  241 (0xf1)   |          20           |             20             |               2               |         2        
       fileUplink        |  261 (0x105)  |          20           |             40             |               8               |         8        
 fileUplinkBufferManager |  301 (0x12d)  |          20           |             40             |               3               |         3        
      fatalAdapter       |  341 (0x155)  |          20           |             20             |               8               |         8        
@@ -16,7 +16,7 @@ fileDownlinkBufferManag |  401 (0x191)  |          20           |             20
           er            |               |                       |                            |                               |                  
       eventLogger       |  421 (0x1a5)  |          20           |             20             |               7               |         7        
        linuxTime        |  441 (0x1b9)  |          20           |             20             |             None              |         0        
-  rateGroupDriverComp   |  461 (0x1cd)  |          20           |             20             |             None              |         0        
+    rateGroupDriver     |  461 (0x1cd)  |          20           |             20             |             None              |         0        
        blockDrv         |  481 (0x1e1)  |          20           |             20             |               1               |         1        
      fileDownlink       |  501 (0x1f5)  |          20           |             20             |               4               |         4        
       textLogger        |  521 (0x209)  |          20           |             20             |             None              |         0        

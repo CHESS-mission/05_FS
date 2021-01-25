@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!---
+Compile this xml into .c file with poconfig tool :
+../bin/poconfig.exe pusopen_onboard_mdb.xml pusopen_onboard_mdb.c
+-->
+<PusopenConfig>
+
+  <!-- Version of the PUSopen(R) configuration scheme (this XML). Please do not change. -->
+  <PoCfgVersion>1.1</PoCfgVersion>
+
+  <!-- Application Process ID (APID) -->
+  <Apid>1</Apid>
+  
+  <!-- Application Process User ID (APUID) -->
+  <Apuid>2</Apuid>
+  
+  <!-- Configuration of the PUSopen(R) PUS services, Packet Services, Virtual Channels and FESS module -->
+  <Modules>
+
+    <!-- PUS Service 1 provider. -->
+    <Pus1>
+      <Used>true</Used>
+
+      <!-- PUS Service 1 reception buffer. This buffer shall be large enough to accommodate 
+           largest expected TM/TC with its associated data. Only one TM/TC is stored in this
+           buffer at any time. -->
+      <RecvBufferSize>2048</RecvBufferSize> <!-- ComBuffer is 1102 length : FW_COM_BUFFER_MAX_SIZE + sizeof(FwBuffSizeType) -->
+    </Pus1>
+        
+    <Pus3>
+      <Used>true</Used>
+
+      <!-- Size of buffer used to assemble TM[3,26] ([3, 25] ? ) report (in bytes) -->
+      <ReportBufferSize>2048</ReportBufferSize> <!-- @todo Will depend on the reports sizes -->
+    </Pus3>
+
+    <Pus5>
+      <Used>true</Used>
+    </Pus5>
+
+    <Pus8>
+      <Used>true</Used>
+    </Pus8>
+    
+    <Pus13>
+      <Used>false</Used>
+    </Pus13>
+    
+    <Pus17>
+      <Used>true</Used>
+    </Pus17>
+
+    <PusUsr>
+      <Used>false</Used>
+    </PusUsr>
+       
+    <Ps>
+      <!-- Packet Services used flag (values: "true" or "false") -->
+      <Used>true</Used>
+      
+      <!-- Max size of sent/received packet (in bytes). Values: 0 to 16000 -->
+      <!-- PO_ERR_TOOLONG 11 - Data too long if smaller than PusEvent DataSize -->
+      <!-- CCSDS + TM -->
+      <MaxSendPacketSize>2048</MaxSendPacketSize>   
+      <MaxRecvPacketSize>2048</MaxRecvPacketSize>   
+      
+      <!-- Idle packet: byte value used to fill an idle packet and size of packet -->
+    </Ps>
+
+
+    <!-- Virtual Channel Services -->
+    <Vcs>
+      <Used>false</Used>
+    </Vcs>
+
+    <Fess>
+      <!-- Frame Encoding and Synchronization Service. Used: true / false. -->
+      <Used>true</Used>
+
+      <!-- Size of the send/receive buffer holding raw byte stream (in bytes). 
+           This buffer should be large enough to accommodate at least one
+           full packet or frame. -->
+      <SendBufferSize>2048</SendBufferSize>
+      <RecvBufferSize>2048</RecvBufferSize>
+
+      <!-- Size of internal buffer of FESS (in bytes). There are four buffers of this
+           size and they shall be large enough to accommodate encrypted packet/frame. -->
+      <TempBufferSize>2048</TempBufferSize>
+      
+      <!-- Attached Synchronization Mark (ASM) content and length. 
+           A byte field (uint8_t[]) defining content of ASM. 
+           PUSopen pre-defines FESS_DEF_ASM = {0,0,0}. -->
+      <Asm>FESS_DEF_ASM</Asm>
+      <AsmLen>3</AsmLen>
+      
+      <!-- Encoding/encryption algorithms used.
+           
+           Encoding:
+               SLIP = Serial Line Internet Protocol
+               NOENCODING = no specific encoding will be performed.
+
+           Encryption:
+               AES128 = AES-128 encryption with key defined in the mission database
+               NOENCRYPTION = no encryption used
+
+           NOTE: If no encoding is used, user has to implement his own packet delimiting mechanism. -->
+
+      <EncodingAlgorithm>SLIP</EncodingAlgorithm>
+      <EncryptionAlgorithm>NOENCRYPTION</EncryptionAlgorithm>
+    </Fess>
+  </Modules>
+
+
+  <!-- PUS 5 on-board events -->
+  <Events>
+    <!-- Please add one "<PusEvent>" element for every TM[5,x] event defined. 
+         * Each PUS event is identified by user-defined Id. Id don't have to be in 
+           sequential order.
+         * Event level is one of the following values:
+         
+             PUS5_EVT_INFO   = Information event TM[5,1]
+             PUS5_EVT_LOW    = Low severity anomaly TM[5,2]
+             PUS5_EVT_MEDIUM = Medium severity anomaly TM[5,3]
+             PUS5_EVT_HIGH   = High severity anomaly TM[5,4]
+             
+         * DataSize element defines size of data payload associated 
+           with event. User defines data content for each occurrence
+           of the event.
+     
+         Example event:
+    
+         <PusEvent>
+            <Id>1</Id>
+            <Level>PUS5_EVT_INFO</Level>
+            <Description>Informative event</Description>
+            <DataSize>150</DataSize>
+            <VcId>1</VcId>
+         </PusEvent>
+    -->
+    <PusEvent>
+       <Id>1</Id>
+       <Level>PUS5_EVT_INFO</Level>
+       <Description>Information event</Description>
+       <DataSize>1102</DataSize>
+    </PusEvent>
+
+    <PusEvent>
+       <Id>2</Id>
+       <Level>PUS5_EVT_LOW</Level>
+       <Description>Low severity anomaly</Description>
+       <DataSize>1102</DataSize>
+    </PusEvent>
+
+    <PusEvent>
+       <Id>3</Id>
+       <Level>PUS5_EVT_MEDIUM</Level>
+       <Description>Medium severity anomaly</Description>
+       <DataSize>1102</DataSize>
+    </PusEvent>
+
+    <PusEvent>
+       <Id>4</Id>
+       <Level>PUS5_EVT_HIGH</Level>
+       <Description>High severity anomaly</Description>
+       <DataSize>1102</DataSize>
+    </PusEvent>
+  </Events>
+
+  <!-- Declaration of user function called by PUS 8 -->
+  <UserCode>
+#include "hk_param.h"
+
+extern po_result_t UserPus8Fn(uint8_t fid, uint8_t *data, uint16_t len);
+
+extern struct s_PARAM PARAM;
+  </UserCode>
+
+  <!-- PUS 8 user functions -->
+  <UserFunctions>
+    <UsrFunc>
+      <Id>1</Id>
+      <Name>Test function</Name>
+      <Description>Example test function</Description>
+      <Addr>UserPus8Fn</Addr>
+    </UsrFunc>
+  </UserFunctions>
+    
+  <HkParameters>
+     <!-- <HkParam>
+       <Id>21</Id>  0x15
+        <Name>RgMaxTime</Name>
+        <Description>Max execution time rate group</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.RgMaxTime</Addr>
+    </HkParam> -->
+    <HkParam>
+        <Id>41</Id> <!-- 0x29 -->
+        <Name>PR_NumPings</Name>
+        <Description>Number of pings received</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.PR_NumPings</Addr>
+    </HkParam>
+    <HkParam>
+        <Id>121</Id> <!-- 0x79 -->
+        <Name>CommandsDispatched</Name>
+        <Description>Number of commands dispatched</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.CommandsDispatched</Addr>
+    </HkParam>
+    <HkParam>
+        <Id>122</Id>  <!--  0x7a -->
+        <Name>CommandErrors</Name>
+        <Description>Number of command errors</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.CommandErrors</Addr>
+    </HkParam> 
+    <HkParam>
+        <Id>361</Id> <!-- 0x169 -->
+        <Name>PingLateWarnings</Name>
+        <Description>Number of overrun warnings</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.PingLateWarnings</Addr>
+    </HkParam>
+    <HkParam>
+        <Id>481</Id> <!-- c-->
+        <Name>BD_Cycles</Name>
+        <Description>Driver cycle count</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.BD_Cycles</Addr> <!-- PO_HK[5].value -->
+    </HkParam>
+    <HkParam>
+        <Id>1071</Id> <!-- 0x42f -->
+        <Name>EPS_Voltage_battery_mV</Name>
+        <Description>Voltage</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.EPS_Voltage_battery_mV</Addr>
+    </HkParam>
+    <HkParam>
+        <Id>1072</Id> <!-- 0x430 -->
+        <Name>EPS_Battery_mode</Name>
+        <Description>Battery mode</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.EPS_Battery_mode</Addr>
+    </HkParam>
+    <HkParam>
+        <Id>1073</Id> <!-- 0x431 -->
+        <Name>EPS_Temp_Battery_Celsuis</Name>
+        <Description>Battery Temp</Description>
+        <Type>PO_UINT32</Type>
+        <Addr>PARAM.EPS_Temp_Battery_Celsuis</Addr>
+    </HkParam>
+  </HkParameters>
+ 
+  <HkReports>
+    <HkReport>
+      <Id>1</Id>
+      <Name>Report #1</Name>
+      <Description>Report #1 description</Description>
+      <Enabled>true</Enabled>
+      <Interval>5</Interval>
+      <DestApid>3</DestApid>
+      <!-- <VcId>1</VcId> -->
+      <HkParamsList>
+          <!-- Be extremely carefull when modifying this - Current implementation is hazardous -->
+          <!-- Update s_PARAM and PO_PARAM_SIZE in hk_param.h -->
+          <!-- Update used_hk array in TlmChanImpl.cpp -->
+          <!-- !! Current implmentation allows U32 parameters only !! -->
+          <HkParamId>41</HkParamId> <!-- 0x29 PR_NumPings -->
+          <HkParamId>121</HkParamId> <!-- 0x79 CommandsDispatched -->
+          <HkParamId>122</HkParamId> <!-- 0x15 RgMaxTime -->
+          <HkParamId>361</HkParamId> <!-- 0x169 PingLateWarnings -->
+          <HkParamId>481</HkParamId> <!-- 0x1E1 BD_Cycles -->
+          <HkParamId>1071</HkParamId> <!-- 0x42f EPS_Voltage_battery_mV -->
+          <HkParamId>1072</HkParamId> <!-- 0x430 EPS_Battery_mode -->
+          <HkParamId>1073</HkParamId> <!-- 0x431 EPS_Temp_Battery_Celsuis -->
+      </HkParamsList>
+    </HkReport>
+  </HkReports>
+    
+</PusopenConfig>  <!-- End of PUSopen(R) Mission Database -->

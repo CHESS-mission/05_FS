@@ -39,8 +39,8 @@ void constructAppArchitecture(void);
 bool constructApp(bool dump, U32 port_number, char *hostname);
 void exitTasks(void);
 
-extern Svc::RateGroupDriverImpl rateGroupDriverComp;
-extern Svc::ActiveRateGroupImpl rateGroup1Comp, rateGroup2Comp, rateGroup3Comp;
+extern Svc::RateGroupDriverImpl rateGroupDriver;
+extern Svc::ActiveRateGroupImpl rateGroup1, rateGroup2, rateGroup3;
 extern Svc::CmdSequencerComponentImpl cmdSeq;
 extern Svc::GroundInterfaceComponentImpl groundIf;
 extern Svc::ConsoleTextLoggerImpl textLogger;

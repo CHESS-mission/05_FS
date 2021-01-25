@@ -888,26 +888,26 @@
     <event component="groundIf" name="GroundInterfaceError" id="0x17d" severity="WARNING_HI" format_string="Ground interface encountered an error">
       <args/>
     </event>
-    <event component="rateGroup1Comp" name="RateGroupStarted" id="0x15" severity="DIAGNOSTIC" format_string="Rate group started.">
+    <event component="rateGroup1" name="RateGroupStarted" id="0x15" severity="DIAGNOSTIC" format_string="Rate group started.">
       <args/>
     </event>
-    <event component="rateGroup1Comp" name="RateGroupCycleSlip" id="0x16" severity="WARNING_HI" format_string="Rate group cycle slipped on cycle %d">
+    <event component="rateGroup1" name="RateGroupCycleSlip" id="0x16" severity="WARNING_HI" format_string="Rate group cycle slipped on cycle %d">
       <args>
         <arg name="cycle" type="U32"/>
       </args>
     </event>
-    <event component="rateGroup2Comp" name="RateGroupStarted" id="0xa1" severity="DIAGNOSTIC" format_string="Rate group started.">
+    <event component="rateGroup2" name="RateGroupStarted" id="0xa1" severity="DIAGNOSTIC" format_string="Rate group started.">
       <args/>
     </event>
-    <event component="rateGroup2Comp" name="RateGroupCycleSlip" id="0xa2" severity="WARNING_HI" format_string="Rate group cycle slipped on cycle %d">
+    <event component="rateGroup2" name="RateGroupCycleSlip" id="0xa2" severity="WARNING_HI" format_string="Rate group cycle slipped on cycle %d">
       <args>
         <arg name="cycle" type="U32"/>
       </args>
     </event>
-    <event component="rateGroup3Comp" name="RateGroupStarted" id="0xf1" severity="DIAGNOSTIC" format_string="Rate group started.">
+    <event component="rateGroup3" name="RateGroupStarted" id="0xf1" severity="DIAGNOSTIC" format_string="Rate group started.">
       <args/>
     </event>
-    <event component="rateGroup3Comp" name="RateGroupCycleSlip" id="0xf2" severity="WARNING_HI" format_string="Rate group cycle slipped on cycle %d">
+    <event component="rateGroup3" name="RateGroupCycleSlip" id="0xf2" severity="WARNING_HI" format_string="Rate group cycle slipped on cycle %d">
       <args>
         <arg name="cycle" type="U32"/>
       </args>
@@ -1062,12 +1062,12 @@
     <channel component="fileDownlinkBufferManager" name="BufferManager_AllocatedSize" id="0x192" description="The total size of all allocated buffers" type="U32"/>
     <channel component="fileManager" name="CommandsExecuted" id="0x26d" description="The total number of commands successfully executed" type="U32"/>
     <channel component="fileManager" name="Errors" id="0x26e" description="The total number of errors" type="U32"/>
-    <channel component="rateGroup1Comp" name="RgMaxTime" id="0x15" format_string="%u us" description="Max execution time rate group" type="U32"/>
-    <channel component="rateGroup1Comp" name="RgCycleSlips" id="0x16" description="Cycle slips for rate group" type="U32"/>
-    <channel component="rateGroup2Comp" name="RgMaxTime" id="0xa1" format_string="%u us" description="Max execution time rate group" type="U32"/>
-    <channel component="rateGroup2Comp" name="RgCycleSlips" id="0xa2" description="Cycle slips for rate group" type="U32"/>
-    <channel component="rateGroup3Comp" name="RgMaxTime" id="0xf1" format_string="%u us" description="Max execution time rate group" type="U32"/>
-    <channel component="rateGroup3Comp" name="RgCycleSlips" id="0xf2" description="Cycle slips for rate group" type="U32"/>
+    <channel component="rateGroup1" name="RgMaxTime" id="0x15" format_string="%u us" description="Max execution time rate group" type="U32"/>
+    <channel component="rateGroup1" name="RgCycleSlips" id="0x16" description="Cycle slips for rate group" type="U32"/>
+    <channel component="rateGroup2" name="RgMaxTime" id="0xa1" format_string="%u us" description="Max execution time rate group" type="U32"/>
+    <channel component="rateGroup2" name="RgCycleSlips" id="0xa2" description="Cycle slips for rate group" type="U32"/>
+    <channel component="rateGroup3" name="RgMaxTime" id="0xf1" format_string="%u us" description="Max execution time rate group" type="U32"/>
+    <channel component="rateGroup3" name="RgCycleSlips" id="0xf2" description="Cycle slips for rate group" type="U32"/>
     <channel component="pingRcvr" name="PR_NumPings" id="0x29" description="Number of pings received" type="U32"/>
     <channel component="blockDrv" name="BD_Cycles" id="0x1e1" description="Driver cycle count" type="U32"/>
     <channel component="ADCS" name="ADCS_LAST_TM_DATA" id="0x41a" description="Tm Value" type="F64"/>

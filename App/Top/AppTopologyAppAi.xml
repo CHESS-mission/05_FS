@@ -63,10 +63,10 @@
 
      <!-- Rate Group Components -->
 
-     <instance namespace="Svc" name="rateGroupDriverComp" type="RateGroupDriver" base_id="461" base_id_window="20" />
-     <instance namespace="Svc" name="rateGroup1Comp" type="ActiveRateGroup" base_id="21" base_id_window="20" />
-     <instance namespace="Svc" name="rateGroup2Comp" type="ActiveRateGroup" base_id="161" base_id_window="20" />
-     <instance namespace="Svc" name="rateGroup3Comp" type="ActiveRateGroup" base_id="241" base_id_window="20" />
+     <instance namespace="Svc" name="rateGroupDriver" type="RateGroupDriver" base_id="461" base_id_window="20" />
+     <instance namespace="Svc" name="rateGroup1" type="ActiveRateGroup" base_id="21" base_id_window="20" />
+     <instance namespace="Svc" name="rateGroup2" type="ActiveRateGroup" base_id="161" base_id_window="20" />
+     <instance namespace="Svc" name="rateGroup3" type="ActiveRateGroup" base_id="241" base_id_window="20" />
 
      <!-- Reference Example Components -->
 
@@ -78,6 +78,52 @@
      <instance namespace="App" name="ADCS" type="ADCS" base_id="1050" base_id_window="20" />
      <instance namespace="App" name="EPS" type="EPS" base_id="1071" base_id_window="20" />
 
+     <!-- Rate Group Connections -->
+
+     <!-- Linux Timer Connection -->
+     <connection name = "BlkDrvClock">
+          <source component = "blockDrv" port = "CycleOut" type = "Cycle" num = "0"/>
+          <target component = "rateGroupDriver" port = "CycleIn" type = "Cycle" num = "0"/>
+     </connection>
+
+     <!-- Rate Group 1 -->
+     <connection name = "rateGroup1DriverComp">
+          <source component = "rateGroupDriver" port = "CycleOut" type = "Cycle" num = "0"/>
+          <target component = "rateGroup1" port = "CycleIn" type = "Cycle" num = "0"/>
+     </connection>
+     <connection name = "Rg1ChTlm">
+          <source component = "rateGroup1" port = "RateGroupMemberOut" type = "Sched" num = "0"/>
+          <target component = "chanTlm" port = "Run" type = "Sched" num = "0"/>
+     </connection>
+     <connection name = "Rg1EPS">
+          <source component = "rateGroup1" port = "RateGroupMemberOut" type = "Sched" num = "1"/>
+          <target component = "EPS" port = "Schedin" type = "Sched" num = "0"/>
+     </connection>
+
+     <!-- Rate Group 2 -->
+     <connection name = "Rg2Drv">
+          <source component = "rateGroupDriver" port = "CycleOut" type = "Cycle" num = "1"/>
+          <target component = "rateGroup2" port = "CycleIn" type = "Cycle" num = "0"/>
+     </connection>
+     <connection name = "Rg2Seq">
+          <source component = "rateGroup2" port = "RateGroupMemberOut" type = "Sched" num = "0"/>
+          <target component = "cmdSeq" port = "schedIn" type = "Sched" num = "0"/>
+     </connection>
+
+     <!-- Rate Group 3 -->
+     <connection name = "rateGroup3DriverComp">
+          <source component = "rateGroupDriver" port = "CycleOut" type = "Cycle" num = "2"/>
+          <target component = "rateGroup3" port = "CycleIn" type = "Cycle" num = "0"/>
+     </connection>
+
+     <connection name = "Rg3Health">
+          <source component = "rateGroup3" port = "RateGroupMemberOut" type = "Sched" num = "0"/>
+          <target component = "health" port = "Run" type = "Sched" num = "0"/>
+     </connection>
+     <connection name = "Rg3BlkDrv">
+          <source component = "rateGroup3" port = "RateGroupMemberOut" type = "Sched" num = "1"/>
+          <target component = "blockDrv" port = "Sched" type = "Sched" num = "0"/>
+     </connection>
 
      <!-- Connections -->
      <!-- Communications driver connections -->
@@ -272,15 +318,15 @@
           <target component = "eventLogger" port = "LogRecv" type = "Log" num = "0"/>
      </connection>
      <connection name = "RG1Ev">
-          <source component = "rateGroup1Comp" port = "Log" type = "Log" num = "0"/>
+          <source component = "rateGroup1" port = "Log" type = "Log" num = "0"/>
           <target component = "eventLogger" port = "LogRecv" type = "Log" num = "0"/>
      </connection>
      <connection name = "RG2Ev">
-          <source component = "rateGroup2Comp" port = "Log" type = "Log" num = "0"/>
+          <source component = "rateGroup2" port = "Log" type = "Log" num = "0"/>
           <target component = "eventLogger" port = "LogRecv" type = "Log" num = "0"/>
      </connection>
      <connection name = "RG3Ev">
-          <source component = "rateGroup3Comp" port = "Log" type = "Log" num = "0"/>
+          <source component = "rateGroup3" port = "Log" type = "Log" num = "0"/>
           <target component = "eventLogger" port = "LogRecv" type = "Log" num = "0"/>
      </connection>
      <connection name = "pingEvt">
@@ -322,15 +368,15 @@
           <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
      </connection>
      <connection name = "Rg1Text">
-          <source component = "rateGroup1Comp" port = "LogText" type = "LogText" num = "0"/>
+          <source component = "rateGroup1" port = "LogText" type = "LogText" num = "0"/>
           <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
      </connection>
      <connection name = "Rg2Text">
-          <source component = "rateGroup2Comp" port = "LogText" type = "LogText" num = "0"/>
+          <source component = "rateGroup2" port = "LogText" type = "LogText" num = "0"/>
           <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
      </connection>
      <connection name = "Rg3Text">
-          <source component = "rateGroup3Comp" port = "LogText" type = "LogText" num = "0"/>
+          <source component = "rateGroup3" port = "LogText" type = "LogText" num = "0"/>
           <target component = "textLogger" port = "TextLogger" type = "LogText" num = "0"/>
      </connection>
      <connection name = "PingText">
@@ -372,15 +418,15 @@
           <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
      </connection>
      <connection name = "Rg1Tlm">
-          <source component = "rateGroup1Comp" port = "Tlm" type = "Tlm" num = "0"/>
+          <source component = "rateGroup1" port = "Tlm" type = "Tlm" num = "0"/>
           <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
      </connection>
      <connection name = "Rg2Tlm">
-          <source component = "rateGroup2Comp" port = "Tlm" type = "Tlm" num = "0"/>
+          <source component = "rateGroup2" port = "Tlm" type = "Tlm" num = "0"/>
           <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
      </connection>
      <connection name = "Rg3Tlm">
-          <source component = "rateGroup3Comp" port = "Tlm" type = "Tlm" num = "0"/>
+          <source component = "rateGroup3" port = "Tlm" type = "Tlm" num = "0"/>
           <target component = "chanTlm" port = "TlmRecv" type = "Tlm" num = "0"/>
      </connection>
      <connection name = "healthTlm">
@@ -410,15 +456,15 @@
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
      <connection name = "rg1Time">
-          <source component = "rateGroup1Comp" port = "Time" type = "Time" num = "0"/>
+          <source component = "rateGroup1" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
      <connection name = "rg2Time">
-          <source component = "rateGroup2Comp" port = "Time" type = "Time" num = "0"/>
+          <source component = "rateGroup2" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
      <connection name = "rg3Time">
-          <source component = "rateGroup3Comp" port = "Time" type = "Time" num = "0"/>
+          <source component = "rateGroup3" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
      <connection name = "fileDownlinkBufferManagerTime">
@@ -469,7 +515,7 @@
           <source component = "blockDrv" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
-     <connection name = "eventLoggerTime">
+     <connection name = "eventActionTime">
           <source component = "eventAction" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
@@ -477,50 +523,6 @@
           <source component = "ADCS" port = "Time" type = "Time" num = "0"/>
           <target component = "linuxTime" port = "timeGetPort" type = "Time" num = "0"/>
      </connection>
-     
-     <!-- Rate Group Connections -->
-
-     <!-- Linux Timer Connection -->
-     <connection name = "BlkDrvClock">
-          <source component = "blockDrv" port = "CycleOut" type = "Cycle" num = "0"/>
-          <target component = "rateGroupDriverComp" port = "CycleIn" type = "Cycle" num = "0"/>
-     </connection>
-
-     <!-- Rate Group 1 -->
-     <connection name = "rateGroup1DriverComp">
-          <source component = "rateGroupDriverComp" port = "CycleOut" type = "Cycle" num = "0"/>
-          <target component = "rateGroup1Comp" port = "CycleIn" type = "Cycle" num = "0"/>
-     </connection>
-     <connection name = "Rg1ChTlm">
-          <source component = "rateGroup1Comp" port = "RateGroupMemberOut" type = "Sched" num = "2"/>
-          <target component = "chanTlm" port = "Run" type = "Sched" num = "0"/>
-     </connection>
-
-     <!-- Rate Group 2 -->
-     <connection name = "Rg2Drv">
-          <source component = "rateGroupDriverComp" port = "CycleOut" type = "Cycle" num = "1"/>
-          <target component = "rateGroup2Comp" port = "CycleIn" type = "Cycle" num = "0"/>
-     </connection>
-     <connection name = "Rg2Seq">
-          <source component = "rateGroup2Comp" port = "RateGroupMemberOut" type = "Sched" num = "0"/>
-          <target component = "cmdSeq" port = "schedIn" type = "Sched" num = "0"/>
-     </connection>
-
-     <!-- Rate Group 3 -->
-     <connection name = "rateGroup3DriverComp">
-          <source component = "rateGroupDriverComp" port = "CycleOut" type = "Cycle" num = "2"/>
-          <target component = "rateGroup3Comp" port = "CycleIn" type = "Cycle" num = "0"/>
-     </connection>
-
-     <connection name = "Rg3Health">
-          <source component = "rateGroup3Comp" port = "RateGroupMemberOut" type = "Sched" num = "0"/>
-          <target component = "health" port = "Run" type = "Sched" num = "0"/>
-     </connection>
-     <connection name = "Rg3BlkDrv">
-          <source component = "rateGroup3Comp" port = "RateGroupMemberOut" type = "Sched" num = "2"/>
-          <target component = "blockDrv" port = "Sched" type = "Sched" num = "0"/>
-     </connection>
-
 
      <!-- Health Connections -->
 
@@ -529,27 +531,27 @@
      <!-- This order must match the pingEntries[] table in Ref/Top/Topology.cpp -->
 
      <connection name = "Rg1PingSend">
-          <source component = "rateGroup1Comp" port = "PingOut" type = "Ping" num = "0"/>
+          <source component = "rateGroup1" port = "PingOut" type = "Ping" num = "0"/>
           <target component = "health" port = "PingReturn" type = "Ping" num = "0"/>
      </connection>
      <connection name = "Rg1PingRecv">
           <source component = "health" port = "PingSend" type = "Ping" num = "0"/>
-          <target component = "rateGroup1Comp" port = "PingIn" type = "Ping" num = "0"/>
+          <target component = "rateGroup1" port = "PingIn" type = "Ping" num = "0"/>
      </connection>
      <connection name = "Rg2PingSend">
           <source component = "health" port = "PingSend" type = "Ping" num = "1"/>
-          <target component = "rateGroup2Comp" port = "PingIn" type = "Ping" num = "0"/>
+          <target component = "rateGroup2" port = "PingIn" type = "Ping" num = "0"/>
      </connection>
      <connection name = "Rg2PingRecv">
-          <source component = "rateGroup2Comp" port = "PingOut" type = "Ping" num = "0"/>
+          <source component = "rateGroup2" port = "PingOut" type = "Ping" num = "0"/>
           <target component = "health" port = "PingReturn" type = "Ping" num = "1"/>
      </connection>
      <connection name = "Rg3PingSend">
           <source component = "health" port = "PingSend" type = "Ping" num = "2"/>
-          <target component = "rateGroup3Comp" port = "PingIn" type = "Ping" num = "0"/>
+          <target component = "rateGroup3" port = "PingIn" type = "Ping" num = "0"/>
      </connection>
      <connection name = "Rg3PingRecv">
-          <source component = "rateGroup3Comp" port = "PingOut" type = "Ping" num = "0"/>
+          <source component = "rateGroup3" port = "PingOut" type = "Ping" num = "0"/>
           <target component = "health" port = "PingReturn" type = "Ping" num = "2"/>
      </connection>
      <connection name = "cmdDispPingIn">
@@ -829,10 +831,6 @@
        <source component = "socketCspIpDriverEPS" port = "recv" type = "App::EPSCmd" num = "0"/>
         <target component = "EPS" port = "DataIn" type = "App::EPSCmdd" num = "0"/>
 </connection>
-   <!-- Scheduler Connection -->
-<connection name = "EPSRG">
-     <source component = "rateGroup1Comp" port = "RateGroupMemberOut" type = "Sched" num = "3"/>
-     <target component = "EPS" port = "Schedin" type = "Sched" num = "0"/>
-</connection>
+
 
 </assembly>
