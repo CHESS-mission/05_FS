@@ -16,6 +16,8 @@ jobs:
     steps:
       # checkout the repository
       - uses: actions/checkout@v2
+        with:
+          ref: dev
 
       - name: prepare python pre-built environnement
         uses: actions/setup-python@v2
