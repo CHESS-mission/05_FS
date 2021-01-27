@@ -45,6 +45,8 @@ namespace Drv {
       void testSendTM(void);
       void testSendTC(void);
       void testSendTCWrongCrc(void);
+      void testSendTMWrongStartByte(void);
+      void testSendTMWrongEndByte(void);
 
     private:
 

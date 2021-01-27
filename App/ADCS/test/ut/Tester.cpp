@@ -148,8 +148,9 @@ namespace App {
     App::ADCSHelper adcsHelper;
     Fw::Buffer bufferTm;
     U8 goodId = 127;
+    U8 crc = 0x74;
     U32 sizeTheoritical= 7;
-    U8 dataTheoritical[] = {0x1F,0x7F,goodId,0x00,0x1F,0xFF,0x00};
+    U8 dataTheoritical[] = {0x1F,0x7F,goodId,0x00,crc,0x1F,0xFF};
     adcsHelper.getCrc(dataTheoritical,sizeTheoritical);
     bufferTm.setData(dataTheoritical);
     bufferTm.setSize(sizeTheoritical);
@@ -171,7 +172,8 @@ namespace App {
 
     ASSERT_EQ(sizeTheoritical,sizeEmpirical);
 
-    for(int i = 0; i < 5 ;i++){
+    for(int i = 0; i < sizeTheoritical ;i++){
+      printf("data : %x",dataEmpirical[i]);
       ASSERT_EQ(dataTheoritical[i],dataEmpirical[i]);
     }
 

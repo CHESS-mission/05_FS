@@ -14,7 +14,7 @@ if __name__ == '__main__':
     print(adcs.current_state)
     print(f"adcs parameter : {adcs.param}")
     print("create connexion")
-    runTCP(adcs)
+    runTCP(adcs,'127.0.0.1',5005)
 
 
 

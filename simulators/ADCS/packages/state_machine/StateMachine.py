@@ -20,16 +20,19 @@ class ADCSStateMachine(StateMachine):
 
     def switcher(self, case):
         data = 0x00
-        if case == 0:
-            self.up_middle()
-        elif case == 1:
-            self.up_high()
-        elif case == 2:
-            self.down_middle()
-        elif case == 3:
-            self.down_low()
-        else:
-            print("error orbit")
+        try:
+            if case == 0:
+                self.up_middle()
+            elif case == 1:
+                self.up_high()
+            elif case == 2:
+                self.down_middle()
+            elif case == 3:
+                self.down_low()
+            else:
+                print("error orbit")
+                data = 0x03
+        except:
             data = 0x03
         return data
 
@@ -45,7 +48,7 @@ class ADCSStateMachine(StateMachine):
         self.param = 30
         print(f"{self.current_state} set, param = {self.param}")
 
-    def exec_command(self, id):
+    def exec_command(self, id, data):
         try:
             data = self.switcher(id)
         except Exception as e:
@@ -60,10 +63,11 @@ class ADCSStateMachine(StateMachine):
     def request(self,packet:bytearray) -> bytearray:
         code = Uart.check_packet(packet)
         id = Uart.get_id(packet)
+        data = Uart.get_data(packet)
         uart_packet = Uart(id)
         if code == 0:
            if id < 128:
-                code = self.exec_command(id)
+                code = self.exec_command(id,data)
                 return uart_packet.end_packet(code)
            else:
                 tm = self.request_telemetry_data(id)

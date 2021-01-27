@@ -32,28 +32,34 @@ class Uart:
     def check_packet(cls,packet:bytearray) -> int:
         code = 0x00
         if packet[0] == 0x1F and packet[1] == 0x7F:
-            if packet[2] < 128:
-                print('Telecommand packet')
-                if packet[-3] == 0x1F and packet[-2] == 0xFF:
-                    if cls.checksum(packet[:-1]) == packet[-1]:
+            if packet[-2] == 0x1F and packet[-1] == 0xFF:
+                if packet[2] < 128:
+                    print('Telecommand packet')
+                    if cls.checksum(packet[2:-3]) == packet[-3]:
                         print("Telecommand packet OK")
                     else:
                         print("CRC error")
                         code = 0x04
                 else:
-                    print("error in  Telecommand End message or Data byte bytes")
-                    code = 0x02
+                    print('Telemetry packet')
+                    if len(packet) == 5:
+                        print("Telemetry packet OK")
+                    else:
+                        print("error in  Telemetry packet length")
+                        code = 0x02
             else:
-                print('Telemetry packet')
-                if packet[-2] == 0x1F and packet[-1] == 0xFF:
-                    print("Telemetry packet OK")
-                else:
-                    print("error in  Telecommand End message or Data byte bytes")
+                print("error in end message or Data byte bytes")
+                code = 0x02
         else:
             print("error in Start message or Data byte bytes")
+            code = 0x02
 
         return code
 
     @staticmethod
     def get_id(packet):
         return packet[2]
+
+    @staticmethod
+    def get_data(packet):
+        return None

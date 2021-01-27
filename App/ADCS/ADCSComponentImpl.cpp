@@ -81,7 +81,7 @@ namespace App {
         U8 id
     )
   {
-    if(id < 128 || id > 255 ){
+    if(id < 128){
       log_WARNING_LO_MS_ID_ERROR(id);  
       this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_EXECUTION_ERROR);
       return;
@@ -101,7 +101,7 @@ namespace App {
           const Fw::CmdStringArg& payload /*!< The payload data*/
       )
       {
-      if(id < 0 || id > 127){
+      if(id > 127){
         log_WARNING_LO_MS_ID_ERROR(id);  
         this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_EXECUTION_ERROR);
         return;
@@ -138,9 +138,9 @@ namespace App {
         hexData[0]=0x1F;
         hexData[1]=0x7f;
         hexData[2]=id;
-        hexData[len-2]=0xFF;
-        hexData[len-3]=0x1F;
-        hexData[len-1]= adcsHelper.getCrc(hexData,len);
+        hexData[len-1]=0xFF;
+        hexData[len-2]=0x1F;
+        hexData[len-3]= adcsHelper.getCrc(hexData,len);
       }
     
     bool ADCSComponentImpl::isPayloadOK(const char* payload,NATIVE_UINT_TYPE len){

@@ -19,7 +19,7 @@ ADCSHelper::ADCSHelper() {
     U8 ADCSHelper::getCrc(U8* buffer,NATIVE_UINT_TYPE len){
         if (len == 0) return 0xff;
         U8 crc = 0;
-        for (U16 i = 0; i < len-1; i++)
+        for (U16 i = 2; i < len-3; i++)
         crc = CRC8Table[crc ^ buffer[i]];
         return crc;
 
