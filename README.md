@@ -39,6 +39,10 @@ fprime-util build
 
 Launch F' and GDS (Ground Software simulator)
 
+Prerequisites
+1. Run ADCS simulator
+2. Run EPS simulator
+
 ```
 fprime-gds
 ```
@@ -77,6 +81,10 @@ export LD_LIBRARY_PATH=./simulators/EPS/packages/csp/lib && python3 ./simulators
 ./fprime/Lib/examples/gs/gs
 ```
 The demonstrator is a TCP server. It will wait for a connection from Flight software and then, start sending and receiving packets
+### Running Flight solftware with demonstrator
+```bash
+./App/build-artifacts/Linux/bin/App -a 127.0.0.1 -p 27015
+```
 
 ## Running the tests
 
