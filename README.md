@@ -62,6 +62,7 @@ sudo apt install libsocketcan-dev pkg-config libzmq3-dev
 ```
 #### Running EPS simulator
 ```bash
+sudo chmod +x ./simulators/EPS/zmqproxy
 sudo ./simulators/EPS/zmqproxy &
 export LD_LIBRARY_PATH=./simulators/EPS/packages/csp/lib && python3 ./simulators/EPS/CspMain.py
 ```
