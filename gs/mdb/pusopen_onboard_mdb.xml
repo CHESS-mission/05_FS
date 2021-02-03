@@ -257,7 +257,7 @@ extern struct s_PARAM PARAM;
       <Name>Report #1</Name>
       <Description>Report #1 description</Description>
       <Enabled>true</Enabled>
-      <Interval>5</Interval>
+      <Interval>1</Interval>
       <DestApid>3</DestApid>
       <!-- <VcId>1</VcId> -->
       <HkParamsList>

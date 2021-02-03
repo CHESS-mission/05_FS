@@ -24,14 +24,16 @@ class EPSStateMachine(StateMachine):
     factory_to_factory = factory.to(working)
 
 
-    volt = 10
+    volt = 15
 
 
     def __str__(self):
         return f"{self.current_state} set, volt = {self.volt}"
 
     def request_cmd(self, data:bytearray):
-        self.volt = 10 if self.volt == 11 else 11
+        self.volt = self.volt - 1 
+        if self.volt == 9 :
+            self.volt = 15
         back_data = bytearray(232)
         back_data[0] = data[0]
         back_data[1] = 0

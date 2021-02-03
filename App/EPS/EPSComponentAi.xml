@@ -56,17 +56,17 @@
         </command>
     </commands>
     <telemetry>
-        <channel id="0" name="EPS_Voltage_battery_mV" data_type="U16">
+        <channel id="0" name="EPS_Voltage_battery_mV" data_type="U32">
             <comment>
             Voltage
             </comment>
         </channel>
-        <channel id="1" name="EPS_Battery_mode" data_type="U8">
+        <channel id="1" name="EPS_Battery_mode" data_type="U32">
             <comment>
             Battery mode
             </comment>
         </channel>
-        <channel id="2" name="EPS_Temp_Battery_Celsuis" data_type="U16">
+        <channel id="2" name="EPS_Temp_Battery_Celsuis" data_type="U32">
             <comment>
             Battery Temp
             </comment>

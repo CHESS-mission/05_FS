@@ -114,6 +114,7 @@ po_result_t pususr_tm(po_tmdesc_t * tm) {
             printf("\tId=%u (0x%x)\n", eventId, eventId);
 
             U8 argU8;
+            U16 argU16;
             U32 argU32;
             I32 argI32;
             switch(eventId) {
@@ -145,6 +146,9 @@ po_result_t pususr_tm(po_tmdesc_t * tm) {
                 case 0x169: // HLTH_PING_WARN
                     printf("\tEvent=HLTH_PING_WARN\n");
                     printf("\t\tentry: -- string not supported --\n");
+                case 0x420: // MS_SAFE_MODE
+                    printf("\tEvent=ADCS_SAFE_MODE\n");
+                    break;
                 case 0x431: // MS_CMD_ERROR
                     printf("\tEvent=MS_CMD_ERROR\n");
                     logBuffer.deserialize(argU8);
@@ -153,6 +157,11 @@ po_result_t pususr_tm(po_tmdesc_t * tm) {
                     printf("\t\tcmd: %u\n", argU8);
                     logBuffer.deserialize(argU8);
                     printf("\t\tstatus: %u\n", argU8);
+                    break;
+                case 0x432: // MS_BATT_VOLT_LOW
+                    printf("\tEvent=MS_BATT_VOLT_LOW\n");
+                    logBuffer.deserialize(argU16);
+                    printf("\t\tvoltage: %u\n", argU16);
                     break;
                 default:
                     printf("\tEvent= -- Uknown -- \n");
