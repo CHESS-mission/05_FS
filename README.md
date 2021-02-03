@@ -43,6 +43,41 @@ Launch F' and GDS (Ground Software simulator)
 fprime-gds
 ```
 
+## simulators
+### ADCS
+#### Installing
+```bash
+pip install python-statemachine
+```
+#### Running ADCS simulator
+```bash
+python3 ./simulators/ADCS/TcpMain.py
+```
+
+### EPS
+#### Installing
+```bash
+pip install python-statemachine
+sudo apt install libsocketcan-dev pkg-config libzmq3-dev 
+```
+#### Running EPS simulator
+```bash
+sudo chmod +x ./simulators/EPS/zmqproxy
+sudo ./simulators/EPS/zmqproxy &
+export LD_LIBRARY_PATH=./simulators/EPS/packages/csp/lib && python3 ./simulators/EPS/CspMain.py
+```
+
+## Demonstrator
+### Prerequisites
+1. Run ADCS simulator
+2. Run EPS simulator
+
+## Running Demonstrator
+```bash
+./fprime/Lib/examples/gs/gs
+```
+The demonstrator is a TCP server. It will wait for a connection from Flight software and then, start sending and receiving packets
+
 ## Running the tests
 
 In `05_FS/App` run
