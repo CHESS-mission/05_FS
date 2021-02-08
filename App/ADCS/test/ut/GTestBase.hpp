@@ -73,8 +73,8 @@
 #define ASSERT_EVENTS_MS_TC_RECV_ADCS_SIZE(size) \
   this->assertEvents_MS_TC_RECV_ADCS_size(__FILE__, __LINE__, size)
 
-#define ASSERT_EVENTS_MS_TC_RECV_ADCS(index, _id, _tm) \
-  this->assertEvents_MS_TC_RECV_ADCS(__FILE__, __LINE__, index, _id, _tm)
+#define ASSERT_EVENTS_MS_TC_RECV_ADCS(index, _id, _tc) \
+  this->assertEvents_MS_TC_RECV_ADCS(__FILE__, __LINE__, index, _id, _tc)
 
 #define ASSERT_EVENTS_MS_TC_PAYLOAD_ERROR_SIZE(size) \
   this->assertEvents_MS_TC_PAYLOAD_ERROR_size(__FILE__, __LINE__, size)
@@ -87,6 +87,9 @@
 
 #define ASSERT_EVENTS_MS_ID_ERROR(index, _id) \
   this->assertEvents_MS_ID_ERROR(__FILE__, __LINE__, index, _id)
+
+#define ASSERT_EVENTS_MS_SAFE_MODE_SIZE(size) \
+  this->assertEvents_MS_SAFE_MODE_size(__FILE__, __LINE__, size)
 
 // ----------------------------------------------------------------------
 // Macros for typed user from port history assertions
@@ -320,7 +323,7 @@ namespace App {
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
           const U8 id, /*!< The telecommand id*/
-          const U8 tm /*!< The telecommand return data*/
+          const U8 tc /*!< The telecommand return data*/
       ) const;
 
     protected:
@@ -360,6 +363,18 @@ namespace App {
           const U32 __callSiteLineNumber, /*!< The line number of the call site*/
           const U32 __index, /*!< The index*/
           const U8 id /*!< the id error*/
+      ) const;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_SAFE_MODE
+      // ----------------------------------------------------------------------
+
+      void assertEvents_MS_SAFE_MODE_size(
+          const char *const __callSiteFileName, /*!< The name of the file containing the call site*/
+          const U32 __callSiteLineNumber, /*!< The line number of the call site*/
+          const U32 size /*!< The asserted size*/
       ) const;
 
     protected:

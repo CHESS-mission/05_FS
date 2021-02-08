@@ -1078,7 +1078,7 @@ namespace App {
             static_cast<AssertArg>(_status)
         );
 
-        U8 tm;
+        U8 tc;
 #if FW_AMPCS_COMPATIBLE
         {
           // Deserialize the argument size
@@ -1091,13 +1091,13 @@ namespace App {
           FW_ASSERT(_argSize == sizeof(U8),_argSize,sizeof(U8));
         }
 #endif
-        _status = args.deserialize(tm);
+        _status = args.deserialize(tc);
         FW_ASSERT(
             _status == Fw::FW_SERIALIZE_OK,
             static_cast<AssertArg>(_status)
         );
 
-        this->logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(id, tm);
+        this->logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(id, tc);
 
         break;
 
@@ -1192,6 +1192,25 @@ namespace App {
 
       }
 
+      case ADCSComponentBase::EVENTID_MS_SAFE_MODE:
+      {
+
+#if FW_AMPCS_COMPATIBLE
+        // For AMPCS, decode zero arguments
+        Fw::SerializeStatus _zero_status = Fw::FW_SERIALIZE_OK;
+        U8 _noArgs;
+        _zero_status = args.deserialize(_noArgs);
+        FW_ASSERT(
+            _zero_status == Fw::FW_SERIALIZE_OK,
+            static_cast<AssertArg>(_zero_status)
+        );
+#endif
+        this->logIn_ACTIVITY_HI_MS_SAFE_MODE();
+
+        break;
+
+      }
+
       default: {
         FW_ASSERT(0, id);
         break;
@@ -1211,6 +1230,7 @@ namespace App {
     this->eventHistory_MS_TC_RECV_ADCS->clear();
     this->eventHistory_MS_TC_PAYLOAD_ERROR->clear();
     this->eventHistory_MS_ID_ERROR->clear();
+    this->eventsSize_MS_SAFE_MODE = 0;
   }
 
 #if FW_ENABLE_TEXT_LOGGING
@@ -1348,11 +1368,11 @@ namespace App {
   void ADCSTesterBase ::
     logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(
         U8 id,
-        U8 tm
+        U8 tc
     )
   {
     EventEntry_MS_TC_RECV_ADCS e = {
-      id, tm
+      id, tc
     };
     eventHistory_MS_TC_RECV_ADCS->push_back(e);
     ++this->eventsSize;
@@ -1388,6 +1408,19 @@ namespace App {
       id
     };
     eventHistory_MS_ID_ERROR->push_back(e);
+    ++this->eventsSize;
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_SAFE_MODE
+  // ----------------------------------------------------------------------
+
+  void ADCSTesterBase ::
+    logIn_ACTIVITY_HI_MS_SAFE_MODE(
+        void
+    )
+  {
+    ++this->eventsSize_MS_SAFE_MODE;
     ++this->eventsSize;
   }
 

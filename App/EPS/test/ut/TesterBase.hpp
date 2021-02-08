@@ -822,14 +822,14 @@ namespace App {
       //!
       virtual void tlmInput_EPS_Voltage_battery_mV(
           const Fw::Time& timeTag, /*!< The time*/
-          const U16& val /*!< The channel value*/
+          const U32& val /*!< The channel value*/
       );
 
       //! A telemetry entry for channel EPS_Voltage_battery_mV
       //!
       typedef struct {
         Fw::Time timeTag;
-        U16 arg;
+        U32 arg;
       } TlmEntry_EPS_Voltage_battery_mV;
 
       //! The history of EPS_Voltage_battery_mV values
@@ -847,14 +847,14 @@ namespace App {
       //!
       virtual void tlmInput_EPS_Battery_mode(
           const Fw::Time& timeTag, /*!< The time*/
-          const U8& val /*!< The channel value*/
+          const U32& val /*!< The channel value*/
       );
 
       //! A telemetry entry for channel EPS_Battery_mode
       //!
       typedef struct {
         Fw::Time timeTag;
-        U8 arg;
+        U32 arg;
       } TlmEntry_EPS_Battery_mode;
 
       //! The history of EPS_Battery_mode values
@@ -872,14 +872,14 @@ namespace App {
       //!
       virtual void tlmInput_EPS_Temp_Battery_Celsuis(
           const Fw::Time& timeTag, /*!< The time*/
-          const U16& val /*!< The channel value*/
+          const U32& val /*!< The channel value*/
       );
 
       //! A telemetry entry for channel EPS_Temp_Battery_Celsuis
       //!
       typedef struct {
         Fw::Time timeTag;
-        U16 arg;
+        U32 arg;
       } TlmEntry_EPS_Temp_Battery_Celsuis;
 
       //! The history of EPS_Temp_Battery_Celsuis values

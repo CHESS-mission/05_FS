@@ -369,7 +369,7 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     U8 data[dataSize] = {0};
     data[EPSCMD] = 0x00;
     data[EPSSTATUS] = 0x00;
-    data[EPSVBATT] = 10;
+    data[EPSVBATT] = 11;
     data[EPSTEMP] = 50;
     data[EPSBATTMODE] = 1;
     bufferData.setData(data);
@@ -447,7 +447,7 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     U8 data[dataSize] = {0};
     data[EPSCMD] = 0x00;
     data[EPSSTATUS] = 0x00;
-    data[EPSVBATT] = 10;
+    data[EPSVBATT] = 11;
     data[EPSTEMP] = 101;
     data[EPSBATTMODE] = 2;
     bufferData.setData(data);
@@ -553,6 +553,7 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
 
     this->clearHistory();
   }
+
 
   // ----------------------------------------------------------------------
   // Handlers for typed from ports

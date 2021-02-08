@@ -575,14 +575,14 @@ namespace App {
       //!
       virtual void logIn_ACTIVITY_LO_MS_TC_RECV_ADCS(
           U8 id, /*!< The telecommand id*/
-          U8 tm /*!< The telecommand return data*/
+          U8 tc /*!< The telecommand return data*/
       );
 
       //! A history entry for event MS_TC_RECV_ADCS
       //!
       typedef struct {
         U8 id;
-        U8 tm;
+        U8 tc;
       } EventEntry_MS_TC_RECV_ADCS;
 
       //! The history of MS_TC_RECV_ADCS events
@@ -637,6 +637,22 @@ namespace App {
       //!
       History<EventEntry_MS_ID_ERROR>
         *eventHistory_MS_ID_ERROR;
+
+    protected:
+
+      // ----------------------------------------------------------------------
+      // Event: MS_SAFE_MODE
+      // ----------------------------------------------------------------------
+
+      //! Handle event MS_SAFE_MODE
+      //!
+      virtual void logIn_ACTIVITY_HI_MS_SAFE_MODE(
+          void
+      );
+
+      //! Size of history for event MS_SAFE_MODE
+      //!
+      U32 eventsSize_MS_SAFE_MODE;
 
     protected:
 

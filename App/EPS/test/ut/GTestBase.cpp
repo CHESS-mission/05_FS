@@ -157,7 +157,7 @@ namespace App {
         const char *const __callSiteFileName,
         const U32 __callSiteLineNumber,
         const U32 __index,
-        const U16& val
+        const U32& val
     )
     const
   {
@@ -207,7 +207,7 @@ namespace App {
         const char *const __callSiteFileName,
         const U32 __callSiteLineNumber,
         const U32 __index,
-        const U8& val
+        const U32& val
     )
     const
   {
@@ -257,7 +257,7 @@ namespace App {
         const char *const __callSiteFileName,
         const U32 __callSiteLineNumber,
         const U32 __index,
-        const U16& val
+        const U32& val
     )
     const
   {

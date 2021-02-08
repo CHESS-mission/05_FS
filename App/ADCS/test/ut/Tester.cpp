@@ -48,7 +48,7 @@ namespace App {
   // Tests 
   // ----------------------------------------------------------------------
 
-  void Tester ::
+    void Tester ::
     testCmdTMBadId(void) 
   {
     //Init data for TM test
@@ -282,9 +282,11 @@ namespace App {
     this->component.doDispatch();
 
     //Verify Event
-    ASSERT_EVENTS_SIZE(1);
+    ASSERT_EVENTS_SIZE(2);
     ASSERT_EVENTS_MS_TC_RECV_ADCS_SIZE(1);
     ASSERT_EVENTS_MS_TC_RECV_ADCS(0,goodId,tc);
+
+    ASSERT_EVENTS_MS_SAFE_MODE_SIZE(1);
 
     //Verify Telemetry
     ASSERT_TLM_SIZE(1);

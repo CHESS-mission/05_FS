@@ -998,7 +998,7 @@ namespace App {
 
       case EPSComponentBase::CHANNELID_EPS_VOLTAGE_BATTERY_MV:
       {
-        U16 arg;
+        U32 arg;
         const Fw::SerializeStatus _status = val.deserialize(arg);
         if (_status != Fw::FW_SERIALIZE_OK) {
           printf("Error deserializing EPS_Voltage_battery_mV: %d\n", _status);
@@ -1010,7 +1010,7 @@ namespace App {
 
       case EPSComponentBase::CHANNELID_EPS_BATTERY_MODE:
       {
-        U8 arg;
+        U32 arg;
         const Fw::SerializeStatus _status = val.deserialize(arg);
         if (_status != Fw::FW_SERIALIZE_OK) {
           printf("Error deserializing EPS_Battery_mode: %d\n", _status);
@@ -1022,7 +1022,7 @@ namespace App {
 
       case EPSComponentBase::CHANNELID_EPS_TEMP_BATTERY_CELSUIS:
       {
-        U16 arg;
+        U32 arg;
         const Fw::SerializeStatus _status = val.deserialize(arg);
         if (_status != Fw::FW_SERIALIZE_OK) {
           printf("Error deserializing EPS_Temp_Battery_Celsuis: %d\n", _status);
@@ -1070,7 +1070,7 @@ namespace App {
   void EPSTesterBase ::
     tlmInput_EPS_Voltage_battery_mV(
         const Fw::Time& timeTag,
-        const U16& val
+        const U32& val
     )
   {
     TlmEntry_EPS_Voltage_battery_mV e = { timeTag, val };
@@ -1085,7 +1085,7 @@ namespace App {
   void EPSTesterBase ::
     tlmInput_EPS_Battery_mode(
         const Fw::Time& timeTag,
-        const U8& val
+        const U32& val
     )
   {
     TlmEntry_EPS_Battery_mode e = { timeTag, val };
@@ -1100,7 +1100,7 @@ namespace App {
   void EPSTesterBase ::
     tlmInput_EPS_Temp_Battery_Celsuis(
         const Fw::Time& timeTag,
-        const U16& val
+        const U32& val
     )
   {
     TlmEntry_EPS_Temp_Battery_Celsuis e = { timeTag, val };

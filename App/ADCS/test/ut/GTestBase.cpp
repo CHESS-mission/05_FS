@@ -445,7 +445,7 @@ namespace App {
         const U32 __callSiteLineNumber,
         const U32 __index,
         const U8 id,
-        const U8 tm
+        const U8 tc
     ) const
   {
     ASSERT_GT(this->eventHistory_MS_TC_RECV_ADCS->size(), __index)
@@ -467,15 +467,15 @@ namespace App {
       << " in history of event MS_TC_RECV_ADCS\n"
       << "  Expected: " << id << "\n"
       << "  Actual:   " << e.id << "\n";
-    ASSERT_EQ(tm, e.tm)
+    ASSERT_EQ(tc, e.tc)
       << "\n"
       << "  File:     " << __callSiteFileName << "\n"
       << "  Line:     " << __callSiteLineNumber << "\n"
-      << "  Value:    Value of argument tm at index "
+      << "  Value:    Value of argument tc at index "
       << __index
       << " in history of event MS_TC_RECV_ADCS\n"
-      << "  Expected: " << tm << "\n"
-      << "  Actual:   " << e.tm << "\n";
+      << "  Expected: " << tc << "\n"
+      << "  Actual:   " << e.tc << "\n";
   }
 
   // ----------------------------------------------------------------------
@@ -584,6 +584,26 @@ namespace App {
       << " in history of event MS_ID_ERROR\n"
       << "  Expected: " << id << "\n"
       << "  Actual:   " << e.id << "\n";
+  }
+
+  // ----------------------------------------------------------------------
+  // Event: MS_SAFE_MODE
+  // ----------------------------------------------------------------------
+
+  void ADCSGTestBase ::
+    assertEvents_MS_SAFE_MODE_size(
+        const char *const __callSiteFileName,
+        const U32 __callSiteLineNumber,
+        const U32 size
+    ) const
+  {
+    ASSERT_EQ(size, this->eventsSize_MS_SAFE_MODE)
+      << "\n"
+      << "  File:     " << __callSiteFileName << "\n"
+      << "  Line:     " << __callSiteLineNumber << "\n"
+      << "  Value:    Size of history for event MS_SAFE_MODE\n"
+      << "  Expected: " << size << "\n"
+      << "  Actual:   " << this->eventsSize_MS_SAFE_MODE << "\n";
   }
 
   // ----------------------------------------------------------------------

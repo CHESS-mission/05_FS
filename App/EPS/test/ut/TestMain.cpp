@@ -35,3 +35,8 @@ TEST(Nominal, TestPing) {
     TEST_CASE(EPS.11,"Test port ping not ok");
     tester.portPingNOK();
 }
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

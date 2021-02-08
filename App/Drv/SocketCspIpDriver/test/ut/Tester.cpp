@@ -65,7 +65,7 @@ namespace Drv {
 
     dataRecvTheoretical[EPSCMD] = cmd;
     dataRecvTheoretical[EPSSTATUS] = 0;
-    dataRecvTheoretical[EPSVBATT] = 11;
+    dataRecvTheoretical[EPSVBATT] = 14;
     dataRecvTheoretical[EPSTEMP] = 50;
     dataRecvTheoretical[EPSBATTMODE] = 2;
 
@@ -117,7 +117,7 @@ void Tester ::
 
     dataRecvTheoretical[EPSCMD] = cmd;
     dataRecvTheoretical[EPSSTATUS] = 0;
-    dataRecvTheoretical[EPSVBATT] = 10;
+    dataRecvTheoretical[EPSVBATT] = 13;
     dataRecvTheoretical[EPSTEMP] = 50;
     dataRecvTheoretical[EPSBATTMODE] = 2;
 
