@@ -55,8 +55,8 @@ namespace App {
       void portChangeMode(void);
 
       void portPingIn(void);
-      void cmdPortPingOk(void);
-      void cmdPortPingNOK(void);
+      void portPingOk(void);
+      void portPingNOK(void);
 
     private:
 

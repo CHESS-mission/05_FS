@@ -25,19 +25,21 @@ class EPSStateMachine(StateMachine):
 
 
     volt = 10
+    temp = 50
+    mode = 2
 
 
     def __str__(self):
         return f"{self.current_state} set, volt = {self.volt}"
 
-    def request_cmd(self, data:bytearray):
+    def request(self, data:bytearray):
         self.volt = 10 if self.volt == 11 else 11
         back_data = bytearray(232)
         back_data[0] = data[0]
         back_data[1] = 0
         back_data[26] = self.volt
-        back_data[206] = 50
-        back_data[226] = 2
+        back_data[206] = self.temp
+        back_data[226] = self.mode
         return back_data
 
 

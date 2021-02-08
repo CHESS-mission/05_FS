@@ -31,7 +31,7 @@ TEST(Nominal, TestPing) {
     TEST_CASE(EPS.9,"Test port ping in");
     tester.portPingIn();
     TEST_CASE(EPS.10,"Test port ping");
-    tester.cmdPortPingOk();
+    tester.portPingOk();
     TEST_CASE(EPS.11,"Test port ping not ok");
-    tester.cmdPortPingNOK();
+    tester.portPingNOK();
 }

@@ -62,4 +62,4 @@ class Uart:
 
     @staticmethod
     def get_data(packet):
-        return None
+        return packet[3:-3]

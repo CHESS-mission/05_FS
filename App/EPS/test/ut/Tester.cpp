@@ -503,7 +503,7 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     this->clearHistory();
   }
 
-  void Tester::cmdPortPingOk(void){
+  void Tester::portPingOk(void){
     //Init data for cmd test
     Fw::Buffer bufferData;
     U8 port = CSP_PING_PORT;
@@ -527,7 +527,7 @@ void Tester::cmdCmdGoodpayloadGoodPort(void){
     this->clearHistory();
   }
 
-    void Tester::cmdPortPingNOK(void){
+    void Tester::portPingNOK(void){
     //Init data for cmd test
     Fw::Buffer bufferData;
     U8 port = CSP_PING_PORT;

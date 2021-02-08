@@ -18,7 +18,7 @@ class ADCSStateMachine(StateMachine):
     def __str__(self):
         return f"{self.current_state} set, param = {self.param}"
 
-    def switcher(self, case):
+    def switcher(self, case, data):
         data = 0x00
         try:
             if case == 0:
@@ -50,7 +50,7 @@ class ADCSStateMachine(StateMachine):
 
     def exec_command(self, id, data):
         try:
-            data = self.switcher(id)
+            data = self.switcher(id,data)
         except Exception as e:
             print(e)
             data = 0x03

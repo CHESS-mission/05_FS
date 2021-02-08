@@ -46,7 +46,7 @@ def csp_server(eps):
                 length = libcsp.packet_get_length(packet)
                 print ("got packet, len=" + str(length) + ", data=" + ''.join('{:02x}'.format(x) for x in data))
                 # send reply
-                back_data = eps.request_cmd(data)
+                back_data = eps.request(data)
                 print(f"volt : {back_data[26]}")
                 print(f'sending data back to client : data {back_data}\n')
                 reply = libcsp.buffer_get(1)
@@ -58,10 +58,10 @@ def csp_server(eps):
                 libcsp.service_handler(conn, packet)
 
 
-def init(eps):
+def init(eps, address):
 
     # init csp
-    libcsp.init(27, "test_service", "bindings", "1.2.3", 10, 300)
+    libcsp.init(address, "test_service", "bindings", "1.2.3", 10, 300)
     libcsp.zmqhub_init(27, "localhost")
     libcsp.rtable_set(0, 0, "ZMQHUB")
     libcsp.route_start_task()
