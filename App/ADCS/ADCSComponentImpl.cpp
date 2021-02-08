@@ -61,6 +61,9 @@ namespace App {
   {
     U8* packet = fwBuffer.getData();
     if(packet[2] < 128){
+
+      log_ACTIVITY_HI_MS_SAFE_MODE();
+
       log_ACTIVITY_LO_MS_TC_RECV_ADCS(packet[2],packet[3]);
       tlmWrite_ADCS_LAST_CMD(packet[3]);
     }else{
@@ -105,7 +108,7 @@ namespace App {
         log_WARNING_LO_MS_ID_ERROR(id);  
         this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_EXECUTION_ERROR);
         return;
-    }
+      }
         const char* data = payload.toChar();
         int isPayload = strcmp(data,"null");
         Fw::LogStringArg eventLog(data);

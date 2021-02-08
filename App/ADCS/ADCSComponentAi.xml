@@ -123,5 +123,10 @@
                 </arg>    
             </args>
         </event>
+        <event id="6" name="MS_SAFE_MODE" severity="ACTIVITY_HI" format_string="Switched to Safe mode"  >
+            <comment>
+            Switch to safe mode
+            </comment>      
+        </event>
     </events>
 </component>

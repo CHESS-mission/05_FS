@@ -994,6 +994,9 @@
         <arg name="id" type="U8"/>
       </args>
     </event>
+    <event component="ADCS" name="MS_SAFE_MODE" id="0x420" severity="ACTIVITY_HI" format_string="Switched to Safe mode">
+      <args/>
+    </event>
     <event component="EPS" name="MS_CMD_SEND_EPS" id="0x42f" severity="ACTIVITY_LO" format_string="Commande send to EPS : port = %hu, cmd = %hu, data: %s">
       <args>
         <arg name="port" type="U8"/>
@@ -1072,9 +1075,9 @@
     <channel component="blockDrv" name="BD_Cycles" id="0x1e1" description="Driver cycle count" type="U32"/>
     <channel component="ADCS" name="ADCS_LAST_TM_DATA" id="0x41a" description="Tm Value" type="F64"/>
     <channel component="ADCS" name="ADCS_LAST_CMD" id="0x41b" description="Last Telecommand return" type="U8"/>
-    <channel component="EPS" name="EPS_Voltage_battery_mV" id="0x42f" description="Voltage" type="U16"/>
-    <channel component="EPS" name="EPS_Battery_mode" id="0x430" description="Battery mode" type="U8"/>
-    <channel component="EPS" name="EPS_Temp_Battery_Celsuis" id="0x431" description="Battery Temp" type="U16"/>
+    <channel component="EPS" name="EPS_Voltage_battery_mV" id="0x42f" description="Voltage" type="U32"/>
+    <channel component="EPS" name="EPS_Battery_mode" id="0x430" description="Battery mode" type="U32"/>
+    <channel component="EPS" name="EPS_Temp_Battery_Celsuis" id="0x431" description="Battery Temp" type="U32"/>
     <channel component="EPS" name="EPS_LAST_CMD_RETURN" id="0x432" description="Battery mode" len="1000" type="string"/>
   </channels>
   <parameters/>
