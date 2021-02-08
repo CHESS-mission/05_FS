@@ -32,6 +32,15 @@ python3 -m pip install ./Fw/Python ./Gds
 
 F' compilation
 
+Option
+
+You can compile for the FPrime GDS or PUS demonstrator
+
+In ./App/CMakeLists.txt comment and uncomment your choice
+
+```cmake=
+add_definitions(-D_PUS)     # to use PUS with GS
+#add_definitions(-D_GDS)    # to use F' GDS (without PUS)
 ```
 fprime-util generate
 fprime-util build
