@@ -85,7 +85,7 @@ export LD_LIBRARY_PATH=./simulators/EPS/packages/csp/lib && python3 ./simulators
 
 ## Running Demonstrator
 ```bash
-./fprime/Lib/examples/gs/gs
+./gs/gs
 ```
 The demonstrator is a TCP server. It will wait for a connection from Flight software and then, start sending and receiving packets
 ### Running Flight solftware with demonstrator
