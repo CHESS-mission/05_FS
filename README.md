@@ -16,17 +16,6 @@ Follow this guide to start with CHESS FS development : [Quick start guide](https
 - CMake 3.5 or newer (3.10.2 used)
 - Python 3.5+, PIP and Python Virtual Environment
 
-
-### Cloning the project
-Clone this repository and ensure recursively initalise [FPrime](https://github.com/CHESS-mission/fprime) submodule. In FPrime submodule, clone [PUSOpen](https://github.com/CHESS-mission/pusopen) as a *Lib* folder at root level (this is caused due to license restrictions).
-
-```
-git clone --recurse-submodules -j8 https://github.com/CHESS-mission/05_FS.git
-cd fprime
-git clone https://github.com/CHESS-mission/pusopen.git Lib
-```
-
-
 ### Installing
 
 See [Quick start guide](https://hackmd.io/@jonathanmichel/SyKt6xV9v) for details.
@@ -43,6 +32,13 @@ python3 -m pip install ./Fw/Python ./Gds
 
 F' compilation
 
+Before compiling, you need to know if the flight sofrware will be used with the FPrime GDS or PUS demonstrator
+
+In ./App/CMakeLists.txt comment and uncomment your choice
+
+```cmake=
+add_definitions(-D_PUS)     # to use PUS with GS
+#add_definitions(-D_GDS)    # to use F' GDS (without PUS)
 ```
 fprime-util generate
 fprime-util build
@@ -50,8 +46,54 @@ fprime-util build
 
 Launch F' and GDS (Ground Software simulator)
 
+Prerequisites
+1. Run ADCS simulator
+2. Run EPS simulator
+
 ```
 fprime-gds
+```
+
+## simulators
+### ADCS
+#### Installing
+```bash
+pip install python-statemachine
+```
+#### Running ADCS simulator
+```bash
+python3 ./simulators/ADCS/TcpMain.py
+```
+
+### EPS
+#### Installing
+```bash
+pip install python-statemachine
+sudo apt install libsocketcan-dev pkg-config libzmq3-dev 
+```
+#### Running EPS simulator
+```bash
+sudo chmod +x ./simulators/EPS/zmqproxy
+sudo ./simulators/EPS/zmqproxy &
+export LD_LIBRARY_PATH=./simulators/EPS/packages/csp/lib && python3 ./simulators/EPS/CspMain.py
+```
+
+## Demonstrator
+### Prerequisites
+1. Run ADCS simulator
+2. Run EPS simulator
+
+## Running Demonstrator
+```bash
+cd /gs/gs
+cmake .
+make 
+./gs
+```
+The demonstrator is a TCP server. It will wait for a connection from Flight software and then, start sending and receiving packets
+### Running flight software with demonstrator
+```bash
+./App/build-artifacts/Linux/bin/App -a 127.0.0.1 -p 27015
 ```
 
 ## Running the tests
