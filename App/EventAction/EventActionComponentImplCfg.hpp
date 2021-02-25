@@ -11,7 +11,7 @@
 // Define configuration values for event action
 
 enum {
-    EVENT_ACTION_TABLE_SIZE = 2, // !< The size of the table holding event actions
+    EVENT_ACTION_TABLE_SIZE = 5, // !< The size of the table holding event actions
 };
 
 #endif /* EVENTACTION_EVENTACTIONIMPLCFG_HPP_ */

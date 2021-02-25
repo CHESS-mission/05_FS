@@ -36,10 +36,10 @@ void EventActionComponentImpl ::init(const NATIVE_INT_TYPE queueDepth,
         this->m_eventActionTable[slot].sequence = Fw::EightyCharString("");
     }
 
-    // Safe mode sequence on low battery event @todo Remove
-    this->m_eventActionTable[0].id = 0x432;
-    this->m_eventActionTable[0].used = true;
-    this->m_eventActionTable[0].sequence = Fw::EightyCharString("safemode.bin");
+    // Safe mode sequence on low battery event for demonstrator @todo Remove
+    //this->m_eventActionTable[0].id = 0x432;
+    //this->m_eventActionTable[0].used = true;
+    //this->m_eventActionTable[0].sequence = Fw::EightyCharString("safemode.bin");
 }
 
 EventActionComponentImpl ::~EventActionComponentImpl(void) {}
