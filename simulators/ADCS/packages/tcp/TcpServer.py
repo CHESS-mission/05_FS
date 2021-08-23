@@ -12,6 +12,7 @@ def runTCP(adcs):
     BUFFER_SIZE = 2046
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     print(f"starting up on {TCP_IP} port {TCP_PORT}")
     s.bind((TCP_IP, TCP_PORT))
     s.listen(1)
@@ -24,7 +25,6 @@ def runTCP(adcs):
             while 1:
                 data = conn.recv(BUFFER_SIZE)
                 if data:
-
                     print(f"Data Received : {data}")
                     back_data = adcs.request(data)
                     print(f'sending data back to client : data {back_data}\n')

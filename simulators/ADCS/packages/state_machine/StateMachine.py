@@ -1,6 +1,25 @@
 from statemachine import StateMachine, State
 from packages.package.UART import Uart
 
+listTC = {
+    1:"reset",
+    4:"reset log pointer",
+    5:"advance log pointer",
+    6:"reset boot registers",
+    108:"erase file",
+    112:"load file donwload block",
+    113:"advance file list read pointer",
+    114:"initiate file upload",
+    115:"file upload packet",
+    116:"finalize upload block",
+    117:"reset upload block",
+    118:"reset file list read pointer",
+    119:"initate donwload burst"
+}
+
+listTM = {
+
+}
 
 class ADCSStateMachine(StateMachine):
     low_orbit = State('Low orbit', initial=True)
@@ -47,6 +66,7 @@ class ADCSStateMachine(StateMachine):
 
     def exec_command(self, id):
         try:
+            print(listTC[id])
             data = self.switcher(id)
         except Exception as e:
             print(e)
@@ -58,14 +78,14 @@ class ADCSStateMachine(StateMachine):
         return self.param
 
     def request(self,packet:bytearray) -> bytearray:
-        code = Uart.check_packet(packet)
-        id = Uart.get_id(packet)
+        code = Uart.check_packet(packet)            #error code (?)
+        id = Uart.get_id(packet)                    #third byte on the received data
         uart_packet = Uart(id)
-        if code == 0:
-           if id < 128:
+        if code == 0:                               #if no errors in received data
+           if id < 128:                             #telecomand
                 code = self.exec_command(id)
                 return uart_packet.end_packet(code)
-           else:
+           else:                                    #telemetry
                 tm = self.request_telemetry_data(id)
                 return uart_packet.end_packet(tm)
         else:
