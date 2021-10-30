@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>EPS:EPS Component Dictionary</title>
+</head>
+<body>
+
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+th {
+    text-align: left;
+}
+html {
+    font-family: Arial, sans-serif ;
+    font-size: 90% ;
+}
+</style>
+
+
+<h1><b>Command: EPS:EPS</b></h1>
+
+
+
+<table>
+	<thead>
+		<tr style = "border-right: 2px solid black; border-left: 2px solid black; border-top: 2px solid black;">
+			<th rowspan = "2">Mnemonic</th>
+			<th rowspan = "2">ID</th>
+			<th rowspan = "2">Description</th>
+			<th rowspan = "1" colspan = "3">Arguments</th>
+		</tr>
+		<tr style = "border-right: 2px solid black; ">
+			<th>Argument</th>
+			<th>Type</th>
+			<th>Description</th>
+		<tr>
+	</thead>
+	<tbody>
+
+		<tr style = "border: 2px solid black;">
+			<td rowspan="3">MS_SEND_CMD</td>
+			<td rowspan="3">1071 (0x42f)</td>
+			<td rowspan="3">Send CMD to EPS</td>
+					<tr style = "border-right: 2px solid black;border-top: 2px solid black;">
+						<td>operation</td>
+						<td>EPSOp</td>
+						<td>operation argument</td>
+					</tr>
+					<tr style = "border-right: 2px solid black;border-bottom: 2px solid black;">
+						<td>payload</td>
+						<td>Fw::CmdStringArg</td>
+						<td>The payload data</td>
+					</tr>
+		</tr>
+		<tr style = "border: 2px solid black;">
+			<td rowspan="1">MS_SEND_PING</td>
+			<td rowspan="1">1072 (0x430)</td>
+			<td rowspan="1">Send Ping to EPS</td>
+				<td></td>
+				<td></td>
+				<td></td>
+		</tr>
+	</tbody>
+</table>
+
+
+</body>
+</html>
