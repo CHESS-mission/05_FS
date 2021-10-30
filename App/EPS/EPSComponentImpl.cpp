@@ -51,6 +51,18 @@ namespace App {
   // ----------------------------------------------------------------------
   // Handler implementations for user-defined typed input ports
   // ----------------------------------------------------------------------
+  void EPSComponentImpl ::
+    PingIn_handler(
+        const NATIVE_INT_TYPE portNum,
+        U32 key
+    )
+  {
+    U8 noData[0];
+    m_key = key;
+    dataSendCmdBuffer.setData(noData);
+    dataSendCmdBuffer.setSize(0);
+    this->DataOut_out(0,CSP_PING_PORT,dataSendCmdBuffer,0);
+  }
 
   void EPSComponentImpl ::
     DataIn_handler(
@@ -60,48 +72,50 @@ namespace App {
         U8 isSched
     )
   {
-    U8* returnData = data.getData();
-    U32 returnSize = data.getSize();
-    U8 status = returnData[EPSSTATUS];
-    if(port == 1){
-      U32 ping = bytesToInt(returnData);
-      log_ACTIVITY_LO_MS_PING((I32)ping);
-      return;
+  U8* returnData = data.getData();
+  U32 returnSize = data.getSize();
+  U8 status = returnData[EPSSTATUS];
+  if(port == (U8)CSP_PING_PORT){
+    U32 ping = bytesToInt(returnData);
+    if((I32)ping != -1){
+       PingOut_out(0,m_key);
     }
-    if(status){
-      log_WARNING_LO_MS_CMD_ERROR(port,returnData[EPSCMD],returnData[EPSSTATUS]);
+    return;
+  }
+  if(status){
+    log_WARNING_LO_MS_CMD_ERROR(port,returnData[EPSCMD],returnData[EPSSTATUS]);
 
+  }else{
+    if(isSched){
+      EPSHkAnalyser helper(data);
+      U8 mode = helper.getbattMode();
+      U16 voltage = helper.getvBatt();
+      U16 temp = helper.getTemp();
+      tlmWrite_EPS_Battery_mode(mode);
+      tlmWrite_EPS_Voltage_battery_mV(voltage);
+      tlmWrite_EPS_Temp_Battery_Celsuis(temp);
+
+      if(mode != this->battMode){
+        log_WARNING_HI_MS_CHNG_BATT_MOD(mode);
+      }
+      if(voltage < EPS_LIMIT_LOW_BATTERY){
+        log_WARNING_HI_MS_BATT_VOLT_LOW(voltage);
+      }
+      if(temp > EPS_LIMIT_TEMP_HIGH){
+        log_WARNING_HI_MS_BATT_TEMP_HIGH(temp);
+      }
+              
     }else{
-      if(isSched){
-        EPSHkAnalyser helper(data);
-        U8 mode = helper.getbattMode();
-        U16 voltage = helper.getvBatt();
-        U16 temp = helper.getTemp();
-        tlmWrite_EPS_Battery_mode(mode);
-        tlmWrite_EPS_Voltage_battery_mV(voltage);
-        tlmWrite_EPS_Temp_Battery_Celsuis(temp);
-
-        if(mode != this->battMode){
-          log_WARNING_HI_MS_CHNG_BATT_MOD(mode);
-        }
-        if(voltage < EPS_LIMIT_LOW_BATTERY){
-          log_WARNING_HI_MS_BATT_VOLT_LOW(voltage);
-        }
-        if(temp > EPS_LIMIT_TEMP_HIGH){
-          log_WARNING_HI_MS_BATT_TEMP_HIGH(temp);
-        }
-                
-      }else{
-        if(port == EPS_INST_TLM_PORT){
-          char returnString[returnSize*3];
-          hexToString(returnString,returnData,returnSize);
-          Fw::LogStringArg logString(returnString);
-          log_ACTIVITY_LO_MS_CMD_RECV_EPS(port,returnData[EPSCMD],logString);
-          Fw::TlmString tlmString(returnString);
-          this->tlmWrite_EPS_LAST_CMD_RETURN(tlmString);
-        }
+      if(port == EPS_INST_TLM_PORT){
+      char returnString[returnSize*3];
+      hexToString(returnString,returnData,returnSize);
+      Fw::LogStringArg logString(returnString);
+      log_ACTIVITY_LO_MS_CMD_RECV_EPS(port,returnData[EPSCMD],logString);
+      Fw::TlmString tlmString(returnString);
+      this->tlmWrite_EPS_LAST_CMD_RETURN(tlmString);
       }
     }
+  }
 
 
   }
@@ -170,19 +184,6 @@ namespace App {
     this->DataOut_out(0,port,dataSendCmdBuffer,0);
     Fw::LogStringArg logString(data);
     log_ACTIVITY_LO_MS_CMD_SEND_EPS(port,hexData[EPSCMD],logString);
-    this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
-  }
-
-    void EPSComponentImpl ::
-    MS_SEND_PING_cmdHandler(
-        const FwOpcodeType opCode,
-        const U32 cmdSeq
-    )
-  {
-    U8 noData[0];
-    dataSendCmdBuffer.setData(noData);
-    dataSendCmdBuffer.setSize(0);
-    this->DataOut_out(0,CSP_PING_PORT,dataSendCmdBuffer,0);
     this->cmdResponse_out(opCode,cmdSeq,Fw::COMMAND_OK);
   }
 

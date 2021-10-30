@@ -12,8 +12,8 @@ TEST(Nominal, TestSendCmd) {
 }
 TEST(Nominal, TestPort) {
     App::Tester tester;
-    TEST_CASE(EPS.3,"Test port with good data");
-    tester.portStatusOKNoSched();
+    /*TEST_CASE(EPS.3,"Test port with good data");
+    tester.portStatusOKNoSched();*/
     TEST_CASE(EPS.4,"Test port with shed");
     tester.portStatusOKSched();
     TEST_CASE(EPS.5,"Test port status error");
@@ -28,10 +28,15 @@ TEST(Nominal, TestPort) {
 
 TEST(Nominal, TestPing) {
     App::Tester tester;
-    TEST_CASE(EPS.9,"Test cmd send ping");
-    tester.cmdSendPing();
+    TEST_CASE(EPS.9,"Test port ping in");
+    tester.portPingIn();
     TEST_CASE(EPS.10,"Test port ping");
-    tester.cmdPortPingOk();
+    tester.portPingOk();
     TEST_CASE(EPS.11,"Test port ping not ok");
-    tester.cmdPortPingOk();
+    tester.portPingNOK();
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

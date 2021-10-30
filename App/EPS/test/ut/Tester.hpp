@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  EPS/test/ut/Tester.hpp
-// \author jsilveira
+// \author root
 // \brief  hpp file for EPS test harness implementation class
 //
 // \copyright
@@ -44,7 +44,19 @@ namespace App {
 
       //! To do
       //!
-      void toDo(void);
+      void cmdCmdGoodpayloadGoodPort(void);
+      void cmdCmdbadPayload(void);
+      void cmdCmdbadPort(void);
+      void portStatusOKSched(void);
+      void portStatusOKNoSched(void);
+      void portStatusNOK(void);
+      void portTestLowVolt(void);
+      void portTestHighTemp(void);
+      void portChangeMode(void);
+
+      void portPingIn(void);
+      void portPingOk(void);
+      void portPingNOK(void);
 
     private:
 
@@ -59,6 +71,13 @@ namespace App {
           U8 port, 
           Fw::Buffer &data, 
           U8 isSched 
+      );
+
+      //! Handler for from_PingOut
+      //!
+      void from_PingOut_handler(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
       );
 
     private:

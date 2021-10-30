@@ -68,6 +68,13 @@ namespace App {
           NATIVE_UINT_TYPE context /*!< The call order*/
       );
 
+      //! Handler implementation for PingIn
+      //!
+      void PingIn_handler(
+          const NATIVE_INT_TYPE portNum, /*!< The port number*/
+          U32 key /*!< Value to return to pinger*/
+      );
+
     PRIVATE:
 
       // ----------------------------------------------------------------------
@@ -98,6 +105,7 @@ namespace App {
       void hexToString (char*, U8[], U16 size);
       bool isPayloadOK(const char*,NATIVE_UINT_TYPE);
       U32 bytesToInt (U8* bytes);
+      U8 m_key;
     };
 
 
